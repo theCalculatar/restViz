@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+
+    <p>methods</p>
+    <ul>
+      <% routes.forEach(function(user){ %>
+      <li>
+        <a href="<%- user.path %>">
+          <div class="" style="display: flex; gap: 15px">
+            <%- user.method %> - <%- user.path %>
+          </div>
+        </a>
+      </li>
+      <% }); %>
+    </ul>
+  </body>
+</html>

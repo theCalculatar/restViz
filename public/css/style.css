@@ -1,0 +1,6 @@
+ul {
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  margin-top: 20px;
+}
