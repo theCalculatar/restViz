@@ -6,7 +6,9 @@ const init = (express, options) => {
   // Serve static files from the "public" folder
   app.use(express.static(path.join(__dirname, '../public')))
 
-  app.set('view engine', 'ejs') // Set EJS as the view engine
+  // Set EJS as the view engine
+  app.set('view engine', 'ejs')
+
   app.set('views', path.join(__dirname, './views'))
 
   // root route for listing endpoints
@@ -24,9 +26,10 @@ const init = (express, options) => {
     })
 
     res.render('index', {
-      title: options ? options.title : 'My Api Documantation',
+      title: options ? options.title : 'My API Documentation',
       theme: options ? options.theme : 'light',
       routes: routes,
+      page: 'home',
     })
   })
   return app
