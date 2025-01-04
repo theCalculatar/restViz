@@ -8,7 +8,7 @@
   "keywords": [],
   "author": "ALpheus Mabetlela",
   "license": "ISC",
-  "description": "mhh",
+  "description": "A lightweight library designed to create a dynamic web interface for Express applications",
   "dependencies": {
     "ejs": "^3.1.10"
   }
