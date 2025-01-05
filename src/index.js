@@ -11,24 +11,33 @@ const init = (express, options) => {
 
   app.set('views', path.join(__dirname, './views'))
 
-  // root route for listing endpoints
-  app.get('/', (req, res) => {
-    // route (optional: serves index.html automatically)
-    const routes = []
-    req.app._router.stack.forEach((middleware) => {
-      if (middleware.route) {
-        // Routes registered directly on the app
-        routes.push({
-          method: Object.keys(middleware.route.methods)[0],
-          path: middleware.route.path,
+  const routes = []
+  routes.length = 0
+  const methods = ['get', 'post', 'put', 'delete']
+
+  //custom app func that accepts meta data
+  methods.forEach((method) => {
+    const original = app[method]
+    app[method] = (path, metadata = {}, ...handlers) => {
+      if (path.startsWith('/')) {
+        routes.push({ ...metadata, path, method })
+        // could potentially add multiple middlewares to the stack
+        app.use('/', (req, res, n) => {
+          req.metadata = routes
+          n()
         })
       }
-    })
+      return original.apply(app, [path, ...handlers])
+    }
+  })
 
+  // root route for listing endpoints
+  app.get('/', {}, (req, res) => {
+    // route (optional: serves index.html automatically)
     res.render('index', {
       title: options ? options.title : 'My API Documentation',
       theme: options ? options.theme : 'light',
-      routes: routes,
+      routes: req.metadata,
       page: 'home',
     })
   })
