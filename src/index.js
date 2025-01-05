@@ -23,7 +23,7 @@ const init = (express, options) => {
         routes.push({ ...metadata, path, method })
         // could potentially add multiple middlewares to the stack
         app.use('/', (req, res, n) => {
-          req.metadata = routes
+          req.metadata = routes.slice(1)
           n()
         })
       }
