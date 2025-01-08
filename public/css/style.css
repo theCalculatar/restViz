@@ -144,6 +144,9 @@ li span:nth-child(1) {
 .route-item[style='display: none;'] {
   display: none !important;
 }
+.hide {
+  display: none;
+}
 
 @media screen and (max-width: 1440px) {
   .container {
