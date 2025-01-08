@@ -147,7 +147,7 @@ li span:nth-child(1) {
 
 @media screen and (max-width: 1440px) {
   .container {
-    margin: 20px 10px;
+    margin: 20px auto;
     padding: 15px;
   }
 
