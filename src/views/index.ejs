@@ -15,17 +15,11 @@
       <%-include('../components/routes')%>
     </div>
 
+    <div class="container hide" id="app"></div>
 
-
-    <div class="container" id="app"></div>
-
+    <div id="routes-data" data-mydata="<%- JSON.stringify(routes) %>"></div>
     <!-- Include the footer component -->
     <%- include('../components/footer') %>
-    <script >
-      const dataV = {
-        title:"lee"
-      }
-    </script>
 
     <script src="/javascript/search.js"></script>
   </body>

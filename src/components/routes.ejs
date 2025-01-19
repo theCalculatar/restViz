@@ -1,6 +1,6 @@
 <ul>
   <% routes.forEach(function(route){ %>
-  <a href="<%- route.path %>">
+  <a href="#/home %>" onclick="setPath('<%- route.path%>','<%- route.method %>')">
     <li class="route-item">
       <span class="method <%- route.method.toLowerCase() %>"
         ><%- route.method.toUpperCase() %></span

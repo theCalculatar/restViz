@@ -25,14 +25,14 @@ npm install restviz
 - Run your app, and restViz will generate a dynamic web interface listing all your routes.
 
 Example Output:
-After starting your app, visit `http://localhost:3000` in your browser. You’ll see:
+After starting your app, visit `http://localhost:your-port-here` in your browser. You’ll see:
 
 A list of all defined routes:
 
 ```
-GET /user
-PUT /user/:id
-POST /user
+GET /
+PUT /
+POST /
 ```
 
 Configuration Options
@@ -45,10 +45,36 @@ const options = {
   theme: "dark",                 // Choose between "light" or "dark" theme
 };
 const app = restViz.init(express, options);
-Available Options
-title: Customizes the web interface title (default: "API Documentation").
-theme: Chooses the theme for the interface (default: "light").
 ```
+
+Available Options
+`title`: Customizes the web interface title (`default: "API Documentation"`).
+`theme`: Chooses the theme for the interface (`default: "light"`)
+
+## Addtional usage
+
+```js
+app.get(
+  '/user/:id',
+  {
+    description: 'Update user details',
+    notes:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias totam exercitationem recusandae sit similique eos, consectetur illum sed debitis quibusdam nostrum distinctio at beatae eligendi quam! Blanditiis dicta repellat voluptate!',
+    responses: { 201: 'User details', 404: 'User not found' },
+  },
+  (req, res) => {
+    res.json({ title: 'This is a title' })
+  }
+)
+```
+
+Metadata Details
+
+- `Description`: Explains what the endpoint does (e.g., "Update user details").
+
+- `Notes`: Includes any extra details, such as warnings or extended explanations.
+
+- `Responses`: Maps HTTP status codes to their descriptions (e.g., 201: User details).
 
 ## Contributing
 
