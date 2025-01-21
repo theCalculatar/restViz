@@ -15,7 +15,27 @@ const init = (express, options) => {
   routes.length = 0
   const methods = ['get', 'post', 'put', 'delete']
 
-  //custom app func that accepts meta data
+  // Helper function to extract routes, including nested ones
+  const extractRoutes = (router, basePath = '') => {
+    router.stack.forEach((layer) => {
+      if (layer.route) {
+        // Direct route
+        const path = basePath + layer.route.path
+        const method = Object.keys(layer.route.methods)[0].toUpperCase()
+        routes.push({ method, path })
+      } else if (layer.name === 'router' && layer.handle.stack) {
+        const nestedBasePath = layer.regexp.source
+          .replace(/\\\//g, '/') // Replace escaped slashes
+          .replace(/\^|\$\|\(\?=\.\*\)\?/g, '') // Remove start/end regex markers and lookaheads
+          .replace(/\/\?\(\?=\/\|\$\)/g, '') // Remove annoying "/?(?=/|$)" pattern
+          .replace(/\/\?$/, '')
+
+        extractRoutes(layer.handle, nestedBasePath)
+      }
+    })
+  }
+
+  // Custom app function that supports metadata
   methods.forEach((method) => {
     const original = app[method]
     app[method] = function (...args) {
@@ -24,10 +44,6 @@ const init = (express, options) => {
         const [path, metadata = {}, ...handlers] = args
         if (path.startsWith('/')) {
           routes.push({ method: method.toUpperCase(), path, ...metadata })
-          app.use('/', (req, res, n) => {
-            req.metadata = routes.slice(1)
-            n()
-          })
         }
         return original.call(app, path, ...handlers)
       } else {
@@ -35,29 +51,32 @@ const init = (express, options) => {
         const [path, ...handlers] = args
         if (path.startsWith('/')) {
           routes.push({ method: method.toUpperCase(), path })
-          app.use('/', (req, res, n) => {
-            req.metadata = routes.slice(1)
-            n()
-          })
         }
         return original.call(app, path, ...handlers)
       }
     }
   })
 
-  // root route for listing endpoints
+  // Middleware to extract all routes, including from Express.Router()
+  app.use((req, res, next) => {
+    routes.length = 0 // Clear the routes array to avoid duplicates
+    extractRoutes(app._router) // Extract all registered routes
+    next()
+  })
+
+  // Root route for listing endpoints
   app.get('/', (req, res) => {
-    // route (optional: serves index.html automatically)
     res.render('index', {
       title: options ? options.title : 'My API Documentation',
       theme: options ? options.theme : 'light',
-      routes: req.metadata,
+      routes,
       page: 'home',
     })
   })
+
   return app
 }
 
 module.exports = { init }
 
-// helping to document make api easier for you or other to understand your api
+// Helping to document and make APIs easier to understand
