@@ -4,19 +4,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css" />
+    <script src="/main.js" defer></script>
   </head>
   <body>
     <!-- Include the header component -->
     <%- include('../components/header') %>
-
-    <div class="container">
-      <% if (page === 'home') { %>
+    <div class="container" id="routes">
       <p>Explore the available API endpoints below.</p>
-
-      <%- include('../components/search') %> <%- include('../components/routes')
-      %> <% } %>
+      <%- include('../components/search') %>
+      <%-include('../components/routes')%>
     </div>
 
+    <div class="container hide" id="app"></div>
+
+    <div id="routes-data" data-mydata='(<%- JSON.stringify(routes) %>)'></div>
     <!-- Include the footer component -->
     <%- include('../components/footer') %>
 
