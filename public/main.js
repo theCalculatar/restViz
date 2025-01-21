@@ -1,6 +1,8 @@
 const app = document.querySelector('#app')
 const container = document.getElementById('routes-data')
-const myData = JSON.parse(container.dataset.mydata) // just for retriving data, ejs gave me hell trying to pass data direcly :)
+const cleanedData = container.dataset.mydata
+
+const myData = JSON.parse(cleanedData.replace(/[()]/g, '')) // just for retriving data, ejs gave me hell trying to pass data direcly :)
 
 let currentRoute = {}
 
