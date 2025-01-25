@@ -12,7 +12,6 @@ const init = (express, options) => {
   app.set('views', path.join(__dirname, './views'))
 
   const routes = []
-  routes.length = 0
   const methods = ['get', 'post', 'put', 'delete']
 
   // Helper function to extract routes, including nested ones
@@ -22,6 +21,10 @@ const init = (express, options) => {
         // Direct route
         const path = basePath + layer.route.path
         const method = Object.keys(layer.route.methods)[0].toUpperCase()
+        const hasRoute = routes.find((route) => route.path === path)
+        if (hasRoute) {
+          return
+        }
         routes.push({ method, path })
       } else if (layer.name === 'router' && layer.handle.stack) {
         const nestedBasePath = layer.regexp.source
@@ -59,7 +62,6 @@ const init = (express, options) => {
 
   // Middleware to extract all routes, including from Express.Router()
   app.use((req, res, next) => {
-    routes.length = 0 // Clear the routes array to avoid duplicates
     extractRoutes(app._router) // Extract all registered routes
     next()
   })
