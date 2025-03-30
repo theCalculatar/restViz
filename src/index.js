@@ -1,6 +1,8 @@
 const path = require('path')
+const { existingRoutes, addRoutes } = require('./utils/routeManager')
 
 const init = (express, options) => {
+
   const app = express()
 
   // Serve static files from the "public" folder
@@ -11,8 +13,7 @@ const init = (express, options) => {
 
   app.set('views', path.join(__dirname, './views'))
 
-  const routes = []
-  const methods = ['get', 'post', 'put', 'delete']
+  const routes = existingRoutes()
 
   // Helper function to extract routes, including nested ones
   const extractRoutes = (router, basePath = '') => {
@@ -26,6 +27,7 @@ const init = (express, options) => {
           return
         }
         routes.push({ method, path })
+        addRoutes(routes)
       } else if (layer.name === 'router' && layer.handle.stack) {
         const nestedBasePath = layer.regexp.source
           .replace(/\\\//g, '/') // Replace escaped slashes
@@ -37,28 +39,6 @@ const init = (express, options) => {
       }
     })
   }
-
-  // Custom app function that supports metadata
-  methods.forEach((method) => {
-    const original = app[method]
-    app[method] = function (...args) {
-      if (typeof args[1] === 'object' && !Array.isArray(args[1])) {
-        // Option 1: path, metadata, handlers
-        const [path, metadata = {}, ...handlers] = args
-        if (path.startsWith('/')) {
-          routes.push({ method: method.toUpperCase(), path, ...metadata })
-        }
-        return original.call(app, path, ...handlers)
-      } else {
-        // Option 2: path, handlers (no metadata)
-        const [path, ...handlers] = args
-        if (path.startsWith('/')) {
-          routes.push({ method: method.toUpperCase(), path })
-        }
-        return original.call(app, path, ...handlers)
-      }
-    }
-  })
 
   // Middleware to extract all routes, including from Express.Router()
   app.use((req, res, next) => {
