@@ -204,3 +204,9 @@ li span:nth-child(1) {
   text-align: left;
   font-size: 14px;
 }
+
+.no-content > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
