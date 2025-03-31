@@ -35,7 +35,11 @@ function renderNotFoundPage() {
   const routes = document.getElementById('routes')
   app.classList.remove('hide')
   routes.classList.add('hide')
-  app.innerHTML = `<div>Not found 404!</div>`
+  app.innerHTML = `
+  <div class="no-content">
+    <div><a class="method post" href="#/">Back </a><p>Nothing to see here. 404!</p></div>
+  </div>
+  `
 }
 
 function renderHomePage() {
