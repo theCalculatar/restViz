@@ -62,8 +62,11 @@ function renderRoutePage() {
   routes.classList.add('hide')
   app.classList.remove('hide')
 
-  app.innerHTML = `
+  app.innerHTML = currentRoute?.path
+    ? `
     <div class="">
+      <a class="btn primary" href="#/">Back </a>
+
       <div class="notes">
         <h3>Implementation notes</h3>
         <p>${currentRoute?.notes || ''}</p>
@@ -74,7 +77,7 @@ function renderRoutePage() {
           ${currentRoute.method.toUpperCase()}</span
         >
         <span class="path">${currentRoute.path}</span>
-        <span class="">${currentRoute?.description || 'Not provieded'}</span>
+        <span class="">${currentRoute?.description || 'Not provided'}</span>
       </li>
 
       <div class="">
@@ -94,4 +97,8 @@ function renderRoutePage() {
 
     </div>
   `
+    : `<div style="display:flex,justify-content: space-between; align-items: center;">
+        <a class="method post" href="#/">Back </a>
+        <p>Nothing to see here. 404!</p>
+      </div>`
 }
