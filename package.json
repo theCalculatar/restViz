@@ -1,15 +1,15 @@
 {
   "name": "restviz",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "./src/index.js",
   "type": "commonjs",
   "types": "./src/types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "ALpheus Mabetlela",
-  "license": "ISC",
+  "keywords": ["REST", "API", "visualization", "metadata"],
+  "author": "Alpheus Mabetlela",
+  "license": "MIT",
   "description": "A lightweight library designed to create a dynamic web interface for Express applications",
   "dependencies": {
     "ejs": "^3.1.10",

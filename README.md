@@ -92,4 +92,15 @@ You can enrich your route documentation using metadata annotations. These are at
 
 ## Contributing
 
-Contributions are welcome! If you find any bugs or have feature requests, feel free to open an issue or submit a pull request.
+Contributions are welcome!
+If you encounter bugs, have ideas for improvements, or want to extend functionality, feel free to [open an issue](https://github.com/theCalculatar/restViz/issues) or submit a pull request.
+
+Before contributing, please take a moment to review our [CONTRIBUTING.md](./CONTRIBUTING.md) guidelines for helpful tips and requirements.
+
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+You are free to use, modify, and distribute this software with proper attribution. See the full license text for more details.
+

@@ -1,3 +1,9 @@
+/*!
+ * restViz - A custom API documentation middleware
+ * Copyright (c) 2025 Mahlane Alpheus Mabetlela
+ * Licensed under the MIT License (MIT)
+ */
+
 /**
  * Filters the list of API routes based on the search term entered by the user.
  * This function dynamically updates the visibility of route items by comparing
