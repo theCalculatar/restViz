@@ -20,8 +20,8 @@ npm install restviz
 
 ## How It Works
 
-- Simply replace your express() initialization with restViz.init(express).
-- Define your routes as you normally would with Express.
+- Simply import init from restviz and pass (express).
+- pass init in your `app.use(init(express))`.
 - Run your app, and restViz will generate a dynamic web interface listing all your routes.
 
 Example Output:
@@ -33,48 +33,62 @@ A list of all defined routes:
 GET /
 PUT /
 POST /
+DELETE /
+PATCH /
 ```
 
 Configuration Options
 You can customize restViz by passing options to restViz.init():
 
 ```js
-Copy code
-const options = {
-  title: "My API Documentation", // Set a custom title for the web interface
-  theme: "dark",                 // Choose between "light" or "dark" theme
-};
-const app = restViz.init(express, options);
+import { init, Options, Theme } from 'restviz'
+
+const app = express()
+
+const theme: Theme = 'light'
+
+const options: Options = {
+  title: 'My API Documentation', // Set a custom title for the web interface
+  theme: 'dark', // Choose between "light" or "dark" theme
+}
+
+app.use(init(express, options))
 ```
 
 Available Options
 `title`: Customizes the web interface title (`default: "API Documentation"`).
 `theme`: Chooses the theme for the interface (`default: "light"`)
 
-## Addtional usage
+## Compatibility
+⚠️ `Note`: restViz is currently compatible with Express v4.
+Support for `Express v5` is not guaranteed and may result in unexpected behavior due to structural changes in routing and middleware handling.
+Please ensure your project uses Express v4:
 
-```js
-app.get(
-  '/user/:id',
-  {
-    description: 'Update user details',
-    notes:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias totam exercitationem recusandae sit similique eos, consectetur illum sed debitis quibusdam nostrum distinctio at beatae eligendi quam! Blanditiis dicta repellat voluptate!',
-    responses: { 201: 'User details', 404: 'User not found' },
-  },
-  (req, res) => {
-    res.json({ title: 'This is a title' })
-  }
-)
+```bash
+npm install express@^4.18.0
 ```
 
-Metadata Details
+## Addtional usage
 
-- `Description`: Explains what the endpoint does (e.g., "Update user details").
+You can enrich your route documentation using metadata annotations. These are attached to each route and enhance the clarity and purpose of your API documentation.
 
-- `Notes`: Includes any extra details, such as warnings or extended explanations.
+**Supported Metadata Fields:**
 
-- `Responses`: Maps HTTP status codes to their descriptions (e.g., 201: User details).
+- **`description`**: A brief explanation of what the endpoint does.  
+  _Example_: `"description": "Update user details"`
+
+- **`notes`**: Extra details like warnings, use cases, or behavior explanation.  
+  _Example_: `"notes": "Only admins can perform this action."`
+
+- **`responses`**: A key-value map describing expected HTTP response codes and their meanings.  
+  _Example_:
+  ```json
+  "responses": {
+    "200": "Success",
+    "400": "Bad request",
+    "401": "Unauthorized"
+  }
+  ```
 
 ## Contributing
 
