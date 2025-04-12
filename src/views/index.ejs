@@ -1,22 +1,27 @@
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="shortcut icon" href="/images/icon.png" type="image/x-icon" />
+    <script src="/main.js" defer></script>
   </head>
   <body>
-    <h1><%= title %></h1>
+    <!-- Include the header component -->
+    <%- include('../components/header') %>
+    <div class="container" id="routes">
+      <p>Explore the available API endpoints below.</p>
+      <%- include('../components/search') %>
+      <%-include('../components/routes')%>
+    </div>
 
-    <p>methods</p>
-    <ul>
-      <% routes.forEach(function(user){ %>
-      <li>
-        <a href="<%- user.path %>">
-          <div class="" style="display: flex; gap: 15px">
-            <%- user.method %> - <%- user.path %>
-          </div>
-        </a>
-      </li>
-      <% }); %>
-    </ul>
+    <div class="container hide" id="app"></div>
+
+    <div id="routes-data" data-mydata='(<%- JSON.stringify(routes) %>)'></div>
+    <!-- Include the footer component -->
+    <%- include('../components/footer') %>
+
+    <script src="/javascript/search.js"></script>
   </body>
 </html>

@@ -1,0 +1,16 @@
+<ul>
+  <% routes.forEach(function(route){ %>
+  <a href="#/home %>" onclick="setPath('<%- route.path%>','<%- route.method %>')">
+    <li class="route-item">
+      <span class="method <%- route.method.toLowerCase() %>"
+        ><%- route.method.toUpperCase() %></span
+      >
+      <span class="path"><%- route.path %></span>
+
+      <span class=""><%- route?.description %></span>
+ 
+    </li>
+  </a>
+  <% }); %>
+</ul>
+

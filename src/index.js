@@ -1,37 +1,45 @@
+/*!
+ * restViz - A custom API documentation middleware
+ * Copyright (c) 2025 Mahlane Alpheus Mabetlela
+ * Licensed under the MIT License (MIT)
+ */
+
 const path = require('path')
+const { updateRoutes } = require('./utils')
+const { routeExtractor } = require('./lib')
 
 const init = (express, options) => {
-  const app = express()
+  let routeExtracted = false
+  routes = []
 
-  // Serve static files from the "public" folder
-  app.use(express.static(path.join(__dirname, '../public')))
+  return (request, response, next) => {
+    if (!routeExtracted) {
+      const app = request.app
+      // Serve static files from the "public" folder
+      app.use(express.static(path.join(__dirname, '../public')))
 
-  app.set('view engine', 'ejs') // Set EJS as the view engine
-  app.set('views', path.join(__dirname, './views'))
+      // Set EJS as the view engine
+      app.set('view engine', 'ejs')
 
-  // root route for listing endpoints
-  app.get('/', (req, res) => {
-    // route (optional: serves index.html automatically)
-    const routes = []
-    req.app._router.stack.forEach((middleware) => {
-      if (middleware.route) {
-        // Routes registered directly on the app
-        routes.push({
-          method: Object.keys(middleware.route.methods)[0],
-          path: middleware.route.path,
+      app.set('views', path.join(__dirname, './views'))
+
+      routes = updateRoutes(routeExtractor(app._router)) // Extract all registered routes
+
+      // Root route for listing endpoints
+      app.get('/', (req, res) => {
+        res.render('index', {
+          title: options ? options.title : 'My API Documentation',
+          theme: options ? options.theme : 'light',
+          routes,
+          page: 'home',
         })
-      }
-    })
-
-    res.render('index', {
-      title: options ? options.title : 'My Api Documantation',
-      theme: options ? options.theme : 'light',
-      routes: routes,
-    })
-  })
-  return app
+      })
+      routeExtracted = true
+    }
+    next()
+  }
 }
 
 module.exports = { init }
 
-// helping to document make api easier for you or other to understand your api
+// Helping to document and make APIs easier to understand
