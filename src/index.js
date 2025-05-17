@@ -30,7 +30,7 @@ const init = (express, options) => {
         res.render('index', {
           title: options ? options.title : 'My API Documentation',
           theme: options ? options.theme : 'light',
-          routes,
+          routes: JSON.stringify(routes),
           page: 'home',
         })
       })

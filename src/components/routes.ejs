@@ -1,5 +1,5 @@
 <ul>
-  <% routes.forEach(function(route){ %>
+  <% JSON.parse(routes).forEach(function(route){ %>
   <a href="#/home %>" onclick="setPath('<%- route.path%>','<%- route.method %>')">
     <li class="route-item">
       <span class="method <%- route.method.toLowerCase() %>"
