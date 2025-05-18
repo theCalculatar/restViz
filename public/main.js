@@ -10,22 +10,30 @@ const myData = JSON.parse(window.__routes__) // finally a better way to parse da
 
 let currentRoute = {}
 
-function setPath(path, method) {
-  currentRoute = myData.filter(
-    (route) => route.method == method && route.path == path
-  )[0]
-}
-
-const routes = {
-  '/': renderHomePage,
-  '/home': renderRoutePage,
+function routeChecker(path) {
+  currentRoute = myData.find((route) => {
+    if (route.path === path) {
+      return route
+    }
+  })
+  if (currentRoute) {
+    renderRoutePage()
+    return
+  }
+  renderNotFoundPage()
 }
 
 // Routing function
 function router() {
   const path = window.location.hash.slice(1) || '/'
 
-  const render = routes[path] || (() => renderNotFoundPage())
+  const routes = {
+    true: renderHomePage,
+    false: () => routeChecker(path),
+  }
+
+  console.log('path: ', path)
+  const render = routes[path === '/']
   render()
 }
 
@@ -41,7 +49,7 @@ function renderNotFoundPage() {
   routes.classList.add('hide')
   app.innerHTML = `
   <div class="no-content">
-    <div><a class="method post" href="#/">Back </a><p>Nothing to see here. 404!</p></div>
+    <div><a class="method post" href="#/">Back </a><p>Route does not exists blud!!!</p></div>
   </div>
   `
 }
