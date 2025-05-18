@@ -16,6 +16,61 @@ function setPath(path, method) {
   )[0]
 }
 
+function jsonFomatter(json) {
+  if (typeof json !== 'string') {
+    json = JSON.stringify(json, null, 2) // pretty-print
+  }
+
+  // Escape HTML characters
+  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+  // Highlight JSON syntax
+  return json.replace(
+    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(?:\s*:)?|\b(true|false|null)\b|[-+]?\d+(\.\d+)?([eE][-+]?\d+)?)/g,
+    (match) => {
+      let cls = 'number'
+      if (/^"/.test(match)) {
+        cls = /:$/.test(match) ? 'key' : 'string'
+      } else if (/true|false/.test(match)) {
+        cls = 'boolean'
+      } else if (/null/.test(match)) {
+        cls = 'null'
+      }
+      return `<span class="json-${cls}">${match}</span>`
+    }
+  )
+}
+
+/////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
+
+function apiCall() {
+  fetch(currentRoute.path, {
+    method: currentRoute.method,
+    body: currentRoute?.body,
+    headers: { 'CONTENT-TYPE': 'application-json' },
+  })
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) => resultsFn(data))
+    .catch((err) => resultsFn(null, err))
+}
+
+function resultsFn(data, err) {
+  document.querySelector(
+    '.api-block'
+  ).innerHTML = `<div class="api-response blink-border ${
+    err ? 'error' : ' success'
+  }"><h3>API response:</h3>
+  ${
+    err
+      ? `<pre class="error">${err}</pre>`
+      : `<pre>\n${jsonFomatter(data)}\n</pre>`
+  }`
+}
+
+//////////////////////////////////////<-PAGES->//////////////////////////////////////////////
+
 const routes = {
   '/': renderHomePage,
   '/home': renderRoutePage,
@@ -55,13 +110,30 @@ function renderHomePage() {
 
 function getStatus() {
   let status = ''
+
+  if (!currentRoute?.responses) {
+    return '<pre>Not provided!</pre>'
+  }
+
   for (const statusCode in currentRoute?.responses) {
+    const statusColor = Math.floor(statusCode / 100) * 100 // round down to 100hundred
     status += `<tr>
-      <td>${statusCode}</td>
-      <td>${currentRoute?.responses[statusCode]}</td>
+      <td ><code class="status code-${statusColor}">${statusCode}</code></td>
+      <td><code>${currentRoute?.responses[statusCode]}</code></td>
     </tr>`
   }
-  return status
+
+  return `<table>
+            <thead>
+              <tr>
+                <th>HTTP Status Code</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${status}
+            </tbody>
+          </table>`
 }
 
 function renderRoutePage() {
@@ -81,26 +153,29 @@ function renderRoutePage() {
       </div>
 
       <li class="route-item">
-        <span class="method ${currentRoute.method.toLowerCase()} ">
-          ${currentRoute.method.toUpperCase()}</span
-        >
+        <span class="method ${currentRoute.method.toLowerCase()}" style="cursor:pointer" onclick="apiCall()">
+          ${currentRoute.method.toUpperCase()}
+        </span>
         <span class="path">${currentRoute.path}</span>
         <span class="">${currentRoute?.description || 'Not provided'}</span>
       </li>
-
+      ${
+        currentRoute.method === 'GET' || currentRoute.method === 'DELETE'
+          ? ''
+          : `
+            <div class="reqest-body-preview">
+              <h3>Body</h3>
+              <pre>${
+                currentRoute.body
+                  ? jsonFomatter(currentRoute.body)
+                  : 'Not provided!'
+              } </pre>
+            </div>`
+      }
+      <div class="api-block"></div>
       <div class="">
         <h3>Response messages</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>HTTP Status Code</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${getStatus()}
-          </tbody>
-        </table>
+          ${getStatus()}
       </div>
 
     </div>
