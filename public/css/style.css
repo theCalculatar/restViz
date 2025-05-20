@@ -213,15 +213,14 @@ li span:nth-child(1) {
 
 .btn {
   font-weight: bold;
-  padding: 7px 10px;
+  padding: 10px 20px;
   border-radius: 5px;
   text-transform: uppercase;
+  background-color: lightgrey;
   font-size: 0.9rem;
-}
-
-.btn.primary {
-  background-color: black;
-  color: white;
+  background-image: url('/images/arrow_left.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .no-content > div {
