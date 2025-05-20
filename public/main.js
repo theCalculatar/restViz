@@ -112,3 +112,10 @@ function renderRoutePage() {
         <p>Nothing to see here. 404!</p>
       </div>`
 }
+const menuBtn = document.querySelector('.menu-btn')
+const menuList = document.querySelector('.menu-list')
+
+menuBtn.addEventListener('click', () => {
+  menuList.classList.toggle('hide')
+  console.log(menuList.classList)
+})
