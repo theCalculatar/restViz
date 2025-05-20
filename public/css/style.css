@@ -15,12 +15,12 @@ body {
 }
 
 h1 {
-  text-align: center;
+  /* text-align: center;
   padding: 20px 0;
   background-color: #3498db;
   color: white;
   margin: 0;
-  font-size: 2.2rem;
+  font-size: 2.2rem; */
 }
 
 table {
@@ -54,7 +54,7 @@ ul {
 }
 
 li {
-  margin: 10px 0;
+  /* margin: 10px 0;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 15px;
@@ -62,10 +62,76 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; */
 }
 
 li:hover {
+  background-color: #ecf0f1;
+}
+
+.nav {
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3498db;
+  border: lightgrey solid 1px;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.635);
+  color: white;
+  margin: 0;
+  padding: 0 20px;
+}
+
+.nav .title {
+  color: white;
+  font-size: 2.2rem;
+}
+
+.nav .menu .menu-btn {
+  cursor: pointer;
+}
+
+.nav .menu .menu-btn > img {
+  height: 40px;
+  width: 40px;
+  color: white;
+}
+
+.nav .menu .menu-list {
+  position: absolute;
+  padding: 10px 0;
+  width: 250px;
+  top: 55;
+  right: 20;
+  background-color: white;
+  color: #555;
+  border: 2px solid lightgrey;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav .menu .menu-list.hide {
+  display: none;
+}
+
+.nav .menu .menu-list > li {
+  padding: 0 20px;
+}
+
+.nav .menu .menu-list > li > a {
+  font-size: 1rem;
+  display: flex;
+}
+
+.nav .menu .menu-list > hr {
+  background: #000;
+  width: 90%;
+  margin: 5px auto;
+}
+
+.nav .menu .menu-list > li:hover {
   background-color: #ecf0f1;
 }
 
@@ -178,17 +244,12 @@ li span:nth-child(1) {
     padding: 15px;
   }
 
-  h1 {
-    font-size: 1.4rem;
-    padding: 15px 0;
-  }
-
   p {
     font-size: 1rem;
   }
 
   li {
-    padding: 10px;
+    /* padding: 10px; */
   }
 
   .method {
