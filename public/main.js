@@ -10,10 +10,17 @@ const myData = JSON.parse(window.__routes__) // finally a better way to parse da
 
 let currentRoute = {}
 
-function setPath(path, method) {
-  currentRoute = myData.filter(
-    (route) => route.method == method && route.path == path
-  )[0]
+function routeChecker(path) {
+  currentRoute = myData.find((route) => {
+    if (route.path === path) {
+      return route
+    }
+  })
+  if (currentRoute) {
+    renderRoutePage()
+    return
+  }
+  renderNotFoundPage()
 }
 
 function jsonFomatter(json) {
@@ -71,16 +78,16 @@ function resultsFn(data, err) {
 
 //////////////////////////////////////<-PAGES->//////////////////////////////////////////////
 
-const routes = {
-  '/': renderHomePage,
-  '/home': renderRoutePage,
-}
-
 // Routing function
 function router() {
   const path = window.location.hash.slice(1) || '/'
 
-  const render = routes[path] || (() => renderNotFoundPage())
+  const routes = {
+    true: renderHomePage,
+    false: () => routeChecker(path),
+  }
+
+  const render = routes[path === '/']
   render()
 }
 
@@ -96,7 +103,7 @@ function renderNotFoundPage() {
   routes.classList.add('hide')
   app.innerHTML = `
   <div class="no-content">
-    <div><a class="method post" href="#/">Back </a><p>Nothing to see here. 404!</p></div>
+    <div><a class="method post" href="#/">Back </a><p>Route does not exists blud!!!</p></div>
   </div>
   `
 }
@@ -145,7 +152,7 @@ function renderRoutePage() {
   app.innerHTML = currentRoute?.path
     ? `
     <div class="">
-      <a class="btn primary" href="#/">Back </a>
+      <a class="btn" href="#/"></a>
 
       <div class="notes">
         <h3>Implementation notes</h3>
@@ -153,11 +160,13 @@ function renderRoutePage() {
       </div>
 
       <li class="route-item">
-        <span class="method ${currentRoute.method.toLowerCase()}" style="cursor:pointer" onclick="apiCall()">
-          ${currentRoute.method.toUpperCase()}
-        </span>
-        <span class="path">${currentRoute.path}</span>
-        <span class="">${currentRoute?.description || 'Not provided'}</span>
+        <div>
+          <span class="method ${currentRoute.method.toLowerCase()}" style="cursor:pointer" onclick="apiCall()">
+            ${currentRoute.method.toUpperCase()}
+          </span>
+          <span class="path">${currentRoute.path}</span>
+        </div>
+        <span class="description">${currentRoute?.description || 'Not provided'}</span>
       </li>
       ${
         currentRoute.method === 'GET' || currentRoute.method === 'DELETE'
@@ -181,7 +190,13 @@ function renderRoutePage() {
     </div>
   `
     : `<div style="display:flex,justify-content: space-between; align-items: center;">
-        <a class="method post" href="#/">Back </a>
+        <a class="btn" href="#/"> </a>
         <p>Nothing to see here. 404!</p>
       </div>`
 }
+const menuBtn = document.querySelector('.menu-btn')
+const menuList = document.querySelector('.menu-list')
+
+menuBtn.addEventListener('click', () => {
+  menuList.classList.toggle('hide')
+})

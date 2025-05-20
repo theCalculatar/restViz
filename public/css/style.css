@@ -36,15 +36,6 @@ body {
   padding: 0;
 }
 
-h1 {
-  text-align: center;
-  padding: 20px 0;
-  background-color: #3498db;
-  color: white;
-  margin: 0;
-  font-size: 2.2rem;
-}
-
 table {
   border-collapse: collapse;
   width: 100%;
@@ -75,19 +66,69 @@ ul {
   padding: 0;
 }
 
-li {
-  margin: 10px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  background-color: #fafafa;
+.nav {
   display: flex;
-  align-items: center;
+  height: 60px;
   justify-content: space-between;
-  transition: background-color 0.3s ease;
+  align-items: center;
+  background-color: #3498db;
+  border: lightgrey solid 1px;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.635);
+  color: white;
+  margin: 0;
+  padding: 0 20px;
 }
 
-li:hover {
+.nav .title {
+  color: white;
+  font-size: 2.2rem;
+}
+
+.nav .menu .menu-btn {
+  cursor: pointer;
+}
+
+.nav .menu .menu-btn > img {
+  height: 40px;
+  width: 40px;
+  color: white;
+}
+
+.nav .menu .menu-list {
+  position: absolute;
+  padding: 10px 0;
+  width: 250px;
+  top: 55;
+  right: 20;
+  background-color: white;
+  color: #555;
+  border: 2px solid lightgrey;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav .menu .menu-list.hide {
+  display: none;
+}
+
+.nav .menu .menu-list > li {
+  padding: 0 20px;
+}
+
+.nav .menu .menu-list > li > a {
+  font-size: 1rem;
+  display: flex;
+}
+
+.nav .menu .menu-list > hr {
+  background: #555;
+  width: 90%;
+  margin: 5px auto;
+}
+
+.nav .menu .menu-list > li:hover {
   background-color: #ecf0f1;
 }
 
@@ -194,6 +235,35 @@ li span:nth-child(1) {
 
 .route-item {
   margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.route-item > div {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 1;
+}
+
+.route-item .description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 1;
+}
+
+.route-item:hover {
+  background-color: #ecf0f1;
 }
 
 .route-item[style='display: none;'] {
@@ -209,16 +279,11 @@ li span:nth-child(1) {
     padding: 15px;
   }
 
-  h1 {
-    font-size: 1.4rem;
-    padding: 15px 0;
-  }
-
   p {
     font-size: 1rem;
   }
 
-  li {
+  .route-item {
     padding: 10px;
   }
 
@@ -244,15 +309,14 @@ li span:nth-child(1) {
 
 .btn {
   font-weight: bold;
-  padding: 7px 10px;
+  padding: 10px 20px;
   border-radius: 5px;
   text-transform: uppercase;
+  background-color: lightgrey;
   font-size: 0.9rem;
-}
-
-.btn.primary {
-  background-color: black;
-  color: white;
+  background-image: url('/images/arrow_left.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .no-content > div {
