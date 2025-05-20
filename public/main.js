@@ -32,7 +32,6 @@ function router() {
     false: () => routeChecker(path),
   }
 
-  console.log('path: ', path)
   const render = routes[path === '/']
   render()
 }
@@ -81,7 +80,7 @@ function renderRoutePage() {
   app.innerHTML = currentRoute?.path
     ? `
     <div class="">
-      <a class="btn primary" href="#/">Back </a>
+      <a class="btn" href="#/"></a>
 
       <div class="notes">
         <h3>Implementation notes</h3>
@@ -89,11 +88,13 @@ function renderRoutePage() {
       </div>
 
       <li class="route-item">
-        <span class="method ${currentRoute.method.toLowerCase()} ">
-          ${currentRoute.method.toUpperCase()}</span
-        >
-        <span class="path">${currentRoute.path}</span>
-        <span class="">${currentRoute?.description || 'Not provided'}</span>
+        <div>
+          <span class="method ${currentRoute.method.toLowerCase()} ">
+            ${currentRoute.method.toUpperCase()}</span
+          >
+          <span class="path">${currentRoute.path}</span>
+        </div>
+        <span class="description">${currentRoute?.description || 'Not provided'}</span>
       </li>
 
       <div class="">
@@ -114,7 +115,13 @@ function renderRoutePage() {
     </div>
   `
     : `<div style="display:flex,justify-content: space-between; align-items: center;">
-        <a class="method post" href="#/">Back </a>
+        <a class="btn" href="#/"> </a>
         <p>Nothing to see here. 404!</p>
       </div>`
 }
+const menuBtn = document.querySelector('.menu-btn')
+const menuList = document.querySelector('.menu-list')
+
+menuBtn.addEventListener('click', () => {
+  menuList.classList.toggle('hide')
+})

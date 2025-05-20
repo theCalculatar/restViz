@@ -2,12 +2,14 @@
   <% JSON.parse(routes).forEach(function(route){ %>
   <a href="#<%- route.path %>">
     <li class="route-item">
-      <span class="method <%- route.method.toLowerCase() %>"
-        ><%- route.method.toUpperCase() %></span
-      >
-      <span class="path"><%- route.path %></span>
+      <div class="">
+        <span class="method <%- route.method.toLowerCase() %>"
+          ><%- route.method.toUpperCase() %></span
+        >
+        <span class="path"><%- route.path %></span>
+      </div>
 
-      <span class=""><%- route?.description %></span>
+      <span class="description"><%- route?.description %></span>
     </li>
   </a>
   <% }); %>
