@@ -332,7 +332,7 @@ pre.error {
 }
 
 .blink-border {
-  border: 2px solid transparent; 
+  border: 2px solid transparent;
   border-radius: 10px;
   animation: blink 1s linear 0s 3;
 }
@@ -352,6 +352,58 @@ pre.error {
   }
   50% {
     border-color: transparent;
+  }
+}
+
+/*************************************** HEADER PAGE **************************************/
+.headers {
+  padding: 7px 0;
+}
+
+.headers > .clear {
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  color: red;
+}
+
+.key-form .fields {
+  display: flex;
+  gap: 20px;
+}
+.key-form .fields > input {
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid lightgrey;
+}
+.key-form .fields > button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.header-table {
+  font-size: small;
+}
+
+.header-table td {
+  max-width: 100px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn.action {
+  background-image: url('/images/trash.svg');
+  display: flex;
+  width: min-content;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 766px) {
+  .key-form .fields {
+    flex-direction: column;
+    gap: 10px;
   }
 }
 

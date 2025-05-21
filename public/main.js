@@ -48,6 +48,90 @@ function jsonFomatter(json) {
   )
 }
 
+function clearAllHeadersFn() {
+  localStorage.setItem('__headers__', '')
+  renderHeadersPage()
+}
+
+function headerLoaderFn() {
+  const headers = localStorage.getItem('__headers__')
+
+  if (!headers || headers === '{}') {
+    return '<pre>No saved Headers!</pre>'
+  }
+
+  let headerRow = ''
+  const objHeaders = JSON.parse(headers)
+
+  for (const header in objHeaders) {
+    headerRow += `<tr>
+                    <td>${header}</td>
+                    <td>${objHeaders[header]}</td>
+                    <td><div class="btn action" onclick="deleteHeaderFn('${header}')"></div></td>
+                  </tr>`
+  }
+
+  return `<table class="header-table">
+            <thead>
+              <tr>
+                <th>Keys</th>
+                <th>Values</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${headerRow}
+            </tbody>
+          </table>`
+}
+
+function addHeaderFn() {
+  const key = document.querySelector('#key')
+  const value = document.querySelector('#value')
+
+  if (!key?.value.trim() || !value?.value.trim()) {
+    alert('Enter correct header!')
+    return
+  }
+
+  const headers = localStorage.getItem('__headers__')
+  if (!headers) {
+    const header = new Map()
+    header.set(key.value, value.value)
+
+    localStorage.setItem(
+      '__headers__',
+      JSON.stringify(Object.fromEntries(header))
+    )
+    renderHeadersPage()
+    return
+  }
+  const mapHeader = new Map(Object.entries(JSON.parse(headers)))
+
+  mapHeader.set(key.value, value.value)
+  localStorage.setItem(
+    '__headers__',
+    JSON.stringify(Object.fromEntries(mapHeader))
+  )
+  renderHeadersPage()
+}
+
+function deleteHeaderFn(key) {
+  const headers = localStorage.getItem('__headers__')
+  if (!headers) {
+    renderHeadersPage()
+    return
+  }
+  const mapHeader = new Map(Object.entries(JSON.parse(headers)))
+
+  mapHeader.delete(key)
+  localStorage.setItem(
+    '__headers__',
+    JSON.stringify(Object.fromEntries(mapHeader))
+  )
+  renderHeadersPage()
+}
+
 /////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
 
 function apiCall() {
@@ -78,22 +162,47 @@ function resultsFn(data, err) {
 
 //////////////////////////////////////<-PAGES->//////////////////////////////////////////////
 
+const routes = {
+  '/': renderHomePage,
+  '/headers': renderHeadersPage,
+}
+
 // Routing function
 function router() {
   const path = window.location.hash.slice(1) || '/'
 
-  const routes = {
-    true: renderHomePage,
-    false: () => routeChecker(path),
-  }
-
-  const render = routes[path === '/']
+  const render = routes[path] || (() => routeChecker(path))
   render()
 }
 
 // Event listeners for route changes
 window.addEventListener('hashchange', router)
 window.addEventListener('load', router)
+
+// HEADERS PAGE
+function renderHeadersPage() {
+  const app = document.getElementById('app')
+  const routes = document.getElementById('routes')
+  app.classList.remove('hide')
+  routes.classList.add('hide')
+  app.innerHTML = `
+    <div class="notes headers">
+      <a class="btn" href="#/"></a>
+      <h3>Headers</h3>
+      <p>Update your Authorization token header or any additional headers you would like to send to send to your api.</p>
+      ${headerLoaderFn()}
+      <div class="key-form">
+        <h3>New key</h3>
+        <div class="fields">
+          <input id="key" placeholder="Please enter key"/>
+          <input id="value" placeholder="Please enter value"/>
+          <button class="method get" onclick="addHeaderFn()">Save</button>
+        </div>
+      </div>
+      <p class="clear" onclick="clearAllHeadersFn()">Clear all keys.</p>
+    </div>
+  `
+}
 
 // page being renderd in html file
 function renderNotFoundPage() {
@@ -166,7 +275,9 @@ function renderRoutePage() {
           </span>
           <span class="path">${currentRoute.path}</span>
         </div>
-        <span class="description">${currentRoute?.description || 'Not provided'}</span>
+        <span class="description">${
+          currentRoute?.description || 'Not provided'
+        }</span>
       </li>
       ${
         currentRoute.method === 'GET' || currentRoute.method === 'DELETE'
