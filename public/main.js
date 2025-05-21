@@ -135,10 +135,19 @@ function deleteHeaderFn(key) {
 /////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
 
 function apiCall() {
+  //fetch headers
+  let headers = localStorage.getItem('__headers__')
+
+  if (!headers) {
+    headers = '{}'
+  }
+
+  const _headers_ = JSON.parse(headers)
+
   fetch(currentRoute.path, {
     method: currentRoute.method,
     body: currentRoute?.body,
-    headers: { 'CONTENT-TYPE': 'application-json' },
+    headers: { 'CONTENT-TYPE': 'application-json', ..._headers_ },
   })
     .then((response) => {
       return response.json()
