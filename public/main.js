@@ -146,8 +146,8 @@ function apiCall() {
 
   fetch(currentRoute.path, {
     method: currentRoute.method,
-    body: currentRoute?.body,
-    headers: { 'CONTENT-TYPE': 'application-json', ..._headers_ },
+    body: JSON.stringify(currentRoute?.body),
+    headers: { 'CONTENT-TYPE': 'application/json', ..._headers_ },
   })
     .then((response) => {
       return response.json()
