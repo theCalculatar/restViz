@@ -6,6 +6,28 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
 
+* {
+  /* Http methods */
+  --method-get: #2ecc71;
+  --method-post: #3498db;
+  --method-put: #f39c12;
+  --method-delete: #e74c3c;
+
+  /* Http response status codes */
+  --status-info-: #5bc0de;
+  --status-success-: #5cb85c;
+  --status-redirect-: #f0ad4e;
+  --status-cError-: #d9534f;
+  --status-sError: #800000;
+
+  /* Json highlighters */
+  --json-key: #d73a49;
+  --json-string: #032f62;
+  --json-number: #005cc5;
+  --json-boolean: #e36209;
+  --json-null: #6a737d;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #f4f7fc;
@@ -108,6 +130,15 @@ ul {
 
 .nav .menu .menu-list > li:hover {
   background-color: #ecf0f1;
+}
+
+pre {
+  font-family: monospace;
+  background: #f6f8fa;
+  padding: 1em;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .container {
@@ -292,4 +323,160 @@ li span:nth-child(1) {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/*********************************** ENDPOINT PREVIEW PAGE ********************************/
+
+.api-block {
+  padding: 22px 0;
+}
+.api-response > h3 {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.api-response > h3 > code {
+  margin: 7px;
+  text-align: end;
+}
+
+.params {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  gap: 10px;
+}
+
+.params > input {
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid lightgrey;
+}
+pre.error {
+  white-space: normal;
+  word-wrap: break-word;
+  margin: 1em 0;
+}
+
+.blink-border {
+  border: 2px solid transparent;
+  border-radius: 10px;
+  animation: blink 1s linear 0s 3;
+}
+
+.blink-border.success {
+  --blink-color-: var(--status-success-);
+}
+
+.blink-border.error {
+  --blink-color-: var(--status-cError-);
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    border-color: var(--blink-color-);
+  }
+  50% {
+    border-color: transparent;
+  }
+}
+
+/*************************************** HEADER PAGE **************************************/
+.headers {
+  padding: 7px 0;
+}
+
+.headers > .clear {
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+  color: red;
+}
+
+.key-form .fields {
+  display: flex;
+  gap: 20px;
+}
+.key-form .fields > input {
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid lightgrey;
+}
+.key-form .fields > button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.header-table {
+  font-size: small;
+}
+
+.header-table td {
+  max-width: 100px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn.action {
+  background-image: url('/images/trash.svg');
+  display: flex;
+  width: min-content;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 766px) {
+  .key-form .fields {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/******************************* HTTP RESPONSE STATUS CODES *********************************/
+.status {
+  padding: 2px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: white;
+}
+
+.status.code-100 {
+  background-color: var(--status-info-);
+}
+
+.status.code-200 {
+  background-color: var(--status-success-);
+}
+
+.status.code-300 {
+  background-color: var(--status-redirect-);
+}
+
+.status.code-400 {
+  background-color: var(--status-cError-);
+}
+
+.status.code-500 {
+  background-color: var(--status-sError);
+}
+
+/* ********************************** JSON HIGHLIGHT COLORS ***************************** */
+
+.json-key {
+  color: var(--json-key);
+}
+.json-string {
+  color: var(--json-string);
+}
+.json-number {
+  color: var(--json-number);
+}
+.json-boolean {
+  color: var(--json-boolean);
+}
+.json-null {
+  color: var(--json-null);
 }
