@@ -207,7 +207,7 @@ function getPath() {
 }
 
 function resultsFn(data, err) {
-  const statusColor = Math.floor(data.status / 100) * 100 // round down to 100hundred
+  const statusColor = Math.floor(data?.status / 100) * 100 // round down to 100hundred
 
   document.querySelector(
     '.api-block'
