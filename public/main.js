@@ -12,9 +12,6 @@ let currentRoute = {}
 
 function routeChecker(path) {
   let __path = path + '*()'
-  const methods = ['g', 'd', 'p', 'a']
-
-  console.log('qwerty', path)
 
   currentRoute = myData.find((route) => {
     const absolutePath = __path
