@@ -11,8 +11,19 @@ const myData = JSON.parse(window.__routes__) // finally a better way to parse da
 let currentRoute = {}
 
 function routeChecker(path) {
+  let __path = path + '*()'
+
   currentRoute = myData.find((route) => {
-    if (route.path === path) {
+    const absolutePath = __path
+      .replace('/g*()', '')
+      .replace('/d*()', '')
+      .replace('/p*()', '')
+      .replace('/a*()', '')
+
+    const isMethodMatching =
+      route.method.at(0).toLowerCase() === path.split('/').at(-1)
+
+    if (route.path === absolutePath && isMethodMatching) {
       return route
     }
   })
