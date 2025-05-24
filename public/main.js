@@ -135,37 +135,82 @@ function deleteHeaderFn(key) {
 /////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
 
 function apiCall() {
-  //fetch headers
-  let headers = localStorage.getItem('__headers__')
-
-  if (!headers) {
-    headers = '{}'
+  const __response = {
+    status: 200,
+    statusText: '',
+    timeout: 0,
+    timestamp: Date.now(),
   }
 
-  const _headers_ = JSON.parse(headers)
+  //fetch headers
+  const headers = localStorage.getItem('__headers__') || '{}'
 
-  fetch(currentRoute.path, {
+  const __headers = JSON.parse(headers)
+
+  const startTime = performance.now()
+
+  fetch(getPath(), {
     method: currentRoute.method,
     body: JSON.stringify(currentRoute?.body),
-    headers: { 'CONTENT-TYPE': 'application/json', ..._headers_ },
+    headers: { 'CONTENT-TYPE': 'application/json', ...__headers },
   })
     .then((response) => {
+      let endTime = performance.now()
+      __response.status = response.status
+      __response.timeout = endTime - startTime
+      __response.statusText = response.statusText
+
       return response.json()
     })
-    .then((data) => resultsFn(data))
+    .then((data) => resultsFn({ data, ...__response }))
     .catch((err) => resultsFn(null, err))
 }
 
+function getParamsFn() {
+  const paths = currentRoute.path.split('/')
+  return paths.filter((path) => path.startsWith(':'))
+}
+
+function paramsLoaderFn() {
+  return getParamsFn()
+    .map((param) => {
+      return `<input id="${param}" placeholder="Enter ${param.replace(
+        ':',
+        ''
+      )} param"/>`
+    })
+    .join('')
+}
+
+function getPath() {
+  return currentRoute.path
+    .split('/')
+    .map((param) => {
+      if (param.startsWith(':')) {
+        const paramValue = document.getElementById(`${param}`)?.value.trim()
+        return paramValue ? paramValue : param
+      }
+      return param
+    })
+    .join('/')
+}
+
 function resultsFn(data, err) {
+  const statusColor = Math.floor(data.status / 100) * 100 // round down to 100hundred
+
   document.querySelector(
     '.api-block'
   ).innerHTML = `<div class="api-response blink-border ${
     err ? 'error' : ' success'
-  }"><h3>API response:</h3>
+  }"><h3>API response: <code class="status code-${statusColor}"> ${
+    err
+      ? ''
+      : `${data?.status} ${data.statusText} ---> ${data.timeout.toFixed(2)}ms`
+  }</code></h3>
   ${
     err
       ? `<pre class="error">${err}</pre>`
-      : `<pre>\n${jsonFomatter(data)}\n</pre>`
+      : `<pre>\n${jsonFomatter(data.data)}\n</pre>`
   }`
 }
 
@@ -301,6 +346,9 @@ function renderRoutePage() {
               } </pre>
             </div>`
       }
+      <div class="params">
+        ${paramsLoaderFn()}
+      </div>
       <div class="api-block"></div>
       <div class="">
         <h3>Response messages</h3>

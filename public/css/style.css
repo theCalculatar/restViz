@@ -325,6 +325,34 @@ li span:nth-child(1) {
   align-items: center;
 }
 
+/*********************************** ENDPOINT PREVIEW PAGE ********************************/
+
+.api-block {
+  padding: 22px 0;
+}
+.api-response > h3 {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.api-response > h3 > code {
+  margin: 7px;
+  text-align: end;
+}
+
+.params {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  gap: 10px;
+}
+
+.params > input {
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: 1px solid lightgrey;
+}
 pre.error {
   white-space: normal;
   word-wrap: break-word;
