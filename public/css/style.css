@@ -22,16 +22,42 @@
 
   /* Json highlighters */
   --json-key: #d73a49;
-  --json-string: #032f62;
+  --json-string: #c9b92c;
   --json-number: #005cc5;
   --json-boolean: #e36209;
   --json-null: #6a737d;
 }
 
+:root {
+  --color-primary-: #3498db;
+  --background-color-: #f4f7fc;
+  --container-background: white;
+  --method-background-color-: #fafafa;
+
+  --font-secondary-color: #777;
+  --font-primary-color: #333;
+
+  --hover-list-color-: #ecf0f1;
+  --box-shadow-: 0 0 10px rgba(52, 152, 219, 0.635);
+}
+
+.dark {
+  --color-primary-: #000;
+  --background-color-: #0e0e0e;
+  --container-background: #1c1c1c;
+  --method-background-color-: #2b2b2b;
+
+  --font-secondary-color: #ccc;
+  --font-primary-color: white;
+
+  --hover-list-color-: #363636;
+  --box-shadow-: 0 0 10px rgb(0, 0, 0);
+}
+
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f4f7fc;
-  color: #333;
+  background-color: var(--background-color-);
+  color: var(--font-primary-color);
   margin: 0;
   padding: 0;
 }
@@ -51,14 +77,14 @@ thead > tr {
   border-bottom: 1px solid #ddd;
 }
 tr:nth-child(even) {
-  background-color: #d6eeee;
+  background-color: var(--method-background-color-);
 }
 
 p {
   font-size: 1.2rem;
   margin-bottom: 20px;
   text-align: center;
-  color: #555;
+  color: var(--color-secondary-);
 }
 
 ul {
@@ -71,9 +97,8 @@ ul {
   height: 60px;
   justify-content: space-between;
   align-items: center;
-  background-color: #3498db;
-  border: lightgrey solid 1px;
-  box-shadow: 0 0 10px rgba(52, 152, 219, 0.635);
+  background-color: var(--color-primary-);
+  box-shadow: var(--box-shadow-);
   color: white;
   margin: 0;
   padding: 0 20px;
@@ -100,9 +125,9 @@ ul {
   width: 250px;
   top: 55;
   right: 20;
-  background-color: white;
-  color: #555;
-  border: 2px solid lightgrey;
+  background-color: var(--container-background);
+  color: var(--color-secondary-);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -120,6 +145,7 @@ ul {
 .nav .menu .menu-list > li > a {
   font-size: 1rem;
   display: flex;
+  color: var(--font-primary-color);
 }
 
 .nav .menu .menu-list > hr {
@@ -129,12 +155,12 @@ ul {
 }
 
 .nav .menu .menu-list > li:hover {
-  background-color: #ecf0f1;
+  background-color: var(--hover-list-color-);
 }
 
 pre {
   font-family: monospace;
-  background: #f6f8fa;
+  background: var(--method-background-color-);
   padding: 1em;
   border-radius: 4px;
   max-height: 300px;
@@ -145,7 +171,7 @@ pre {
   max-width: 960px;
   margin: 30px auto;
   padding: 20px;
-  background-color: white;
+  background-color: var(--container-background);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
 }
@@ -156,31 +182,28 @@ pre {
   border-radius: 5px;
   text-transform: uppercase;
   font-size: 0.9rem;
+  color: white;
 }
 
 .method.get {
   background-color: #2ecc71;
-  color: white;
 }
 
 .method.post {
   background-color: #3498db;
-  color: white;
 }
 
 .method.put {
   background-color: #f39c12;
-  color: white;
 }
 
 .method.delete {
   background-color: #e74c3c;
-  color: white;
 }
 
 .path {
   font-size: 1rem;
-  color: #555;
+  color: var(--font-secondary-color);
   text-decoration: none;
   flex-grow: 1;
   margin-left: 15px;
@@ -204,7 +227,7 @@ li span:nth-child(1) {
 .footer {
   text-align: center;
   margin-top: 40px;
-  color: #777;
+  color: var(--font-secondary-color);
   font-size: 0.9rem;
 }
 
@@ -235,10 +258,9 @@ li span:nth-child(1) {
 
 .route-item {
   margin: 10px 0;
-  border: 1px solid #ddd;
   border-radius: 8px;
   padding: 15px;
-  background-color: #fafafa;
+  background-color: var(--method-background-color-);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -260,10 +282,11 @@ li span:nth-child(1) {
   overflow: hidden;
   text-overflow: ellipsis;
   line-clamp: 1;
+  color: var(--font-secondary-color);
 }
 
 .route-item:hover {
-  background-color: #ecf0f1;
+  background-color: var(--hover-list-color-);
 }
 
 .route-item[style='display: none;'] {
@@ -302,7 +325,7 @@ li span:nth-child(1) {
 }
 
 .notes > p {
-  color: #777;
+  color: var(--font-secondary-color);
   text-align: left;
   font-size: 14px;
 }
@@ -389,11 +412,12 @@ pre.error {
 }
 
 .headers > .clear {
-  margin-top: 10px;
+  margin-top: 14px;
   font-weight: 500;
   font-size: 12px;
   cursor: pointer;
   color: red;
+  text-decoration: underline;
 }
 
 .key-form .fields {
