@@ -145,7 +145,7 @@ function deleteHeaderFn(key) {
 
 /////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
 
-function apiCall() {
+async function apiCall() {
   const __response = {
     status: 200,
     statusText: '',
@@ -160,21 +160,35 @@ function apiCall() {
 
   const startTime = performance.now()
 
-  fetch(getPath(), {
+  const response = await fetch(getPath(), {
     method: currentRoute.method,
     body: JSON.stringify(currentRoute?.body),
     headers: { 'CONTENT-TYPE': 'application/json', ...__headers },
   })
-    .then((response) => {
-      let endTime = performance.now()
-      __response.status = response.status
-      __response.timeout = endTime - startTime
-      __response.statusText = response.statusText
 
-      return response.json()
-    })
-    .then((data) => resultsFn({ data, ...__response }))
-    .catch((err) => resultsFn(null, err))
+  let endTime = performance.now()
+  __response.status = response.status
+  __response.timeout = endTime - startTime
+  __response.statusText = response.statusText
+
+  try {
+    if (response.ok) {
+      const data = await response.json()
+      resultsFn({ data, ...__response })
+      return
+    }
+    resultsFn(null, await response.text())
+  } catch (error) {
+    if (
+      response.ok &&
+      error.message ===
+        "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
+    ) {
+      resultsFn({ data: {}, ...__response })
+      return
+    }
+    resultsFn(null, error)
+  }
 }
 
 function getParamsFn() {
