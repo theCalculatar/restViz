@@ -1,6 +1,6 @@
 <ul>
   <% JSON.parse(routes).forEach(function(route){ %>
-  <a href="#<%- route.path %>/<%- route.method.at(0).toLowerCase() %>">
+  <a href="#<%- route.path %>/<%- route.method.substring(0, 2).toLowerCase() %>">
     <li class="route-item">
       <div class="">
         <span class="method <%- route.method.toLowerCase() %>"
