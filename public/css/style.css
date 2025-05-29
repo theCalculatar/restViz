@@ -257,6 +257,7 @@ li span:nth-child(1) {
 }
 
 .route-item {
+  position: relative;
   margin: 10px 0;
   border-radius: 8px;
   padding: 15px;
@@ -292,6 +293,29 @@ li span:nth-child(1) {
 .route-item[style='display: none;'] {
   display: none !important;
 }
+
+.route-item .tooltip {
+  display: none;
+  position: absolute;
+  width: 200px;
+  padding: 10px;
+  border-radius: 7px;
+  background-color: var(--background-color-);
+}
+
+.route-item .tooltip > p {
+  font-size: x-small;
+  text-wrap: wrap;
+  text-align: left;
+  text-transform: initial;
+  margin: 0;
+  color: var(--font-secondary-color);
+}
+
+.route-item .method:hover > .tooltip {
+  display: block;
+}
+
 .hide {
   display: none;
 }

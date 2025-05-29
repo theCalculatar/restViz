@@ -337,6 +337,11 @@ function renderRoutePage() {
         <div>
           <span class="method ${currentRoute.method.toLowerCase()}" style="cursor:pointer" onclick="apiCall()">
             ${currentRoute.method.toUpperCase()}
+            <div class="tooltip">
+              <p>
+                Click to interact with your API live. Make sure to edit the request body for methods like PUT, POST, and PATCH.              
+              </p>
+            </div>
           </span>
           <span class="path">${currentRoute.path}</span>
         </div>
