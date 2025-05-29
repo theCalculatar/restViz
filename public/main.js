@@ -15,13 +15,14 @@ function routeChecker(path) {
 
   currentRoute = myData.find((route) => {
     const absolutePath = __path
-      .replace('/g*()', '')
-      .replace('/d*()', '')
-      .replace('/p*()', '')
-      .replace('/a*()', '')
+      .replace('/ge*()', '')
+      .replace('/de*()', '')
+      .replace('/pa*()', '')
+      .replace('/po*()', '')
+      .replace('/pu*()', '')
 
     const isMethodMatching =
-      route.method.at(0).toLowerCase() === path.split('/').at(-1)
+      route.method.substring(0, 2).toLowerCase() === path.split('/').at(-1)
 
     if (route.path === absolutePath && isMethodMatching) {
       return route
