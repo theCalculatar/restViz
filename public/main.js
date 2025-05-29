@@ -207,7 +207,7 @@ function getPath() {
 }
 
 function resultsFn(data, err) {
-  const statusColor = Math.floor(data.status / 100) * 100 // round down to 100hundred
+  const statusColor = Math.floor(data?.status / 100) * 100 // round down to 100hundred
 
   document.querySelector(
     '.api-block'
@@ -337,6 +337,11 @@ function renderRoutePage() {
         <div>
           <span class="method ${currentRoute.method.toLowerCase()}" style="cursor:pointer" onclick="apiCall()">
             ${currentRoute.method.toUpperCase()}
+            <div class="tooltip">
+              <p>
+                Click to interact with your API live. Make sure to edit the request body for methods like PUT, POST, and PATCH.              
+              </p>
+            </div>
           </span>
           <span class="path">${currentRoute.path}</span>
         </div>

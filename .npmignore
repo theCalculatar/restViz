@@ -16,7 +16,7 @@ examples/
 
 # Ignore source files that shouldn't be published
 src/
-lib/
+# lib/
 dist/
 
 # Ignore editor and system files

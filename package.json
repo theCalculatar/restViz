@@ -1,6 +1,6 @@
 {
   "name": "restviz",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-alpha.2",
   "main": "src/index.js",
   "type": "commonjs",
   "types": "src/types/index.d.ts",
