@@ -73,9 +73,10 @@ td {
   padding: 8px;
 }
 
-thead > tr {
+thead>tr {
   border-bottom: 1px solid #ddd;
 }
+
 tr:nth-child(even) {
   background-color: var(--method-background-color-);
 }
@@ -113,7 +114,7 @@ ul {
   cursor: pointer;
 }
 
-.nav .menu .menu-btn > img {
+.nav .menu .menu-btn>img {
   height: 40px;
   width: 40px;
   color: white;
@@ -138,23 +139,23 @@ ul {
   display: none;
 }
 
-.nav .menu .menu-list > li {
+.nav .menu .menu-list>li {
   padding: 0 20px;
 }
 
-.nav .menu .menu-list > li > a {
+.nav .menu .menu-list>li>a {
   font-size: 1rem;
   display: flex;
   color: var(--font-primary-color);
 }
 
-.nav .menu .menu-list > hr {
+.nav .menu .menu-list>hr {
   background: #555;
   width: 90%;
   margin: 5px auto;
 }
 
-.nav .menu .menu-list > li:hover {
+.nav .menu .menu-list>li:hover {
   background-color: var(--hover-list-color-);
 }
 
@@ -269,7 +270,7 @@ li span:nth-child(1) {
   transition: background-color 0.3s ease;
 }
 
-.route-item > div {
+.route-item>div {
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -303,7 +304,7 @@ li span:nth-child(1) {
   background-color: var(--background-color-);
 }
 
-.route-item .tooltip > p {
+.route-item .tooltip>p {
   font-size: x-small;
   text-wrap: wrap;
   text-align: left;
@@ -312,7 +313,7 @@ li span:nth-child(1) {
   color: var(--font-secondary-color);
 }
 
-.route-item .method:hover > .tooltip {
+.route-item .method:hover>.tooltip {
   display: block;
 }
 
@@ -348,7 +349,7 @@ li span:nth-child(1) {
   }
 }
 
-.notes > p {
+.notes>p {
   color: var(--font-secondary-color);
   text-align: left;
   font-size: 14px;
@@ -366,7 +367,7 @@ li span:nth-child(1) {
   background-position: center;
 }
 
-.no-content > div {
+.no-content>div {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -377,13 +378,15 @@ li span:nth-child(1) {
 .api-block {
   padding: 22px 0;
 }
-.api-response > h3 {
+
+.api-response>h3 {
   margin: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.api-response > h3 > code {
+
+.api-response>h3>code {
   margin: 7px;
   text-align: end;
 }
@@ -395,11 +398,12 @@ li span:nth-child(1) {
   gap: 10px;
 }
 
-.params > input {
+.params>input {
   padding: 5px 10px;
   border-radius: 7px;
   border: 1px solid lightgrey;
 }
+
 pre.error {
   white-space: normal;
   word-wrap: break-word;
@@ -421,10 +425,12 @@ pre.error {
 }
 
 @keyframes blink {
+
   0%,
   100% {
     border-color: var(--blink-color-);
   }
+
   50% {
     border-color: transparent;
   }
@@ -435,7 +441,7 @@ pre.error {
   padding: 7px 0;
 }
 
-.headers > .clear {
+.headers>.clear {
   margin-top: 14px;
   font-weight: 500;
   font-size: 12px;
@@ -448,12 +454,14 @@ pre.error {
   display: flex;
   gap: 20px;
 }
-.key-form .fields > input {
+
+.key-form .fields>input {
   padding: 5px 10px;
   border-radius: 7px;
   border: 1px solid lightgrey;
 }
-.key-form .fields > button {
+
+.key-form .fields>button {
   outline: none;
   border: none;
   cursor: pointer;
@@ -516,15 +524,86 @@ pre.error {
 .json-key {
   color: var(--json-key);
 }
+
 .json-string {
   color: var(--json-string);
 }
+
 .json-number {
   color: var(--json-number);
 }
+
 .json-boolean {
   color: var(--json-boolean);
 }
+
 .json-null {
   color: var(--json-null);
+}
+
+/* Copy button and response section styles */
+.response-section {
+  margin-top: 20px;
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.response-header h3 {
+  margin: 0;
+}
+
+.copy-btn {
+  background-color: var(--method-background-color-);
+  color: var(--font-primary-color);
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.copy-btn:hover {
+  background-color: var(--hover-list-color-);
+  border-color: var(--color-primary-);
+}
+
+.copy-btn:active {
+  background-color: var(--color-primary-);
+  color: white;
+}
+
+.copy-btn.copied {
+  background-color: var(--method-get);
+  color: white;
+  border-color: var(--method-get);
+}
+
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Responsive adjustments for copy button */
+@media screen and (max-width: 1440px) {
+  .response-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .copy-btn {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+  }
 }

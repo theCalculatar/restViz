@@ -183,7 +183,7 @@ async function apiCall() {
     if (
       response.ok &&
       error.message ===
-        "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
+      "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
     ) {
       resultsFn({ data: {}, ...__response })
       return
@@ -226,18 +226,15 @@ function resultsFn(data, err) {
 
   document.querySelector(
     '.api-block'
-  ).innerHTML = `<div class="api-response blink-border ${
-    err ? 'error' : ' success'
-  }"><h3>API response: <code class="status code-${statusColor}"> ${
-    err
+  ).innerHTML = `<div class="api-response blink-border ${err ? 'error' : ' success'
+    }"><h3>API response: <code class="status code-${statusColor}"> ${err
       ? ''
       : `${data?.status} ${data.statusText} ---> ${data.timeout.toFixed(2)}ms`
-  }</code></h3>
-  ${
-    err
+    }</code></h3>
+  ${err
       ? `<pre class="error">${err}</pre>`
       : `<pre>\n${jsonFomatter(data.data)}\n</pre>`
-  }`
+    }`
 }
 
 //////////////////////////////////////<-PAGES->//////////////////////////////////////////////
@@ -319,17 +316,73 @@ function getStatus() {
     </tr>`
   }
 
-  return `<table>
-            <thead>
-              <tr>
-                <th>HTTP Status Code</th>
-                <th>Reason</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${status}
-            </tbody>
-          </table>`
+  return `<div class="response-section">
+            <div class="response-header">
+              <h3>Response messages</h3>
+              <button id="copy-response-btn" class="btn copy-btn" onclick="copyResponseTable()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 9H11C9.89543 9 9 9.89543 9 11V20C9 21.1046 9.89543 22 11 22H20C21.1046 22 22 21.1046 22 20V11C22 9.89543 21.1046 9 20 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M5 15H4C2.89543 15 2 14.1046 2 13V4C2 2.89543 2.89543 2 4 2H13C14.1046 2 15 2.89543 15 4V5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <table id="response-table">
+              <thead>
+                <tr>
+                  <th>HTTP Status Code</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${status}
+              </tbody>
+            </table>
+          </div>`
+}
+
+// Function to copy response table content to clipboard
+function copyResponseTable() {
+  let responseText = `Response Messages for ${currentRoute.method.toUpperCase()} ${currentRoute.path}\n\n`
+  responseText += 'HTTP Status Code | Reason\n'
+  responseText += '-----------------|-------\n'
+
+  for (const statusCode in currentRoute?.responses) {
+    responseText += `${statusCode} | ${currentRoute?.responses[statusCode]}\n`
+  }
+
+  navigator.clipboard.writeText(responseText).then(() => {
+    // Show success feedback
+    const copyBtn = document.getElementById('copy-response-btn')
+    const originalText = copyBtn.textContent
+    copyBtn.textContent = 'Copied!'
+    copyBtn.classList.add('copied')
+
+    setTimeout(() => {
+      copyBtn.textContent = originalText
+      copyBtn.classList.remove('copied')
+    }, 2000)
+  }).catch(err => {
+    console.error('Failed to copy: ', err)
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea')
+    textArea.value = responseText
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+
+    // Show success feedback
+    const copyBtn = document.getElementById('copy-response-btn')
+    const originalText = copyBtn.textContent
+    copyBtn.textContent = 'Copied!'
+    copyBtn.classList.add('copied')
+
+    setTimeout(() => {
+      copyBtn.textContent = originalText
+      copyBtn.classList.remove('copied')
+    }, 2000)
+  })
 }
 
 function renderRoutePage() {
@@ -360,30 +413,26 @@ function renderRoutePage() {
           </span>
           <span class="path">${currentRoute.path}</span>
         </div>
-        <span class="description">${
-          currentRoute?.description || 'Not provided'
-        }</span>
+        <span class="description">${currentRoute?.description || 'Not provided'
+    }</span>
       </li>
-      ${
-        currentRoute.method === 'GET' || currentRoute.method === 'DELETE'
-          ? ''
-          : `
+      ${currentRoute.method === 'GET' || currentRoute.method === 'DELETE'
+      ? ''
+      : `
             <div class="reqest-body-preview">
               <h3>Body</h3>
-              <pre>${
-                currentRoute.body
-                  ? jsonFomatter(currentRoute.body)
-                  : 'Not provided!'
-              } </pre>
+              <pre>${currentRoute.body
+        ? jsonFomatter(currentRoute.body)
+        : 'Not provided!'
+      } </pre>
             </div>`
-      }
+    }
       <div class="params">
         ${paramsLoaderFn()}
       </div>
       <div class="api-block"></div>
       <div class="">
-        <h3>Response messages</h3>
-          ${getStatus()}
+        ${getStatus()}
       </div>
 
     </div>
