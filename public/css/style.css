@@ -12,6 +12,7 @@
   --method-post: #3498db;
   --method-put: #f39c12;
   --method-delete: #e74c3c;
+  --method-patch: #a259ff;
 
   /* Http response status codes */
   --status-info-: #5bc0de;
@@ -201,6 +202,10 @@ pre {
 
 .method.delete {
   background-color: #e74c3c;
+}
+
+.method.patch {
+  background-color: #a259ff;
 }
 
 .path {
