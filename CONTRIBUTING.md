@@ -2,15 +2,30 @@
 
 Thank you for considering contributing to `restViz`! Your input is highly appreciated and helps make this project better for everyone.
 
-## How to Contribute
+### Base Contributions on the development Branch
+**Important**: ```Always branch off from development — not main.```
 
+All new ```features```, ```bug fixes```, and ```documentation``` updates should be based on the development branch. Pull requests targeting main will be closed or asked to be retargeted.
+
+# How to Contribute
 1. **Fork the repository**
-2. **Create a new branch** for your changes
-   - Use meaningful branch names:  
-     `fix/spelling-error`, `feature/add-dark-mode`, `docs/update-readme`
+
+2. **Create a new branch off of development**
+
+   *Example*:
+      - git checkout -b feature/add-dark-mode origin/development
+   
+      - Use meaningful branch names
+   
+      - fix/spelling-error, feature/add-dark-mode, docs/update-readme
+
 3. **Commit with clear messages**
+
 4. **Push to your fork**
-5. **Submit a Pull Request** and describe what you've done
+
+5. **Submit a Pull Request targeting the development branch**
+
+Describe what you've done and why
 
 ## Code Guidelines
 
