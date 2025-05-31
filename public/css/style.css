@@ -110,7 +110,9 @@ ul {
 }
 
 .nav .menu .menu-btn {
+
   cursor: pointer;
+  padding: 6px;
 }
 
 .nav .menu .menu-btn > img {
