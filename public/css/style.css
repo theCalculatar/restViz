@@ -203,6 +203,10 @@ pre {
   background-color: #e74c3c;
 }
 
+.method-patch {
+  background-color: #a259ff;
+}
+
 .path {
   font-size: 1rem;
   color: var(--font-secondary-color);
