@@ -173,19 +173,16 @@ async function apiCall() {
   __response.statusText = response.statusText
 
   try {
-    if (response.ok) {
-      const data = await response.json()
-      resultsFn({ data, ...__response })
+    if (response.status === 204) {
+      resultsFn({ data: {}, ...__response })
       return
     }
-    resultsFn(null, await response.text())
+    const data = await response.json()
+
+    resultsFn({ data, ...__response })
   } catch (error) {
-    if (
-      response.ok &&
-      error.message ===
-        "Failed to execute 'json' on 'Response': Unexpected end of JSON input"
-    ) {
-      resultsFn({ data: {}, ...__response })
+    if (response.status === 404 && error.message.includes('is not valid JSON')) {
+      resultsFn(null, 'Route not found. Please check the path on server and try again.')
       return
     }
     resultsFn(null, error)
