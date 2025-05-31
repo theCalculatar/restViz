@@ -1,15 +1,13 @@
 <ul>
-  <% routes.forEach(function(route){ %>
-  <a
-    href="#/home %>"
-    onclick="setPath('<%- route.path%>','<%- route.method %>')"
-  >
+  <% JSON.parse(routes).forEach(function(route){ %>
+  <a href="#<%- route.path %>/<%- route.method.substring(0, 2).toLowerCase() %>">
     <li class="route-item">
-      <span class="method <%- route.method.toLowerCase() %>"
-        ><%- route.method.toUpperCase() %></span
-      >
-      <span class="path"><%- route.path %></span>
-
+      <div class="">
+        <span class="method <%- route.method.toLowerCase() %>"
+          ><%- route.method.toUpperCase() %></span
+        >
+        <span class="path"><%- route.path %></span>
+      </div>
       <span class=""
         ><%- route.description ? route.description : "Not provided!" %></span
       >

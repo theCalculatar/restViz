@@ -26,7 +26,7 @@ function filterRoutes() {
     const path = route.querySelector('.path').textContent.toLowerCase()
 
     if (method.includes(searchTerm) || path.includes(searchTerm)) {
-      route.style.display = 'block'
+      route.style.display = 'flex'
     } else {
       route.style.display = 'none'
     }

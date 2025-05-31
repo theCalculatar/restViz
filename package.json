@@ -7,7 +7,21 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["REST", "API", "visualization", "metadata"],
+  "keywords": [
+    "REST",
+    "API",
+    "visualization",
+    "metadata",
+    "express",
+    "frameworks",
+    "web",
+    "http",
+    "rest",
+    "restful",
+    "router",
+    "app",
+    "api"
+  ],
   "author": "Alpheus Mabetlela",
   "license": "MIT",
   "description": "A lightweight library designed to create a dynamic web interface for Express applications",

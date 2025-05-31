@@ -39,7 +39,7 @@ const createFile = () => {
  * @param {Array} routes - An array of route objects to be stored.
  */
 const addRoutes = (routes) => {
-  fs.writeFileSync('routes.json', JSON.stringify(routes))
+  fs.writeFileSync('routes.json', JSON.stringify(routes, null, 2))
 }
 
 /**
