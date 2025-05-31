@@ -8,8 +8,9 @@
         >
         <span class="path"><%- route.path %></span>
       </div>
-
-      <span class="description"><%- route?.description %></span>
+      <span class=""
+        ><%- route.description ? route.description : "Not provided!" %></span
+      >
     </li>
   </a>
   <% }); %>
