@@ -237,6 +237,20 @@ function resultsFn(data, err) {
   }`
 }
 
+function copyResponse() {
+  const responseTextElement = document.getElementById('responseText')
+  if (!responseTextElement) {
+    alert('No response text to copy!')
+    return
+  }
+  const textToCopy = responseTextElement.innerText || responseTextElement.textContent
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    alert('Response copied to clipboard!')
+  }).catch((err) => {
+    alert('Failed to copy text: ' + err)
+  })
+}
+
 //////////////////////////////////////<-PAGES->//////////////////////////////////////////////
 
 const routes = {
