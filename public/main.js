@@ -219,36 +219,80 @@ function getPath() {
 }
 
 function resultsFn(data, err) {
-  const statusColor = Math.floor(data?.status / 100) * 100 // round down to 100hundred
+  const statusColor = Math.floor(data?.status / 100) * 100;
 
-  document.querySelector(
-    '.api-block'
-  ).innerHTML = `<div class="api-response blink-border ${
-    err ? 'error' : ' success'
-  }"><h3>API response: <code class="status code-${statusColor}"> ${
-    err
-      ? ''
-      : `${data?.status} ${data.statusText} ---> ${data.timeout.toFixed(2)}ms`
-  }</code></h3>
-  ${
-    err
-      ? `<pre class="error">${err}</pre>`
-      : `<pre>\n${jsonFomatter(data.data)}\n</pre>`
-  }`
+  document.querySelector('.api-block').innerHTML = `
+    <div class="api-response blink-border ${err ? 'error' : 'success'}">
+      <h3>API response: 
+        <code class="status code-${statusColor}">
+          ${err ? '' : `${data?.status} ${data.statusText} ---> ${data.timeout.toFixed(2)}ms`}
+        </code>
+      </h3>
+      ${
+        err
+          ? `<pre class="error">${err}</pre>`
+          : `<pre id="responseText">\n${jsonFomatter(data.data)}\n</pre>
+              <button id="copy-button" class="copy-button">📋 Copy</button>`
+      }
+    </div>
+  `;
+
+  // Attach the copy button click listener if not error
+  if (!err) {
+    const copyBtn = document.getElementById('copy-button');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => {
+        const responseTextElement = document.getElementById('responseText');
+        if (!responseTextElement) {
+          alert('No response text to copy!');
+          return;
+        }
+        const textToCopy = responseTextElement.innerText || responseTextElement.textContent;
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => alert('Response copied to clipboard!'))
+          .catch((err) => alert('Failed to copy text: ' + err));
+      });
+    }
+  }
 }
 
 function copyResponse() {
-  const responseTextElement = document.getElementById('responseText')
-  if (!responseTextElement) {
-    alert('No response text to copy!')
-    return
+  const responseTextElement = document.getElementById('responseText');
+  const copyBtn = document.getElementById('copy-response-btn');
+
+  if (!responseTextElement) return;
+
+  let rawJson;
+  try {
+    rawJson = JSON.parse(responseTextElement.textContent);
+  } catch (err) {
+    console.error("Invalid JSON in responseText:", err);
+    return;
   }
-  const textToCopy = responseTextElement.innerText || responseTextElement.textContent
-  navigator.clipboard.writeText(textToCopy).then(() => {
-    alert('Response copied to clipboard!')
+
+  // Build a table-style string
+  let tableText = 'HTTP Status Code    Reason\n';
+  tableText += '-----------------   ----------------\n';
+
+  for (const [code, reason] of Object.entries(rawJson)) {
+    const codeCol = code.padEnd(18, ' ');
+    const reasonCol = reason;
+    tableText += `${codeCol}${reasonCol}\n`;
+  }
+
+  // Copy to clipboard
+  navigator.clipboard.writeText(tableText).then(() => {
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = 'Copied!';
+    copyBtn.classList.add('copied');
+
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+      copyBtn.classList.remove('copied');
+    }, 2000);
   }).catch((err) => {
-    alert('Failed to copy text: ' + err)
-  })
+    console.error('Copy failed:', err);
+  });
 }
 
 //////////////////////////////////////<-PAGES->//////////////////////////////////////////////
