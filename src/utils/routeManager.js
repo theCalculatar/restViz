@@ -51,17 +51,21 @@ const addRoutes = (routes) => {
  */
 const updateRoutes = (appRoutes) => {
   const newRoutes = existingRoutes()
+  let routesChanged = false;
 
   appRoutes.forEach((route) => {
     const routeExist = newRoutes.find(
       (route_) => route_.path === route.path && route_.method === route.method
     )
     if (!routeExist) {
+      routesChanged = true; // Mark as changed if a new route is added
       newRoutes.push(route) // Add only if the route doesn't already exist
     }
   })
 
-  addRoutes(newRoutes)
+  if (routesChanged) {
+    addRoutes(newRoutes)
+  }
 
   return newRoutes
 }
