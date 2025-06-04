@@ -111,7 +111,6 @@ ul {
 }
 
 .nav .menu .menu-btn {
-
   cursor: pointer;
   padding: 6px;
 }
@@ -425,6 +424,26 @@ pre.error {
 
 .blink-border.error {
   --blink-color-: var(--status-cError-);
+}
+
+.api-response .response-block {
+  position: relative;
+}
+.api-response .response-block > .copy-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-image: url('/images/copy.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-color: var(--hover-list-color-);
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
 }
 
 @keyframes blink {
