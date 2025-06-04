@@ -181,8 +181,14 @@ async function apiCall() {
 
     resultsFn({ data, ...__response })
   } catch (error) {
-    if (response.status === 404 && error.message.includes('is not valid JSON')) {
-      resultsFn(null, 'Route not found. Please check the path on server and try again.')
+    if (
+      response.status === 404 &&
+      error.message.includes('is not valid JSON')
+    ) {
+      resultsFn(
+        null,
+        'Route not found. Please check the path on server and try again.'
+      )
       return
     }
     resultsFn(null, error)
@@ -219,25 +225,39 @@ function getPath() {
 }
 
 function resultsFn(data, err) {
-  const statusColor = Math.floor(data?.status / 100) * 100 // round down to 100hundred
+  const statusColor = Math.floor(data?.status / 100) * 100
 
-  document.querySelector(
-    '.api-block'
-  ).innerHTML = `<div class="api-response blink-border ${
-    err ? 'error' : ' success'
-  }"><h3>API response: <code class="status code-${statusColor}"> ${
-    err
-      ? ''
-      : `${data?.status} ${data.statusText} ---> ${data.timeout.toFixed(2)}ms`
-  }</code></h3>
-  ${
-    err
-      ? `<pre class="error">${err}</pre>`
-      : `<pre>\n${jsonFomatter(data.data)}\n</pre>`
-  }`
+  document.querySelector('.api-block').innerHTML = `
+    <div class="api-response blink-border ${err ? 'error' : 'success'}">
+      <h3>API response: 
+        <code class="status code-${statusColor}">
+          ${
+            err
+              ? ''
+              : `${data?.status} ${data.statusText} ---> ${data.timeout.toFixed(
+                  2
+                )}ms`
+          }
+        </code>
+      </h3>
+      <div class="response-block">
+        <button id="copy-button" class="copy-button"></button>
+        ${
+          err
+            ? `<pre class="error">${err}</pre>`
+            : `<pre>\n${jsonFomatter(data.data)}\n</pre>`
+        }
+      </div>
+    </div>
+  `
+
+  document.getElementById('copy-button').addEventListener('click', () => {
+    navigator.clipboard
+      .writeText(data.data ? JSON.stringify(data.data, null, 2) : err)
+      .then(() => alert('Response copied to clipboard!'))
+      .catch((err) => alert('Failed to copy text: ' + err))
+  })
 }
-
-//////////////////////////////////////<-PAGES->//////////////////////////////////////////////
 
 const routes = {
   '/': renderHomePage,
