@@ -12,6 +12,7 @@
   --method-post: #3498db;
   --method-put: #f39c12;
   --method-delete: #e74c3c;
+  --method-patch: #a259ff;
 
   /* Http response status codes */
   --status-info-: #5bc0de;
@@ -111,6 +112,7 @@ ul {
 
 .nav .menu .menu-btn {
   cursor: pointer;
+  padding: 6px;
 }
 
 .nav .menu .menu-btn > img {
@@ -199,6 +201,10 @@ pre {
 
 .method.delete {
   background-color: #e74c3c;
+}
+
+.method.patch {
+  background-color: #a259ff;
 }
 
 .path {
@@ -418,6 +424,26 @@ pre.error {
 
 .blink-border.error {
   --blink-color-: var(--status-cError-);
+}
+
+.api-response .response-block {
+  position: relative;
+}
+.api-response .response-block > .copy-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-image: url('/images/copy.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-color: var(--hover-list-color-);
+  width: 30px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
 }
 
 @keyframes blink {
