@@ -228,7 +228,9 @@ function resultsFn(data, err) {
   const statusColor = Math.floor(data?.status / 100) * 100 // round down to 100hundred
 
   document.querySelector('.api-block').innerHTML = `
-    <div class="api-response blink-border ${err ? 'error' : 'success'}">
+    <div class="api-response blink-border ${
+      err || data.status >= 400 ? 'error' : 'success'
+    }">
       <h3>API response: 
         <code class="status code-${statusColor}">
           ${
