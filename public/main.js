@@ -312,9 +312,17 @@ function renderNotFoundPage() {
   app.classList.remove('hide')
   routes.classList.add('hide')
   app.innerHTML = `
-  <div class="no-content">
-    <div><a class="method post" href="#/">Back </a><p>Route does not exists blud!!!</p></div>
-  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 50px">
+      <h1 style="font-size: 8rem; margin: 0;">404</h1>
+      <h2 style="font-size: 2rem; margin: 10px 0;">Oops! This endpoint wandered off.</h2>
+      <p style="font-size: 1rem; max-width: 400px; margin-bottom: 30px;">
+        Looks like the API route you are trying to visualize does not exist or is not mapped in Express. Try refreshing or double-checking your endpoints.
+      </p>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="location.hash='/'" style="padding: 10px 20px; font-size: 1rem; border: none; border-radius: 8px; background-color: #4f9deb; color: white; cursor: pointer;">Return Home</button>
+        <button onclick="window.open('https://github.com/theCalculatar/restViz/issues/new', '_blank')" style="padding: 10px 20px; font-size: 14px; background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; cursor: pointer;">Report Issue</button>
+      </div>
+    </div>
   `
 }
 
