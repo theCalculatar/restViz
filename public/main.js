@@ -37,9 +37,11 @@ function routeChecker(path) {
 }
 
 function jsonFomatter(json) {
-  if (typeof json !== 'string') {
-    json = JSON.stringify(json, null, 2) // pretty-print
+  if (typeof json === 'string') {
+    return json // already a string, no need to format
   }
+
+  json = JSON.stringify(json, null, 2) // pretty-print
 
   // Escape HTML characters
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -162,9 +164,17 @@ async function apiCall() {
 
   const startTime = performance.now()
 
+  let __body = null
+
+  if (useJsonRequestData) {
+    __body = JSON.stringify(currentRoute?.body)
+  } else {
+    __body = document.querySelector('.raw-body').value?.trim()
+  }
+
   const response = await fetch(getPath(), {
     method: currentRoute.method,
-    body: JSON.stringify(currentRoute?.body),
+    body: __body,
     headers: { 'CONTENT-TYPE': 'application/json', ...__headers },
   })
 
@@ -192,7 +202,7 @@ async function apiCall() {
       )
       return
     }
-    resultsFn(null, error)
+    resultsFn({ ...__response, error: error.message }, null)
   }
 }
 
@@ -248,7 +258,9 @@ function resultsFn(data, err) {
         ${
           err
             ? `<pre class="error">${err}</pre>`
-            : `<pre>\n${jsonFomatter(data.data)}\n</pre>`
+            : `<pre>\n${jsonFomatter(
+                data.data ? data.data : data.error
+              )}\n</pre>`
         }
       </div>
     </div>
