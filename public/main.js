@@ -38,6 +38,9 @@ function routeChecker(path) {
 
 function jsonFomatter(json) {
   if (typeof json === 'string') {
+    if (json.includes('... is not valid JSON')) {
+      return 'Body is not valid JSON. Please check your request body and try again.'
+    }
     return json // already a string, no need to format
   }
 
