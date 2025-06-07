@@ -446,6 +446,57 @@ pre.error {
   border-radius: 5px;
 }
 
+.reqest-body-preview .request-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reqest-body-preview .request-actions > button {
+  outline: none;
+  border: none;
+  font-size: small;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.reqest-body-preview .request-actions .body-control {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  height: auto;
+  margin: 0;
+}
+
+.reqest-body-preview .request-actions .body-control > li > p {
+  margin: 0;
+  height: auto;
+  font-size: small;
+}
+
+.reqest-body-preview .request-actions .body-control > li {
+  height: auto;
+  padding: 5px 15px;
+  border-radius: 7px;
+  border: 1px solid var(--method-background-color-);
+  cursor: pointer;
+}
+
+.reqest-body-preview .request-actions .body-control .control-item.active {
+  background-color: var(--hover-list-color-);
+}
+
+.body-preview textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 13px;
+  margin-top: 12px;
+  background-color: var(--container-background);
+  color: var(--font-secondary-color);
+}
+
 @keyframes blink {
   0%,
   100% {
