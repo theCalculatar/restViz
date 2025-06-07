@@ -9,6 +9,7 @@ const app = document.querySelector('#app')
 const myData = JSON.parse(window.__routes__) // finally a better way to parse data :) why didnt I think of it sooner??
 
 let currentRoute = {}
+let useJsonRequestData = false // default to false, if false then use raw request data
 
 function routeChecker(path) {
   let __path = path + '*()'
@@ -36,9 +37,14 @@ function routeChecker(path) {
 }
 
 function jsonFomatter(json) {
-  if (typeof json !== 'string') {
-    json = JSON.stringify(json, null, 2) // pretty-print
+  if (typeof json === 'string') {
+    if (json.includes('... is not valid JSON')) {
+      return 'Body is not valid JSON. Please check your request body and try again.'
+    }
+    return json // already a string, no need to format
   }
+
+  json = JSON.stringify(json, null, 2) // pretty-print
 
   // Escape HTML characters
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -144,6 +150,22 @@ function deleteHeaderFn(key) {
   renderHeadersPage()
 }
 
+/**
+ * Helper function to handle switching between pages.
+ * This function is used to hide the routes and show the app content.
+ * @param {*} page
+ */
+function routeHelperFn(page) {
+  const routes = document.getElementById('routes')
+  const app = document.getElementById('app')
+  routes.classList.add('hide')
+  app.classList.remove('hide')
+
+  app.innerHTML = page
+
+  useJsonRequestData = false // reset to false when switching pages
+}
+
 /////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
 
 async function apiCall() {
@@ -161,9 +183,17 @@ async function apiCall() {
 
   const startTime = performance.now()
 
+  let __body = null
+
+  if (useJsonRequestData) {
+    __body = JSON.stringify(currentRoute?.body)
+  } else {
+    __body = document.querySelector('.raw-body').value?.trim()
+  }
+
   const response = await fetch(getPath(), {
     method: currentRoute.method,
-    body: JSON.stringify(currentRoute?.body),
+    body: __body,
     headers: { 'CONTENT-TYPE': 'application/json', ...__headers },
   })
 
@@ -191,7 +221,7 @@ async function apiCall() {
       )
       return
     }
-    resultsFn(null, error)
+    resultsFn({ ...__response, error: error.message }, null)
   }
 }
 
@@ -228,7 +258,9 @@ function resultsFn(data, err) {
   const statusColor = Math.floor(data?.status / 100) * 100 // round down to 100hundred
 
   document.querySelector('.api-block').innerHTML = `
-    <div class="api-response blink-border ${err ? 'error' : 'success'}">
+    <div class="api-response blink-border ${
+      err || data.status >= 400 ? 'error' : 'success'
+    }">
       <h3>API response: 
         <code class="status code-${statusColor}">
           ${
@@ -245,7 +277,9 @@ function resultsFn(data, err) {
         ${
           err
             ? `<pre class="error">${err}</pre>`
-            : `<pre>\n${jsonFomatter(data.data)}\n</pre>`
+            : `<pre>\n${jsonFomatter(
+                data.data ? data.data : data.error
+              )}\n</pre>`
         }
       </div>
     </div>
@@ -280,11 +314,7 @@ window.addEventListener('load', router)
 
 // HEADERS PAGE
 function renderHeadersPage() {
-  const app = document.getElementById('app')
-  const routes = document.getElementById('routes')
-  app.classList.remove('hide')
-  routes.classList.add('hide')
-  app.innerHTML = `
+  const pageContent = `
     <div class="notes headers">
       <a class="btn" href="#/"></a>
       <h3>Headers</h3>
@@ -301,19 +331,25 @@ function renderHeadersPage() {
       <p class="clear" onclick="clearAllHeadersFn()">Clear all keys.</p>
     </div>
   `
+  routeHelperFn(pageContent)
 }
 
 // page being renderd in html file
 function renderNotFoundPage() {
-  const app = document.getElementById('app')
-  const routes = document.getElementById('routes')
-  app.classList.remove('hide')
-  routes.classList.add('hide')
-  app.innerHTML = `
-  <div class="no-content">
-    <div><a class="method post" href="#/">Back </a><p>Route does not exists blud!!!</p></div>
-  </div>
+  let pageContent = `
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 50px">
+      <h1 style="font-size: 8rem; margin: 0;">404</h1>
+      <h2 style="font-size: 2rem; margin: 10px 0;">Oops! This endpoint wandered off.</h2>
+      <p style="font-size: 1rem; max-width: 400px; margin-bottom: 30px;">
+        Looks like the API route you are trying to visualize does not exist or is not mapped in Express. Try refreshing or double-checking your endpoints.
+      </p>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="location.hash='/'" style="padding: 10px 20px; font-size: 1rem; border: none; border-radius: 8px; background-color: #4f9deb; color: white; cursor: pointer;">Return Home</button>
+        <button onclick="window.open('https://github.com/theCalculatar/restViz/issues/new', '_blank')" style="padding: 10px 20px; font-size: 14px; background-color: #e0e0e0; color: #333; border: none; border-radius: 6px; cursor: pointer;">Report Issue</button>
+      </div>
+    </div>
   `
+  routeHelperFn(pageContent)
 }
 
 function renderHomePage() {
@@ -351,13 +387,54 @@ function getStatus() {
           </table>`
 }
 
-function renderRoutePage() {
-  const routes = document.getElementById('routes')
-  const app = document.getElementById('app')
-  routes.classList.add('hide')
-  app.classList.remove('hide')
+function changesToUseJsonRequestData(renderJson) {
+  if (renderJson === useJsonRequestData) {
+    return // no need to change
+  }
 
-  app.innerHTML = currentRoute?.path
+  // toggle the useJsonRequestData variable
+  useJsonRequestData = renderJson
+
+  const bodyPreview = document.querySelector('.reqest-body-preview')
+
+  bodyPreview.innerHTML = ` 
+    <h3>Body</h3>
+    <div class="request-actions">
+      <ul class="body-control">
+        <li class="control-item ${
+          useJsonRequestData ? 'active' : ''
+        } " onclick="changesToUseJsonRequestData(true)">
+          <p>Json</p>
+        </li>
+        <li class="control-item ${
+          !useJsonRequestData ? 'active' : ''
+        }" onclick="changesToUseJsonRequestData(false)">
+          <p>Raw</p>
+        </li>
+      </ul>
+      <button class="method get" onclick="apiCall()">Send</button>
+    </div>
+    <div class="body-preview">
+      ${
+        useJsonRequestData
+          ? ` <pre class='json-body'>${
+              currentRoute.body
+                ? jsonFomatter(currentRoute.body)
+                : 'Not provided!'
+            } </pre>`
+          : `<textarea id="raw-body" class="raw-body" placeholder="Enter raw body here...">${
+              currentRoute.body
+                ? JSON.stringify(currentRoute.body, null, 2)
+                : '{}'
+            }</textarea>`
+      }
+    </div>
+
+  `
+}
+
+function renderRoutePage() {
+  let pageContent = currentRoute?.path
     ? `
     <div class="">
       <a class="btn" href="#/"></a>
@@ -386,15 +463,7 @@ function renderRoutePage() {
       ${
         currentRoute.method === 'GET' || currentRoute.method === 'DELETE'
           ? ''
-          : `
-            <div class="reqest-body-preview">
-              <h3>Body</h3>
-              <pre>${
-                currentRoute.body
-                  ? jsonFomatter(currentRoute.body)
-                  : 'Not provided!'
-              } </pre>
-            </div>`
+          : '<div class="reqest-body-preview"></div>'
       }
       <div class="params">
         ${paramsLoaderFn()}
@@ -404,13 +473,15 @@ function renderRoutePage() {
         <h3>Response messages</h3>
           ${getStatus()}
       </div>
-
     </div>
   `
     : `<div style="display:flex,justify-content: space-between; align-items: center;">
         <a class="btn" href="#/"> </a>
         <p>Nothing to see here. 404!</p>
       </div>`
+
+  routeHelperFn(pageContent)
+  changesToUseJsonRequestData(true)
 }
 const menuBtn = document.querySelector('.menu-btn')
 const menuList = document.querySelector('.menu-list')
