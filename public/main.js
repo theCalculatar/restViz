@@ -312,10 +312,10 @@ function renderNotFoundPage() {
   app.classList.remove('hide')
   routes.classList.add('hide')
   app.innerHTML = `
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(to right, #a1c4fd, #c2e9fb); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center;">
-      <h1 style="font-size: 8rem; margin: 0; color: #888;">404</h1>
-      <h2 style="font-size: 2rem; color: #444; margin: 10px 0;">Oops! This endpoint wandered off.</h2>
-      <p style="font-size: 1rem; color: #555; max-width: 400px; margin-bottom: 30px;">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 50px">
+      <h1 style="font-size: 8rem; margin: 0;">404</h1>
+      <h2 style="font-size: 2rem; margin: 10px 0;">Oops! This endpoint wandered off.</h2>
+      <p style="font-size: 1rem; max-width: 400px; margin-bottom: 30px;">
         Looks like the API route you are trying to visualize does not exist or is not mapped in Express. Try refreshing or double-checking your endpoints.
       </p>
       <div style="display: flex; gap: 10px;">
