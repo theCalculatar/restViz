@@ -426,8 +426,7 @@ function renderRoutePage() {
   routes.classList.add('hide')
   app.classList.remove('hide')
 
-  app.innerHTML = currentRoute?.path
-    ? `
+  app.innerHTML = `
     <div class="">
       <a class="btn" href="#/"></a>
 
@@ -465,13 +464,8 @@ function renderRoutePage() {
         <h3>Response messages</h3>
           ${getStatus()}
       </div>
-
     </div>
   `
-    : `<div style="display:flex,justify-content: space-between; align-items: center;">
-        <a class="btn" href="#/"> </a>
-        <p>Nothing to see here. 404!</p>
-      </div>`
 
   changesToUseJsonRequestData(true)
 }
