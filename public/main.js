@@ -9,7 +9,7 @@ const app = document.querySelector('#app')
 const myData = JSON.parse(window.__routes__) // finally a better way to parse data :) why didnt I think of it sooner??
 
 let currentRoute = {}
-let useJsonRequestData = true // default to true, if false then use raw request data
+let useJsonRequestData = false // default to false, if false then use raw request data
 
 function routeChecker(path) {
   let __path = path + '*()'
@@ -367,6 +367,11 @@ function getStatus() {
 }
 
 function changesToUseJsonRequestData(renderJson) {
+  if(renderJson === useJsonRequestData) {
+    return // no need to change
+  }
+
+  // toggle the useJsonRequestData variable
   useJsonRequestData = renderJson
 
   const bodyPreview = document.querySelector('.reqest-body-preview')
