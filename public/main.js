@@ -9,6 +9,7 @@ const app = document.querySelector('#app')
 const myData = JSON.parse(window.__routes__) // finally a better way to parse data :) why didnt I think of it sooner??
 
 let currentRoute = {}
+let useJsonRequestData = true // default to true, if false then use raw request data
 
 function routeChecker(path) {
   let __path = path + '*()'
@@ -353,6 +354,47 @@ function getStatus() {
           </table>`
 }
 
+function changesToUseJsonRequestData(renderJson) {
+  useJsonRequestData = renderJson
+
+  const bodyPreview = document.querySelector('.reqest-body-preview')
+
+  bodyPreview.innerHTML = ` 
+    <h3>Body</h3>
+    <div class="request-actions">
+      <ul class="body-control">
+        <li class="control-item ${
+          useJsonRequestData ? 'active' : ''
+        } " onclick="changesToUseJsonRequestData(true)">
+          <p>Json</p>
+        </li>
+        <li class="control-item ${
+          !useJsonRequestData ? 'active' : ''
+        }" onclick="changesToUseJsonRequestData(false)">
+          <p>Raw</p>
+        </li>
+      </ul>
+      <button class="method get" onclick="apiCall()">Send</button>
+    </div>
+    <div class="body-preview">
+      ${
+        useJsonRequestData
+          ? ` <pre class='json-body'>${
+              currentRoute.body
+                ? jsonFomatter(currentRoute.body)
+                : 'Not provided!'
+            } </pre>`
+          : `<textarea id="raw-body" class="raw-body" placeholder="Enter raw body here...">${
+              currentRoute.body
+                ? JSON.stringify(currentRoute.body, null, 2)
+                : '{}'
+            }</textarea>`
+      }
+    </div>
+
+  `
+}
+
 function renderRoutePage() {
   const routes = document.getElementById('routes')
   const app = document.getElementById('app')
@@ -388,15 +430,7 @@ function renderRoutePage() {
       ${
         currentRoute.method === 'GET' || currentRoute.method === 'DELETE'
           ? ''
-          : `
-            <div class="reqest-body-preview">
-              <h3>Body</h3>
-              <pre>${
-                currentRoute.body
-                  ? jsonFomatter(currentRoute.body)
-                  : 'Not provided!'
-              } </pre>
-            </div>`
+          : '<div class="reqest-body-preview"></div>'
       }
       <div class="params">
         ${paramsLoaderFn()}
@@ -413,6 +447,8 @@ function renderRoutePage() {
         <a class="btn" href="#/"> </a>
         <p>Nothing to see here. 404!</p>
       </div>`
+
+  changesToUseJsonRequestData(true)
 }
 const menuBtn = document.querySelector('.menu-btn')
 const menuList = document.querySelector('.menu-list')
