@@ -492,7 +492,7 @@ pre.error {
   padding: 12px;
   border-radius: 5px;
   font-size: 13px;
-  margin-top: 12px;
+  margin: 12px 0;
   background-color: var(--container-background);
   color: var(--font-secondary-color);
 }

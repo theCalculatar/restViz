@@ -383,7 +383,7 @@ function getStatus() {
 }
 
 function changesToUseJsonRequestData(renderJson) {
-  if(renderJson === useJsonRequestData) {
+  if (renderJson === useJsonRequestData) {
     return // no need to change
   }
 
@@ -476,6 +476,7 @@ function renderRoutePage() {
       </div>`
 
   routeHelperFn(pageContent)
+  changesToUseJsonRequestData(true)
 }
 const menuBtn = document.querySelector('.menu-btn')
 const menuList = document.querySelector('.menu-list')
