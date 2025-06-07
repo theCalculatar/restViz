@@ -144,6 +144,20 @@ function deleteHeaderFn(key) {
   renderHeadersPage()
 }
 
+/**
+ * Helper function to handle switching between pages.
+ * This function is used to hide the routes and show the app content.
+ * @param {*} page
+ */
+function routeHelperFn(page) {
+  const routes = document.getElementById('routes')
+  const app = document.getElementById('app')
+  routes.classList.add('hide')
+  app.classList.remove('hide')
+
+  app.innerHTML = page
+}
+
 /////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
 
 async function apiCall() {
@@ -282,11 +296,7 @@ window.addEventListener('load', router)
 
 // HEADERS PAGE
 function renderHeadersPage() {
-  const app = document.getElementById('app')
-  const routes = document.getElementById('routes')
-  app.classList.remove('hide')
-  routes.classList.add('hide')
-  app.innerHTML = `
+  const pageContent = `
     <div class="notes headers">
       <a class="btn" href="#/"></a>
       <h3>Headers</h3>
@@ -303,15 +313,12 @@ function renderHeadersPage() {
       <p class="clear" onclick="clearAllHeadersFn()">Clear all keys.</p>
     </div>
   `
+  routeHelperFn(pageContent)
 }
 
 // page being renderd in html file
 function renderNotFoundPage() {
-  const app = document.getElementById('app')
-  const routes = document.getElementById('routes')
-  app.classList.remove('hide')
-  routes.classList.add('hide')
-  app.innerHTML = `
+  let pageContent = `
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding-bottom: 50px">
       <h1 style="font-size: 8rem; margin: 0;">404</h1>
       <h2 style="font-size: 2rem; margin: 10px 0;">Oops! This endpoint wandered off.</h2>
@@ -324,6 +331,7 @@ function renderNotFoundPage() {
       </div>
     </div>
   `
+  routeHelperFn(pageContent)
 }
 
 function renderHomePage() {
@@ -362,12 +370,7 @@ function getStatus() {
 }
 
 function renderRoutePage() {
-  const routes = document.getElementById('routes')
-  const app = document.getElementById('app')
-  routes.classList.add('hide')
-  app.classList.remove('hide')
-
-  app.innerHTML = currentRoute?.path
+  let pageContent = currentRoute?.path
     ? `
     <div class="">
       <a class="btn" href="#/"></a>
@@ -421,6 +424,8 @@ function renderRoutePage() {
         <a class="btn" href="#/"> </a>
         <p>Nothing to see here. 404!</p>
       </div>`
+
+  routeHelperFn(pageContent)
 }
 const menuBtn = document.querySelector('.menu-btn')
 const menuList = document.querySelector('.menu-list')
