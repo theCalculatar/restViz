@@ -159,6 +159,8 @@ function routeHelperFn(page) {
   app.classList.remove('hide')
 
   app.innerHTML = page
+
+  useJsonRequestData = false // reset to false when switching pages
 }
 
 /////////////////////////////////////<- HTTP API CALL ->///////////////////////////////////
