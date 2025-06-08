@@ -31,12 +31,20 @@ const routeExtractor = (router, basePath = '') => {
     } else if (layer.name === 'router' && layer.handle.stack) {
       // Nested router (like Express.Router)
 
-      // Extract the base path from the nested router's regex pattern
-      const nestedBasePath = layer.regexp.source
-        .replace(/\\\//g, '/') // Replace escaped slashes (\/) with actual slashes (/)
-        .replace(/\^|\$\|\(\?=\.\*\)\?/g, '') // Remove start/end regex markers and lookaheads
-        .replace(/\/\?\(\?=\/\|\$\)/g, '') // Clean up optional trailing slash pattern
-        .replace(/\/\?$/, '') // Remove trailing optional slash
+      let nestedBasePath = layer.path || ''
+
+      // Fallback: extract from regexp if layer.path missing
+      if (!nestedBasePath && layer.regexp) {
+        nestedBasePath = layer.regexp.source
+          .replace(/\\\//g, '/') // Replace escaped slashes (\/) with actual slashes (/)
+          .replace(/\^|\$\|\(\?=\.\*\)\?/g, '') // Remove start/end regex markers and lookaheads
+          .replace(/\/\?\(\?=\/\|\$\)/g, '') // Clean up optional trailing slash pattern
+          .replace(/\/\?$/, '') // Remove trailing optional slash
+      }
+
+      if (nestedBasePath && !nestedBasePath.startsWith('/')) {
+        nestedBasePath = '/' + nestedBasePath
+      }
 
       // Recursively extract nested routes and merge them into the main list
       routes.push(...routeExtractor(layer.handle, nestedBasePath))
