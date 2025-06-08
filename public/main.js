@@ -36,6 +36,13 @@ function routeChecker(path) {
   renderNotFoundPage()
 }
 
+/**
+ * This function formats JSON data for display in the UI.
+ * It converts the JSON object to a pretty-printed string, escapes HTML characters,
+ * and applies syntax highlighting for better readability.
+ * @param {*} json
+ * @returns Formatted JSON string with syntax highlighting.
+ */
 function jsonFomatter(json) {
   if (typeof json === 'string') {
     if (json.includes('... is not valid JSON')) {
@@ -191,18 +198,20 @@ async function apiCall() {
     __body = document.querySelector('.raw-body').value?.trim()
   }
 
-  const response = await fetch(getPath(), {
-    method: currentRoute.method,
-    body: __body,
-    headers: { 'CONTENT-TYPE': 'application/json', ...__headers },
-  })
-
-  let endTime = performance.now()
-  __response.status = response.status
-  __response.timeout = endTime - startTime
-  __response.statusText = response.statusText
+  let response
 
   try {
+    response = await fetch(getPath(), {
+      method: currentRoute.method,
+      body: __body,
+      headers: { 'CONTENT-TYPE': 'application/json', ...__headers },
+    })
+
+    let endTime = performance.now()
+    __response.status = response.status
+    __response.timeout = endTime - startTime
+    __response.statusText = response.statusText
+
     if (response.status === 204) {
       resultsFn({ data: {}, ...__response })
       return
@@ -211,6 +220,14 @@ async function apiCall() {
 
     resultsFn({ data, ...__response })
   } catch (error) {
+    if (error.message.includes('Failed to fetch')) {
+      resultsFn(
+        null,
+        'Network error. Please check your connection or the server status.'
+      )
+      return
+    }
+
     if (
       response.status === 404 &&
       error.message.includes('is not valid JSON')
@@ -221,6 +238,14 @@ async function apiCall() {
       )
       return
     }
+
+    if (error.message.includes('Unexpected token') && response.status === 500) {
+      // This is a server error, we can assume the server is not returning valid JSON
+      resultsFn({ ...__response, error: 'Server Error' }, null)
+      return
+    }
+
+    // Handle other errors
     resultsFn({ ...__response, error: error.message }, null)
   }
 }
