@@ -29,7 +29,7 @@ const init = (express, options) => {
       // Root route for listing endpoints
       app.get('/', (req, res) => {
         res.render('index', {
-          title: options ? options.title : 'My API Documentation',
+          title: options.title ? options.title : 'My API Documentation',
           theme: options ? options.theme : 'light',
           routes: JSON.stringify(routes),
           page: 'home',
