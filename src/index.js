@@ -27,7 +27,7 @@ const init = (express, options) => {
       routes = updateRoutes(routeExtractor(router)) // Extract all registered routes
 
       // Root route for listing endpoints
-      app.get('/', (req, res) => {
+      app.get('/docs', (req, res) => {
         res.render('index', {
           title: options.title ? options.title : 'My API Documentation',
           theme: options ? options.theme : 'light',
