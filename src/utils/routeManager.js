@@ -43,31 +43,32 @@ const addRoutes = (routes) => {
 }
 
 /**
- * Updates the routes.json file with new routes that are not already present.
- * Compares existing routes with the new routes and adds only unique ones.
+ * Updates the routes.json file by synchronizing with appRoutes.
+ * The order of routes in the file will match the order in the code.
  *
- * @param {Array} appRoutes - An array of new route objects to be merged with existing routes.
- * @returns {Array} The updated list of routes after merging.
+ * @param {Array} appRoutes - An array of current route objects to sync with.
+ * @returns {Array} The updated list of routes after synchronization.
  */
 const updateRoutes = (appRoutes) => {
-  const newRoutes = existingRoutes()
-  let routesChanged = false;
+  const currentRoutes = existingRoutes()
 
-  appRoutes.forEach((route) => {
-    const routeExist = newRoutes.find(
-      (route_) => route_.path === route.path && route_.method === route.method
-    )
-    if (!routeExist) {
-      routesChanged = true; // Mark as changed if a new route is added
-      newRoutes.push(route) // Add only if the route doesn't already exist
-    }
-  })
+  // Compare the current routes and app routes
+  const currentSet = new Set(currentRoutes.map((r) => `${r.method}:${r.path}`))
+  const appSet = new Set(appRoutes.map((r) => `${r.method}:${r.path}`))
 
-  if (routesChanged) {
-    addRoutes(newRoutes)
+  const removed = currentRoutes.find(
+    (r) => !appSet.has(`${r.method}:${r.path}`)
+  )
+  const added = appRoutes.find((r) => !currentSet.has(`${r.method}:${r.path}`))
+
+  const hasOrderChanged =
+    JSON.stringify(currentRoutes) !== JSON.stringify(appRoutes)
+
+  if (removed || added || hasOrderChanged) {
+    addRoutes(appRoutes) // Overwrite with exact appRoutes in defined order
   }
 
-  return newRoutes
+  return appRoutes
 }
 
 module.exports = { updateRoutes }
