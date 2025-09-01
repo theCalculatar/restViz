@@ -1,11 +1,15 @@
 {
   "name": "restviz",
   "version": "3.0.0",
-  "main": "src/index.js",
+  "main": "dist/middleware/index.cjs",
   "type": "commonjs",
   "types": "src/types/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "dev:middleware": "node esbuild.config.js --watch",
+    "build": "vite build",
+    "build:middleware": "node esbuild.config.js"
   },
   "keywords": [
     "REST",
@@ -27,6 +31,13 @@
   "description": "A lightweight library designed to create a dynamic web interface for Express applications",
   "dependencies": {
     "ejs": "^3.1.10",
-    "jsonschema": "^1.5.0"
+    "jsonschema": "^1.5.0",
+    "preact": "^10.26.9",
+    "preact-iso": "^2.10.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.2",
+    "esbuild": "^0.25.9",
+    "vite": "^7.0.4"
   }
 }
