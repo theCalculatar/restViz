@@ -48,3 +48,10 @@ temp/
 #
 .prettierrc
 CONTRIBUTING.md
+esbuild.config.js
+jsconfig.json
+postcss.config.js
+tailwind.config.js
+vite.config.js
+index.html
+
