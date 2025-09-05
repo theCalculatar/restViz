@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
-import preact from '@preact/preset-vite';
+import react from '@vitejs/plugin-react';
 import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [preact()],
+	plugins: [react()],
 	build: {
 		minify: 'esbuild',
 		outDir: 'dist/ui', // everything goes under dist/ui
@@ -18,5 +18,5 @@ export default defineConfig({
 			},
 		}
 	},
-	base: '', // This is important for hash routing
+	// base: '', // This is important for hash routing
 });

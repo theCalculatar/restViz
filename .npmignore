@@ -15,9 +15,9 @@ examples/
 .env.*.local
 
 # Ignore source files that shouldn't be published
-src/
+src/*
 # lib/
-dist/
+# dist/
 
 # Ignore editor and system files
 .vscode/

@@ -32,12 +32,20 @@
   "dependencies": {
     "ejs": "^3.1.10",
     "jsonschema": "^1.5.0",
-    "preact": "^10.26.9",
-    "preact-iso": "^2.10.0"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.8.2"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.10.2",
+    "@eslint/js": "^9.33.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
     "esbuild": "^0.25.9",
+    "globals": "^16.3.0",
     "vite": "^7.0.4"
   }
 }
