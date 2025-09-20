@@ -30,8 +30,6 @@
   "license": "MIT",
   "description": "A lightweight library designed to create a dynamic web interface for Express applications",
   "dependencies": {
-    "@radix-ui/react-icons": "^1.3.2",
-    "@radix-ui/themes": "^3.2.1",
     "clsx": "^2.1.1",
     "ejs": "^3.1.10",
     "jsonschema": "^1.5.0",
@@ -42,6 +40,7 @@
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@preact/preset-vite": "^2.10.2",
+    "@radix-ui/themes": "^3.2.1",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.9",
     "globals": "^16.3.0",
