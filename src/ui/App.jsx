@@ -7,7 +7,7 @@ export default function App() {
   return (
     <Router>
       <nav className="bg-gray-200 py-2 flex gap-4">
-        <Link to="/" className="text-blue-500">
+        <Link to="/" className="text-red-500">
           Home
         </Link>
         <Link to="/about" className="text-blue-500">
