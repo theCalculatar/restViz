@@ -100,7 +100,7 @@ function Provider({ children }) {
   const [name, setName] = useReducer(setNameFn, 'My API Documentation')
   const [headers, setHeaders] = useReducer(setHeadersFn, {})
   const [history, setHistory] = useReducer(setHistoryFn, [])
-  const [isNavOpen, toogleNav] = useReducer(setNavStaeFn, true)
+  const [isNavOpen, toogleNav] = useReducer(setNavStaeFn, false)
   const [activeRoute, setCurrentRoute] = useReducer(setCurrentRouteFn, {})
 
   return (

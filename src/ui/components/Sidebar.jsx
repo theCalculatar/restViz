@@ -25,7 +25,7 @@ function Sidebar() {
     return [...groupRoutesFn(routes).entries()]
   }, [routes])
 
-  const isMobile = false
+  const isMobile = true
   const navigate = useNavigate()
 
   return (
@@ -34,7 +34,7 @@ function Sidebar() {
         'border-r h-full px-2 pt-14 lg:pt-4 w-64 flex flex-col dark:border-white/10 border-black/10' +
         ' inset-y-0 left-0 z-50 fixed -translate-x-full lg:static lg:transform-none backdrop-blur-lg ' +
         ' transition-transform duration-200 ease-in-out  ' +
-        `${isMobile && isNavOpen && '-translate-x-0'}`
+        `${isMobile && isNavOpen && 'translate-x-0'}`
       }
     >
       <Heading size={'4'}>
