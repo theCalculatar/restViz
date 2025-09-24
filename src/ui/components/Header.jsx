@@ -11,23 +11,36 @@ import { useIsMobile } from '../hooks/useMobile'
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'preact/hooks'
 import { AppContext } from '../context'
+import { toogleNav, toogleTheme } from '../context/actions'
 
 export function Header() {
   const loggedIn = true
   const isMobile = useIsMobile()
   const navigate = useNavigate()
+  const {
+    toogleNav: toogleNavFn,
+    name,
+    theme,
+    setTheme,
+  } = useContext(AppContext)
 
   return (
     <header>
       <Flex
         className={'border-b-[1px] dark:border-white/10 border-black/10'}
-        px={{ initial: '4', xs: '6' }}
+        px={{ initial: '4', xs: '2' }}
         py={'4'}
         justify={'between'}
       >
         <Flex gap={'4'} direction={'row'} align={'center'}>
           {isMobile && (
-            <Button variant="ghost" size={{}}>
+            <Button
+              variant="ghost"
+              size={{}}
+              onClick={() => {
+                toogleNavFn(toogleNav)
+              }}
+            >
               <MenuIcon />
             </Button>
           )}
@@ -41,7 +54,7 @@ export function Header() {
                 xl: '7',
               }}
             >
-              My API Documantation
+              {name}
             </Heading>
           </Link>
           {!isMobile && loggedIn && (
@@ -80,12 +93,22 @@ export function Header() {
                 </DropdownMenu.Item>
                 <DropdownMenu.Item shortcut="⌘ S">Share</DropdownMenu.Item>
                 <DropdownMenu.Item
-                  shortcut="⌘ D"
+                  shortcut="⌘ M"
                   onClick={() => {
                     navigate('/settings')
                   }}
                 >
                   Settings
+                </DropdownMenu.Item>
+                <DropdownMenu.Item
+                  shortcut="⌘ D"
+                  onClick={() => {
+                    setTheme(toogleTheme)
+                  }}
+                >
+                  <span className={'capitalize'}>
+                    {theme === 'dark' ? 'light' : 'dark'} mode
+                  </span>
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator />
                 <DropdownMenu.Item

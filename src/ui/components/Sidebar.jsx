@@ -31,7 +31,7 @@ function Sidebar() {
   return (
     <aside
       className={
-        'border-r h-full px-2 pt-14 lg:pt-4 w-64 flex flex-col dark:border-white/10 border-black/10' +
+        'border-r h-full px-2 pt-[85px] lg:pt-4 w-64 flex flex-col dark:border-white/10 border-black/10' +
         ' inset-y-0 left-0 z-50 fixed -translate-x-full lg:static lg:transform-none backdrop-blur-lg ' +
         ' transition-transform duration-200 ease-in-out  ' +
         `${isMobile && isNavOpen && 'translate-x-0'}`
