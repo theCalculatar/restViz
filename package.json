@@ -36,6 +36,8 @@
     "jsonschema": "^1.5.0",
     "lucide-react": "^0.544.0",
     "preact": "^10.27.2",
+    "preact-iso": "^2.10.0",
+    "radix-ui": "^1.4.3",
     "react-router-dom": "^7.9.1",
     "tailwind-merge": "^3.3.1"
   },
