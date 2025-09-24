@@ -1,4 +1,4 @@
-import { setHeaders, setHistory, setName, setRoutes } from "./actions"
+import { setCurrentRoute, setHeaders, setHistory, setName, setRoutes, toogleNav } from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
     switch (type) {
@@ -34,10 +34,26 @@ const setHistoryFn = (state, { type, payload }) => {
     switch (type) {
         case setHistory:
             return { ...payload }
+        default:
+            return state
+    }
+}
+const setNavStaeFn = (state, type) => {
+    switch (type) {
+        case toogleNav:
+            return !state
+        default:
+            return state
+    }
+}
+const setCurrentRouteFn = (state, { type, payload }) => {
+    switch (type) {
+        case setCurrentRoute:
+            return { path: payload.path, method: payload.method }
 
         default:
             return state
     }
 }
 
-export { setRoutesFn, setNameFn, setHeadersFn, setHistoryFn }
+export { setRoutesFn, setNameFn, setHeadersFn, setHistoryFn, setNavStaeFn, setCurrentRouteFn }
