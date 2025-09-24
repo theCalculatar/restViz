@@ -9,6 +9,8 @@ import {
 import { ChartColumnIncreasingIcon, LogIn, MenuIcon } from 'lucide-react'
 import { useIsMobile } from '../hooks/useMobile'
 import { Link, useNavigate } from 'react-router-dom'
+import { useContext } from 'preact/hooks'
+import { AppContext } from '../context'
 
 export function Header() {
   const loggedIn = true
@@ -43,7 +45,7 @@ export function Header() {
             </Heading>
           </Link>
           {!isMobile && loggedIn && (
-            <Button>
+            <Button size={'2'} onClick={() => {}}>
               <ChartColumnIncreasingIcon /> Dashboard
             </Button>
           )}
