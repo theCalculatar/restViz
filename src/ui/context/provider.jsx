@@ -101,7 +101,7 @@ function Provider({ children }) {
   const [headers, setHeaders] = useReducer(setHeadersFn, {})
   const [history, setHistory] = useReducer(setHistoryFn, [])
   const [isNavOpen, toogleNav] = useReducer(setNavStaeFn, true)
-  const [activeRoute, setCurrentRoute] = useReducer(setCurrentRouteFn, '')
+  const [activeRoute, setCurrentRoute] = useReducer(setCurrentRouteFn, {})
 
   return (
     <AppContext.Provider

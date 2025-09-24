@@ -11,7 +11,7 @@ import { useContext, useMemo } from 'preact/hooks'
 import { Collapsible } from 'radix-ui'
 import { AppContext } from '../context'
 import { groupRoutesFn } from '../utils/routesUtils'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { setCurrentRoute } from '../context/actions'
 
 function Sidebar() {
@@ -26,6 +26,7 @@ function Sidebar() {
   }, [routes])
 
   const isMobile = false
+  const navigate = useNavigate()
 
   return (
     <aside
@@ -84,10 +85,10 @@ function Sidebar() {
                           py={'1'}
                           direction={'column'}
                           width={'100%'}
-                          className={`w-full dark:hover:bg-white/10 hover:bg-black/10 ${
+                          className={`w-full dark:hover:bg-white/10 hover:bg-black/5 ${
                             route.path === activeRoute.path &&
                             route.method === activeRoute.method &&
-                            'bg-black/15 dark:bg-white/15'
+                            'bg-black/10 dark:bg-white/15'
                           }`}
                           style={{
                             borderRadius: 'var(--radius-3)',
@@ -97,7 +98,7 @@ function Sidebar() {
                               type: setCurrentRoute,
                               payload: route,
                             })
-                            
+                            navigate(`test${route.path}`)
                           }}
                         >
                           <Flex align={'center'} gap={'1'}>
