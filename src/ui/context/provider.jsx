@@ -8,6 +8,7 @@ import {
   setNameFn,
   setNavStaeFn,
   setRoutesFn,
+  setThemeFn,
 } from './reducers'
 
 const AppContext = createContext(null)
@@ -102,6 +103,7 @@ function Provider({ children }) {
   const [history, setHistory] = useReducer(setHistoryFn, [])
   const [isNavOpen, toogleNav] = useReducer(setNavStaeFn, false)
   const [activeRoute, setCurrentRoute] = useReducer(setCurrentRouteFn, {})
+  const [theme, setTheme] = useReducer(setThemeFn, 'dark')
 
   return (
     <AppContext.Provider
@@ -118,6 +120,8 @@ function Provider({ children }) {
         toogleNav,
         activeRoute,
         setCurrentRoute,
+        theme,
+        setTheme,
       }}
     >
       {children}

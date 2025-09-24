@@ -1,4 +1,13 @@
-import { setCurrentRoute, setHeaders, setHistory, setName, setRoutes, toogleNav } from "./actions"
+import {
+    setCurrentRoute,
+    setHeaders,
+    setHistory,
+    setName,
+    setRoutes,
+    toogleNav,
+    toogleTheme
+
+} from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
     switch (type) {
@@ -56,4 +65,32 @@ const setCurrentRouteFn = (state, { type, payload }) => {
     }
 }
 
-export { setRoutesFn, setNameFn, setHeadersFn, setHistoryFn, setNavStaeFn, setCurrentRouteFn }
+const setThemeFn = (state, type) => {
+    switch (type) {
+        case toogleTheme:
+            if (state === 'dark') {
+                state = 'light'
+                document.documentElement.classList.remove('dark')
+                document.documentElement.classList.add('light')
+                localStorage.setItem('theme', 'light')
+            } else {
+                state = 'dark'
+                document.documentElement.classList.remove('light')
+                document.documentElement.classList.add('dark')
+                localStorage.setItem('theme', 'dark')
+            }
+            return state
+        default:
+            return state
+    }
+}
+
+export {
+    setRoutesFn,
+    setNameFn,
+    setHeadersFn,
+    setHistoryFn,
+    setNavStaeFn,
+    setCurrentRouteFn,
+    setThemeFn
+}

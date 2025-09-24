@@ -17,3 +17,7 @@ body {
   height: 100vh;
   overflow: hidden;
 }
+
+.lucide {
+  width: 16px;
+}
