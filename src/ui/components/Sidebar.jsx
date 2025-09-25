@@ -13,6 +13,8 @@ import { AppContext } from '../context'
 import { groupRoutesFn } from '../utils/routesUtils'
 import { Link, useNavigate } from 'react-router-dom'
 import { setCurrentRoute } from '../context/actions'
+import { ChevronDown, ChevronUp } from 'lucide-react'
+import { methodColors } from '../utils/colors'
 
 function Sidebar() {
   const {
@@ -31,9 +33,9 @@ function Sidebar() {
   return (
     <aside
       className={
-        'border-r h-full px-2 pt-[85px] lg:pt-4 w-64 flex flex-col dark:border-white/10 border-black/10' +
+        'border-r h-full p-4 pt-[68px] lg:pt-4 w-64 sm:w-80 flex flex-col dark:border-white/10 border-black/10' +
         ' inset-y-0 left-0 z-50 fixed -translate-x-full lg:static lg:transform-none backdrop-blur-lg ' +
-        ' transition-transform duration-200 ease-in-out  ' +
+        ' transition-transform duration-200 ease-in-out bg-white/[0.02] ' +
         `${isMobile && isNavOpen && 'translate-x-0'}`
       }
     >
@@ -62,21 +64,28 @@ function Sidebar() {
           {groupedRoute.map((group, key) => {
             return (
               <Collapsible.Root key={key}>
-                <Collapsible.Trigger asChild>
+                <Collapsible.Trigger asChild className={'collapse-trigger'}>
                   <Box
-                    p={'1'}
+                    px={'2'}
+                    py={'1'}
                     className={'dark:hover:bg-white/10 hover:bg-black/10 '}
                     style={{
                       borderRadius: 'var(--radius-3)',
                     }}
                   >
-                    <Text size={'2'} className="IconButton">
-                      {group[0]}
-                    </Text>
+                    <Flex justify={'between'} align={'center'}>
+                      <Text size={'2'} className="IconButton">
+                        {group[0]}
+                      </Text>
+                      <Box>
+                        <ChevronUp className={'ico-closed'} />
+                        <ChevronDown className={'ico-open'} />
+                      </Box>
+                    </Flex>
                   </Box>
                 </Collapsible.Trigger>
-                <Collapsible.Content>
-                  <Box px={'2'}>
+                <Collapsible.Content className={'CollapsibleContent'}>
+                  <Flex direction={'column'} gap={'1'} px={'2'}>
                     {group[1].map((route, index) => {
                       return (
                         <Flex
@@ -102,10 +111,14 @@ function Sidebar() {
                           }}
                         >
                           <Flex align={'center'} gap={'1'}>
-                            <Badge color="gold" size={'1'}>
+                            <Badge
+                              color={methodColors[route.method]}
+                              size={'1'}
+                            >
+                              {console.log(methodColors[route.method])}
                               {route.method}
                             </Badge>
-                            <Box p={'2'}>
+                            <Box p={'1'}>
                               <Text className="IconButton" size={'2'}>
                                 {route.path}
                               </Text>
@@ -117,7 +130,7 @@ function Sidebar() {
                         </Flex>
                       )
                     })}
-                  </Box>
+                  </Flex>
                 </Collapsible.Content>
               </Collapsible.Root>
             )
