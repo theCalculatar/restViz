@@ -58,7 +58,7 @@ const setNavStaeFn = (state, type) => {
 const setCurrentRouteFn = (state, { type, payload }) => {
     switch (type) {
         case setCurrentRoute:
-            return { path: payload.path, method: payload.method }
+            return {...payload}
 
         default:
             return state

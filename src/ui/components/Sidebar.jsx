@@ -85,11 +85,10 @@ function Sidebar() {
                           py={'1'}
                           direction={'column'}
                           width={'100%'}
-                          className={`w-full dark:hover:bg-white/10 hover:bg-black/5 ${
-                            route.path === activeRoute.path &&
+                          className={`w-full dark:hover:bg-white/10 hover:bg-black/5 ${route.path === activeRoute.path &&
                             route.method === activeRoute.method &&
                             'bg-black/10 dark:bg-white/15'
-                          }`}
+                            }`}
                           style={{
                             borderRadius: 'var(--radius-3)',
                           }}

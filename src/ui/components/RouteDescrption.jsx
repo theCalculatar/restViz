@@ -1,8 +1,17 @@
-import { Badge, Box, Button, Card, Flex, Text } from '@radix-ui/themes'
+import React, { useContext, useEffect } from 'preact/compat'
+import { Badge, Box, Button, Card, Flex, Text, TabNav, Tabs } from '@radix-ui/themes'
 import { Copy } from 'lucide-react'
+import { AppContext } from '../context'
 
 //all logic and UI here
 export default function RouteDescrption() {
+
+  const { activeRoute } = useContext(AppContext)
+
+  useEffect(() => {
+    console.log(activeRoute)
+  })
+
   return (
     <Box width={'100%'}>
       <Box>
@@ -12,7 +21,7 @@ export default function RouteDescrption() {
               Get
             </Badge>
             <Badge color="gray" size={'3'}>
-              /users
+              {activeRoute.path}
             </Badge>
           </Flex>
           <Button variant={'outline'} color="gray" radius="large" size={'2'}>
@@ -20,11 +29,43 @@ export default function RouteDescrption() {
           </Button>
         </Flex>
         <Text size={'2'} color="gray">
-          Route Description
+          {activeRoute.description}
+
         </Text>
       </Box>
       {/* Other info here */}
       <Box p={'3'}></Box>
+
+
+      <Tabs.Root defaultValue="description" >
+        <Tabs.List justify={'center'} color='gray' style={{ display: 'flex', gap: '14px' }}>
+          <Tabs.Trigger  value="description">Description</Tabs.Trigger>
+          <Tabs.Trigger value="notes">Notes</Tabs.Trigger>
+          <Tabs.Trigger value="request">Request</Tabs.Trigger>
+          <Tabs.Trigger value="responses">Responses</Tabs.Trigger>
+        </Tabs.List>
+
+        <Box pt="3">
+          <Tabs.Content value="description">
+            <Text size="2">Make changes to your account.</Text>
+          </Tabs.Content>
+
+          <Tabs.Content value="notes">
+            <Text size="2">Access and update your documents.</Text>
+          </Tabs.Content>
+
+          <Tabs.Content value="request">
+            <Text size="2">Edit your profile or update contact information.</Text>
+          </Tabs.Content>
+
+          <Tabs.Content value="responses">
+            <Text size="2">Edit your profile or update contact information.</Text>
+          </Tabs.Content>
+        </Box>
+      </Tabs.Root>
     </Box>
+
+
+
   )
 }
