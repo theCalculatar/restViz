@@ -28,14 +28,14 @@ export function Header() {
     <header>
       <Flex
         className={'border-b-[1px] dark:border-white/10 border-black/10'}
-        px={{ initial: '4', xs: '2' }}
-        py={'4'}
+        px={'4'}
+        py={'2'}
         justify={'between'}
       >
         <Flex gap={'4'} direction={'row'} align={'center'}>
           {isMobile && (
             <Button
-              variant="ghost"
+              variant="outline"
               size={{}}
               onClick={() => {
                 toogleNavFn(toogleNav)
@@ -51,7 +51,6 @@ export function Header() {
                 initial: '3',
                 sm: '5',
                 md: '6',
-                xl: '7',
               }}
             >
               {name}
