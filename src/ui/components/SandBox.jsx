@@ -17,6 +17,7 @@ import { useContext, useEffect, useState } from 'preact/hooks'
 import { getStatusColor, methodColors } from '../utils/colors'
 import { prettyJson } from '../utils/json'
 import { apiCall } from '../lib/request'
+import { Fragment } from 'preact/jsx-runtime'
 
 function SandBox() {
   const { activeRoute, headers: _headers, setHistory } = useContext(AppContext)
@@ -28,6 +29,7 @@ function SandBox() {
   const [response, setResponse] = useState()
 
   const [isValid, setIsValid] = useState(true)
+  const [bCopied, setBCopied] = useState(false)
 
   useEffect(() => {
     setRequestBody(prettyJson(activeRoute?.body))
@@ -92,6 +94,16 @@ function SandBox() {
     console.log(_response)
     setResponse(_response)
     // addHistory(response)
+  }
+
+  const copy = () => {
+    navigator.clipboard.writeText(
+      prettyJson(response?.data || response?.error || '')
+    )
+    setBCopied(true)
+    setTimeout(() => {
+      setBCopied(false)
+    }, 2000)
   }
 
   return (
@@ -256,8 +268,23 @@ function SandBox() {
                 </Code>{' '}
                 <Text>{response.statusText}</Text>
               </Text>
-              <Button size={'2'} variant="outline" radius="large" color="gray">
-                <Copy /> Copy
+              <Button
+                size={'2'}
+                variant="outline"
+                radius="large"
+                color="gray"
+                onClick={copy}
+                disabled={bCopied}
+              >
+                {bCopied ? (
+                  <Fragment>
+                    <Check /> Copied
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <Copy /> Copy
+                  </Fragment>
+                )}
               </Button>
             </Flex>
             <Separator mt={'2'} mb={'2'} size={'4'} />
