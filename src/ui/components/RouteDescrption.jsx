@@ -46,13 +46,18 @@ export default function RouteDescrption() {
       <Tabs.Root defaultValue="description">
         <Tabs.List
           justify={'center'}
-          color="gray"
-          style={{ display: 'flex', gap: '14px' }}
+          color='gray'
+          style={{ 
+            display: 'flex', 
+            gap: '3rem',
+            // background: '#F5F5F5',
+            border: '1rem',
+            padding: '0.1rem'
+          }}
         >
           <Tabs.Trigger value="description">Description</Tabs.Trigger>
           <Tabs.Trigger value="notes">Notes</Tabs.Trigger>
-          <Tabs.Trigger value="request">Request</Tabs.Trigger>
-          <Tabs.Trigger value="responses">Responses</Tabs.Trigger>
+          <Tabs.Trigger value="request">Request & Responses</Tabs.Trigger>
         </Tabs.List>
 
         <Box pt="3">
@@ -73,8 +78,8 @@ export default function RouteDescrption() {
             <Card asChild>
               <a href="#">
                 <Text as="div" size="2" weight="bold">
-                  Notes{' '}
-                </Text>
+                  Notes & Warnings 
+                </Text><br />
                 <Text as="div" color="gray" size="2">
                   {activeRoute.notes || 'No notes added yet'}{' '}
                 </Text>
@@ -83,6 +88,17 @@ export default function RouteDescrption() {
           </Tabs.Content>
 
           <Tabs.Content value="request">
+
+            <Card asChild>
+              <a href="#">
+                <Text as="div" size="2" weight="bold">
+                  Responses{' '}
+                </Text>
+                <Text as="div" color="gray" size="2">
+                  {activeRoute.responses || 'No responses defined'}{' '}
+                </Text>
+              </a>
+            </Card> <br />
             <Card asChild>
               <a href="#">
                 <Text as="div" size="2" weight="bold">
@@ -95,20 +111,10 @@ export default function RouteDescrption() {
             </Card>
           </Tabs.Content>
 
-          <Tabs.Content value="responses">
-            <Card asChild>
-              <a href="#">
-                <Text as="div" size="2" weight="bold">
-                  Responses{' '}
-                </Text>
-                <Text as="div" color="gray" size="2">
-                  {activeRoute.responses || 'No responses defined'}{' '}
-                </Text>
-              </a>
-            </Card>
-          </Tabs.Content>
         </Box>
       </Tabs.Root>
+
+      
     </Box>
   )
 }
