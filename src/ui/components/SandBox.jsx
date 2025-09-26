@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   Badge,
   Box,
@@ -15,28 +16,25 @@ import { AppContext } from '../context'
 import { useContext, useEffect, useState } from 'preact/hooks'
 import { getStatusColor, methodColors } from '../utils/colors'
 import { prettyJson } from '../utils/json'
+import { apiCall } from '../lib/request'
 
 function SandBox() {
-  const { activeRoute } = useContext(AppContext)
+  const { activeRoute, headers: _headers, setHistory } = useContext(AppContext)
   const [requestBody, setRequestBody] = useState('')
 
-  const [response, setResponse] = useState({
-    code: 200,
-    status: 'OK',
-    body: {
-      id: 3,
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      role: 'user',
-      created_at: new Date().toISOString(),
-    },
-  })
+  const [headers, setHeaders] = useState([])
+  const [fullPath, setFullPath] = useState('')
+
+  const [response, setResponse] = useState()
 
   const [isValid, setIsValid] = useState(true)
 
   useEffect(() => {
     setRequestBody(prettyJson(activeRoute?.body))
-  }, [activeRoute])
+    setHeaders(_headers)
+    setResponse(null)
+    setFullPath(window.location.origin + activeRoute.path)
+  }, [activeRoute, _headers])
 
   const validateJson = (value) => {
     if (!value.trim()) {
@@ -62,8 +60,38 @@ function SandBox() {
       setRequestBody(prettyJson(requestBody))
       setIsValid(true)
     } catch {
-      // Keep current value if invalid
+      setRequestBody(requestBody)
+      setIsValid(false)
     }
+  }
+
+  const removeHeader = (index) => {
+    if (headers[index].key === '') return
+
+    if (headers.length <= 1) {
+      setHeaders([{ key: '', value: '' }])
+      return
+    }
+    setHeaders((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const addHeader = () => {
+    if (headers.length >= 10) return
+    if (headers.some((header) => header.key === '')) return
+    setHeaders((prev) => [...prev, { key: '', value: '' }])
+  }
+
+  const makeRequest = async () => {
+    const _response = await apiCall({
+      method: activeRoute.method,
+      fullPath,
+      headers,
+      ...activeRoute,
+      body: requestBody,
+    })
+    console.log(_response)
+    setResponse(_response)
+    // addHistory(response)
   }
 
   return (
@@ -96,18 +124,24 @@ function SandBox() {
               placeholder="Enter request URL"
               radius="large"
               className={'w-full'}
-              value={window.location.origin + activeRoute.path}
+              value={fullPath}
+              onChange={(e) => setFullPath(e.target.value)}
             ></TextField.Root>
           </Flex>
           <Box>
             <Flex justify={'between'} align={'center'}>
               <Text>Headers</Text>
-              <Button size={'2'} variant="surface" radius="large">
+              <Button
+                size={'2'}
+                variant="surface"
+                radius="large"
+                onClick={addHeader}
+              >
                 Add headers
               </Button>
             </Flex>
             <Flex gap={'2'} mt={'2'} direction={'column'}>
-              {[0, 2, 3].map((item) => {
+              {headers.map((header, key) => {
                 return (
                   <Flex
                     gap={'2'}
@@ -118,13 +152,20 @@ function SandBox() {
                       placeholder={'Add header'}
                       className={'w-full'}
                       radius="large"
+                      value={header.key}
                     ></TextField.Root>
                     <TextField.Root
                       placeholder={'Add value'}
                       className={'w-full'}
                       radius="large"
+                      value={header.value}
                     ></TextField.Root>
-                    <Button variant="surface" radius="large" color="red">
+                    <Button
+                      variant="surface"
+                      radius="large"
+                      color="red"
+                      onClick={() => removeHeader(key)}
+                    >
                       <X />
                     </Button>
                   </Flex>
@@ -177,6 +218,7 @@ function SandBox() {
                 radius="large"
                 mt={'2'}
                 value={requestBody}
+                // @ts-ignore
                 onChange={(e) => handleBodyChange(e.target.value)}
                 placeholder="Enter JSON request body..."
                 rows={6}
@@ -190,7 +232,13 @@ function SandBox() {
               </Box>
             </Box>
           )}
-          <Button className={'w-full'} radius="large" disabled={!isValid}>
+          <Button
+            className={'w-full'}
+            radius="large"
+            onClick={() => {
+              makeRequest()
+            }}
+          >
             <Play />
             Send Request
           </Button>
@@ -203,24 +251,29 @@ function SandBox() {
             <Flex justify={'between'} align={'center'}>
               <Text>
                 Response:{' '}
-                <Code color={getStatusColor(response.code)}>
-                  {response.code}
+                <Code color={getStatusColor(response.status)}>
+                  {response.status}
                 </Code>{' '}
-                <Text>{response.status}</Text>
+                <Text>{response.statusText}</Text>
               </Text>
               <Button size={'2'} variant="outline" radius="large" color="gray">
                 <Copy /> Copy
               </Button>
             </Flex>
             <Separator mt={'2'} mb={'2'} size={'4'} />
-            <Text color="gray">Response body</Text>
+            <Flex align={'center'} justify={'between'}>
+              <Text>Response body</Text>
+              <Text color="gray">{response.timeout.toFixed(2)} ms</Text>
+            </Flex>
             <Code
               mt={'2'}
               className={
                 'w-full h-48 overflow-auto language-json whitespace-pre-wrap break-all'
               }
             >
-              {prettyJson(response.body)}
+              {response.error}
+              {response.status === 204 && 'No Content'}
+              {response?.data ? prettyJson(response.data) : ''}
             </Code>
           </Flex>
         </Card>
