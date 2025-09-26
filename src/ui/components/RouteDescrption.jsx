@@ -1,11 +1,19 @@
 import React, { useContext, useEffect } from 'preact/compat'
-import { Badge, Box, Button, Card, Flex, Text, TabNav, Tabs } from '@radix-ui/themes'
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Flex,
+  Text,
+  TabNav,
+  Tabs,
+} from '@radix-ui/themes'
 import { Copy } from 'lucide-react'
 import { AppContext } from '../context'
 
 //all logic and UI here
 export default function RouteDescrption() {
-
   const { activeRoute } = useContext(AppContext)
 
   useEffect(() => {
@@ -30,16 +38,18 @@ export default function RouteDescrption() {
         </Flex>
         <Text size={'2'} color="gray">
           {activeRoute.description}
-
         </Text>
       </Box>
       {/* Other info here */}
       <Box p={'3'}></Box>
 
-
-      <Tabs.Root defaultValue="description" >
-        <Tabs.List justify={'center'} color='gray' style={{ display: 'flex', gap: '14px' }}>
-          <Tabs.Trigger  value="description">Description</Tabs.Trigger>
+      <Tabs.Root defaultValue="description">
+        <Tabs.List
+          justify={'center'}
+          color="gray"
+          style={{ display: 'flex', gap: '14px' }}
+        >
+          <Tabs.Trigger value="description">Description</Tabs.Trigger>
           <Tabs.Trigger value="notes">Notes</Tabs.Trigger>
           <Tabs.Trigger value="request">Request</Tabs.Trigger>
           <Tabs.Trigger value="responses">Responses</Tabs.Trigger>
@@ -47,25 +57,58 @@ export default function RouteDescrption() {
 
         <Box pt="3">
           <Tabs.Content value="description">
-            <Text size="2">Make changes to your account.</Text>
+            <Card asChild>
+              <a href="#">
+                <Text as="div" size="2" weight="bold">
+                  Descriptions{' '}
+                </Text>
+                <Text as="div" color="gray" size="2">
+                  {activeRoute.description || 'No description available'}{' '}
+                </Text>
+              </a>
+            </Card>
           </Tabs.Content>
 
           <Tabs.Content value="notes">
-            <Text size="2">Access and update your documents.</Text>
+            <Card asChild>
+              <a href="#">
+                <Text as="div" size="2" weight="bold">
+                  Notes{' '}
+                </Text>
+                <Text as="div" color="gray" size="2">
+                  {activeRoute.notes || 'No notes added yet'}{' '}
+                </Text>
+              </a>
+            </Card>
           </Tabs.Content>
 
           <Tabs.Content value="request">
-            <Text size="2">Edit your profile or update contact information.</Text>
+            <Card asChild>
+              <a href="#">
+                <Text as="div" size="2" weight="bold">
+                  Requests{' '}
+                </Text>
+                <Text as="div" color="gray" size="2">
+                  {activeRoute.requestBody || 'No request body'}{' '}
+                </Text>
+              </a>
+            </Card>
           </Tabs.Content>
 
           <Tabs.Content value="responses">
-            <Text size="2">Edit your profile or update contact information.</Text>
+            <Card asChild>
+              <a href="#">
+                <Text as="div" size="2" weight="bold">
+                  Responses{' '}
+                </Text>
+                <Text as="div" color="gray" size="2">
+                  {activeRoute.responses || 'No responses defined'}{' '}
+                </Text>
+              </a>
+            </Card>
           </Tabs.Content>
         </Box>
       </Tabs.Root>
     </Box>
-
-
-
   )
 }
