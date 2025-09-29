@@ -1,4 +1,5 @@
 import {
+    removeHeaders,
     setCurrentRoute,
     setHeaders,
     setHistory,
@@ -33,7 +34,9 @@ const setNameFn = (state, { type, payload }) => {
 const setHeadersFn = (state, { type, payload }) => {
     switch (type) {
         case setHeaders:
-            return { ...payload }
+            return [...state, ...payload]
+        case removeHeaders:
+            return [...state.filter((header) => header.key !== '' && header.value !== payload.key)]
 
         default:
             return state

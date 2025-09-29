@@ -2,6 +2,7 @@ const setRoutes = 'SETROUTES'
 const setName = 'SETNAME'
 const setHistory = 'SETHISTORY'
 const setHeaders = 'SETHEADERS'
+const removeHeaders = 'REMOVEHEADERS'
 const setCurrentRoute = 'SETCURRENTROUTE'
 const toogleNav = 'TOOGLENAV'
 const toogleTheme = 'TOGLETHEME'
@@ -13,5 +14,6 @@ export {
     setHistory,
     toogleNav,
     setCurrentRoute,
-    toogleTheme
+    toogleTheme,
+    removeHeaders
 }
