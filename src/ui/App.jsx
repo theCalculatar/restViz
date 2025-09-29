@@ -6,7 +6,7 @@ import { Box, Flex, Theme } from '@radix-ui/themes'
 import Sidebar from './components/Sidebar'
 import { AppContext } from './context'
 import { useContext } from 'preact/hooks'
-import { toogleNav } from './context/actions'
+import { act_toogleNav } from './context/actions'
 import { Header } from './components/Header'
 import Settings from './pages/settings'
 
@@ -24,7 +24,7 @@ export default function App() {
               <div
                 className="fixed inset-0 z-auto"
                 onClick={() => {
-                  toogleNavFn(toogleNav)
+                  toogleNavFn(act_toogleNav)
                 }}
               ></div>
             )}

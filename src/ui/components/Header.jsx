@@ -11,7 +11,7 @@ import { useIsMobile } from '../hooks/useMobile'
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'preact/hooks'
 import { AppContext } from '../context'
-import { toogleNav, toogleTheme } from '../context/actions'
+import { act_toogleNav, act_toogleTheme } from '../context/actions'
 
 export function Header() {
   const loggedIn = true
@@ -38,7 +38,7 @@ export function Header() {
               variant="outline"
               size={{}}
               onClick={() => {
-                toogleNavFn(toogleNav)
+                toogleNavFn(act_toogleNav)
               }}
             >
               <MenuIcon />
@@ -102,7 +102,7 @@ export function Header() {
                 <DropdownMenu.Item
                   shortcut="⌘ D"
                   onClick={() => {
-                    setTheme(toogleTheme)
+                    setTheme(act_toogleTheme)
                   }}
                 >
                   <span className={'capitalize'}>

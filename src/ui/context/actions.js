@@ -1,19 +1,19 @@
-const setRoutes = 'SETROUTES'
-const setName = 'SETNAME'
-const setHistory = 'SETHISTORY'
-const setHeaders = 'SETHEADERS'
-const removeHeaders = 'REMOVEHEADERS'
-const setCurrentRoute = 'SETCURRENTROUTE'
-const toogleNav = 'TOOGLENAV'
-const toogleTheme = 'TOGLETHEME'
+const act_setRoutes = 'SETROUTES'
+const act_setName = 'SETNAME'
+const act_setHistory = 'SETHISTORY'
+const act_setHeaders = 'SETHEADERS'
+const act_removeHeaders = 'REMOVEHEADERS'
+const act_setCurrentRoute = 'SETCURRENTROUTE'
+const act_toogleNav = 'TOOGLENAV'
+const act_toogleTheme = 'TOGLETHEME'
 
 export {
-    setName,
-    setRoutes,
-    setHeaders,
-    setHistory,
-    toogleNav,
-    setCurrentRoute,
-    toogleTheme,
-    removeHeaders
+    act_setName,
+    act_setRoutes,
+    act_setHeaders,
+    act_setHistory,
+    act_toogleNav,
+    act_setCurrentRoute,
+    act_toogleTheme,
+    act_removeHeaders
 }

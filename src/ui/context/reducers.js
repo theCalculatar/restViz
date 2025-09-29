@@ -1,19 +1,19 @@
 import {
-    removeHeaders,
-    setCurrentRoute,
-    setHeaders,
-    setHistory,
-    setName,
-    setRoutes,
-    toogleNav,
-    toogleTheme
+    act_removeHeaders,
+    act_setCurrentRoute,
+    act_setHeaders,
+    act_setHistory,
+    act_setName,
+    act_setRoutes,
+    act_toogleNav,
+    act_toogleTheme
 
 } from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
     switch (type) {
 
-        case setRoutes:
+        case act_setRoutes:
             return { ...state, ...payload }
 
         default:
@@ -23,7 +23,7 @@ const setRoutesFn = (state, { type, payload }) => {
 
 const setNameFn = (state, { type, payload }) => {
     switch (type) {
-        case setName:
+        case act_setName:
             return { ...payload }
 
         default:
@@ -33,9 +33,9 @@ const setNameFn = (state, { type, payload }) => {
 
 const setHeadersFn = (state, { type, payload }) => {
     switch (type) {
-        case setHeaders:
+        case act_setHeaders:
             return [...state, ...payload]
-        case removeHeaders:
+        case act_removeHeaders:
             return [...state.filter((header) => header.key !== '' && header.value !== payload.key)]
 
         default:
@@ -44,7 +44,7 @@ const setHeadersFn = (state, { type, payload }) => {
 }
 const setHistoryFn = (state, { type, payload }) => {
     switch (type) {
-        case setHistory:
+        case act_setHistory:
             return { ...payload }
         default:
             return state
@@ -52,7 +52,7 @@ const setHistoryFn = (state, { type, payload }) => {
 }
 const setNavStaeFn = (state, type) => {
     switch (type) {
-        case toogleNav:
+        case act_toogleNav:
             return !state
         default:
             return state
@@ -60,7 +60,7 @@ const setNavStaeFn = (state, type) => {
 }
 const setCurrentRouteFn = (state, { type, payload }) => {
     switch (type) {
-        case setCurrentRoute:
+        case act_setCurrentRoute:
             return { path: payload.path, method: payload.method }
 
         default:
@@ -70,7 +70,7 @@ const setCurrentRouteFn = (state, { type, payload }) => {
 
 const setThemeFn = (state, type) => {
     switch (type) {
-        case toogleTheme:
+        case act_toogleTheme:
             if (state === 'dark') {
                 state = 'light'
                 document.documentElement.classList.remove('dark')

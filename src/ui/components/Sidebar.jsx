@@ -12,7 +12,7 @@ import { Collapsible } from 'radix-ui'
 import { AppContext } from '../context'
 import { groupRoutesFn } from '../utils/routesUtils'
 import { Link, useNavigate } from 'react-router-dom'
-import { setCurrentRoute } from '../context/actions'
+import { act_setCurrentRoute } from '../context/actions'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { methodColors } from '../utils/colors'
 
@@ -104,7 +104,7 @@ function Sidebar() {
                           }}
                           onClick={() => {
                             setCurrentRouteFn({
-                              type: setCurrentRoute,
+                              type: act_setCurrentRoute,
                               payload: route,
                             })
                             navigate(`test${route.path}`)

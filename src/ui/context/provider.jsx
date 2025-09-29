@@ -98,13 +98,15 @@ function Provider({ children }) {
       group: 'Authentication',
     },
   ])
-  const [name, setName] = useReducer(setNameFn, 'My API Documentation')
-  const [headers, setHeaders] = useReducer(setHeadersFn, {})
+  const [headers, setHeaders] = useReducer(setHeadersFn, [
+    { key: '', value: '' },
+  ])
   const [history, setHistory] = useReducer(setHistoryFn, [])
   const [isNavOpen, toogleNav] = useReducer(setNavStaeFn, false)
   const [activeRoute, setCurrentRoute] = useReducer(setCurrentRouteFn, {})
   const [theme, setTheme] = useReducer(setThemeFn, 'dark')
-
+  const [name, setName] = useReducer(setNameFn, 'My API Documentation')
+  
   return (
     <AppContext.Provider
       value={{
