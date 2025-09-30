@@ -25,7 +25,9 @@ const setHeadersFn = (state, { type, payload }) => {
     switch (type) {
         case act_setHeaders:
             const headersMap = new Map([...payload].map(item => [item.key, item]));
-            return [...headersMap.values()]
+            const headers = [...headersMap.values()]
+            localStorage.setItem('headers', JSON.stringify(headers))
+            return headers
         case act_removeHeaders:
             return [...state.filter((header) => header.key !== '' && header.value !== payload.key)]
 

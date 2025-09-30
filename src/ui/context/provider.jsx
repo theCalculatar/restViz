@@ -18,15 +18,21 @@ function Provider({ children }) {
     // @ts-ignore
     return window.__routes__ || []
   })
-  const [headers, setHeaders] = useReducer(setHeadersFn, [
-    { key: '', value: '' },
-  ])
+
+  const [headers, setHeaders] = useReducer(setHeadersFn, [], () => {
+    const saved = localStorage.getItem('headers')
+    return saved ? JSON.parse(saved) : [{ key: '', value: '' }]
+  })
+
   const [history, setHistory] = useReducer(setHistoryFn, [], () => {
     const saved = localStorage.getItem('history')
     return saved ? JSON.parse(saved) : []
   })
+
   const [isNavOpen, toogleNav] = useReducer(setNavStaeFn, false)
+
   const [activeRoute, setCurrentRoute] = useReducer(setCurrentRouteFn, {})
+
   const [config, setConfig] = useReducer(setConfigFn, {}, () => {
     // @ts-ignore
     const saved = window.__config__ || {}
