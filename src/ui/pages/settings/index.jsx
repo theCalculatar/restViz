@@ -3,13 +3,10 @@ import {
   Button,
   Callout,
   Card,
-  Checkbox,
   Container,
   Heading,
   Section,
   Switch,
-  // @ts-ignore
-  TabNav,
   Tabs,
   Text,
   TextArea,
@@ -19,10 +16,11 @@ import { Flex } from '@radix-ui/themes/src/index.js'
 import { Download, InfoIcon, Repeat, Upload, X } from 'lucide-react'
 import { useContext, useState } from 'preact/hooks'
 import { AppContext } from '../../context'
+import { act_setConfigtTheme } from '../../context/actions'
 
 function Settings() {
   // @ts-ignore
-  const { headers, setHeaders } = useContext(AppContext)
+  const { headers, setHeaders, config, setConfig } = useContext(AppContext)
   const [localHeaders, setLocalHeaders] = useState(headers)
 
   const addHeader = () => {
@@ -91,6 +89,7 @@ function Settings() {
                           disabled
                           radius="large"
                           type="text"
+                          value={config.name}
                           placeholder="Enter documentation title"
                         />
                       </Box>
@@ -106,6 +105,7 @@ function Settings() {
                               disabled
                               radius="large"
                               type="text"
+                              value={config.version}
                               placeholder="1.0.0"
                             />
                           </Box>
@@ -115,6 +115,7 @@ function Settings() {
                               disabled
                               radius="large"
                               type="text"
+                              value={config.baseUrl}
                               placeholder="MIT"
                             />
                           </Box>
@@ -126,6 +127,7 @@ function Settings() {
                           radius="large"
                           placeholder="Enter documentation description"
                           disabled
+                          value={config.description}
                         />
                       </Box>
                     </Flex>
@@ -169,6 +171,7 @@ function Settings() {
                           disabled
                           radius="large"
                           type="number"
+                          value={config.timeout}
                           placeholder="5000"
                         />
                       </Box>
@@ -178,6 +181,7 @@ function Settings() {
                           disabled
                           radius="large"
                           type="number"
+                          value={config.retries}
                           placeholder="3"
                         />
                       </Box>
@@ -282,7 +286,13 @@ function Settings() {
                           Toggle between light and dark themes
                         </Text>
                       </Flex>
-                      <Switch radius="large"></Switch>
+                      <Switch
+                        radius="large"
+                        checked={config.theme === 'dark'}
+                        onClick={() => {
+                          setConfig({ type: act_setConfigtTheme })
+                        }}
+                      ></Switch>
                     </Flex>
                   </Card>
                   <Card>

@@ -11,10 +11,14 @@ import { Header } from './components/Header'
 import Settings from './pages/settings'
 
 export default function App() {
-  const { toogleNav: toogleNavFn, isNavOpen } = useContext(AppContext)
-  const { theme } = useContext(AppContext)
+  const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
   return (
-    <Theme appearance={theme} accentColor="blue" radius="small" scaling="95%">
+    <Theme
+      appearance={config.theme}
+      accentColor="blue"
+      radius="small"
+      scaling="95%"
+    >
       <Flex direction={'column'} height={'100vh'}>
         <Router>
           <Header />

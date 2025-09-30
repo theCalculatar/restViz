@@ -1,5 +1,7 @@
 import {
     act_removeHeaders,
+    act_setConfig,
+    act_setConfigtTheme,
     act_setCurrentRoute,
     act_setHeaders,
     act_setHistory,
@@ -15,16 +17,6 @@ const setRoutesFn = (state, { type, payload }) => {
 
         case act_setRoutes:
             return { ...state, ...payload }
-
-        default:
-            return state
-    }
-}
-
-const setNameFn = (state, { type, payload }) => {
-    switch (type) {
-        case act_setName:
-            return { ...payload }
 
         default:
             return state
@@ -68,32 +60,35 @@ const setCurrentRouteFn = (state, { type, payload }) => {
     }
 }
 
-const setThemeFn = (state, type) => {
+
+const setConfigFn = (state, { type, payload }) => {
     switch (type) {
-        case act_toogleTheme:
-            if (state === 'dark') {
-                state = 'light'
+        case act_setConfig:
+            return { ...state, ...payload }
+        case act_setConfigtTheme:
+            if (state.theme === 'dark') {
+                state.theme = 'light'
                 document.documentElement.classList.remove('dark')
                 document.documentElement.classList.add('light')
                 localStorage.setItem('theme', 'light')
             } else {
-                state = 'dark'
+                state.theme = 'dark'
                 document.documentElement.classList.remove('light')
                 document.documentElement.classList.add('dark')
                 localStorage.setItem('theme', 'dark')
             }
-            return state
+            return { ...state }
         default:
             return state
     }
 }
 
+
 export {
     setRoutesFn,
-    setNameFn,
     setHeadersFn,
     setHistoryFn,
     setNavStaeFn,
     setCurrentRouteFn,
-    setThemeFn
+    setConfigFn
 }
