@@ -6,15 +6,20 @@ import { Box, Flex, Theme } from '@radix-ui/themes'
 import Sidebar from './components/Sidebar'
 import { AppContext } from './context'
 import { useContext } from 'preact/hooks'
-import { toogleNav } from './context/actions'
+import { act_toogleNav } from './context/actions'
 import { Header } from './components/Header'
+import Settings from './pages/settings'
 import Preview from './pages/Preview'
 
 export default function App() {
-  const { toogleNav: toogleNavFn, isNavOpen } = useContext(AppContext)
-  const { theme } = useContext(AppContext)
+  const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
   return (
-    <Theme appearance={theme} accentColor="blue" radius="small" scaling="95%">
+    <Theme
+      appearance={config.theme}
+      accentColor="blue"
+      radius="small"
+      scaling="95%"
+    >
       <Flex direction={'column'} height={'100vh'}>
         <Router>
           <Header />
@@ -24,7 +29,7 @@ export default function App() {
               <div
                 className="fixed inset-0 z-auto"
                 onClick={() => {
-                  toogleNavFn(toogleNav)
+                  toogleNavFn(act_toogleNav)
                 }}
               ></div>
             )}
@@ -32,6 +37,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/test/*" element={<Preview />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

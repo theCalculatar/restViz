@@ -9,6 +9,13 @@
   </head>
   <body>
     <div id="app"></div>
+    <script type="module" defer>
+      import { routes, config } from './src/ui/data.js'
+
+      window.__DEV__ = true
+      window.__config__ = config
+      window.__routes__ = routes
+    </script>
     <script type="module" src="./src/ui/index.jsx"></script>
     <!-- <script type="module" src="./dist/ui/index.css"></script> -->
   </body>
