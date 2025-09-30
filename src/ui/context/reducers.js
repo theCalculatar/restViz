@@ -5,10 +5,8 @@ import {
     act_setCurrentRoute,
     act_setHeaders,
     act_setHistory,
-    act_setName,
     act_setRoutes,
     act_toogleNav,
-    act_toogleTheme
 
 } from "./actions"
 
@@ -26,7 +24,8 @@ const setRoutesFn = (state, { type, payload }) => {
 const setHeadersFn = (state, { type, payload }) => {
     switch (type) {
         case act_setHeaders:
-            return [...state, ...payload]
+            const headersMap = new Map([...payload].map(item => [item.key, item]));
+            return [...headersMap.values()]
         case act_removeHeaders:
             return [...state.filter((header) => header.key !== '' && header.value !== payload.key)]
 

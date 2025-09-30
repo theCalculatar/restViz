@@ -6,6 +6,7 @@ import {
   Container,
   Heading,
   Section,
+  Separator,
   Switch,
   Tabs,
   Text,
@@ -13,10 +14,10 @@ import {
   TextField,
 } from '@radix-ui/themes'
 import { Flex } from '@radix-ui/themes/src/index.js'
-import { Download, InfoIcon, Repeat, Upload, X } from 'lucide-react'
+import { Download, InfoIcon, Repeat, Save, Upload, X } from 'lucide-react'
 import { useContext, useState } from 'preact/hooks'
 import { AppContext } from '../../context'
-import { act_setConfigtTheme } from '../../context/actions'
+import { act_setConfigtTheme, act_setHeaders } from '../../context/actions'
 
 function Settings() {
   // @ts-ignore
@@ -43,6 +44,10 @@ function Settings() {
     const updatedHeaders = [...localHeaders]
     updatedHeaders[index][field] = value
     setLocalHeaders(updatedHeaders)
+  }
+
+  const saveSettings = () => {
+    setHeaders({ type: act_setHeaders, payload: localHeaders })
   }
 
   return (
@@ -267,6 +272,12 @@ function Settings() {
                       </Callout.Text>
                     </Callout.Root>
                   </Card>
+                  <Flex align={'end'} gap={'4'} mt={'2'} direction={'column'}>
+                    <Separator orientation={'horizontal'} size={'4'} />
+                    <Button onClick={saveSettings}>
+                      <Save /> Save settings
+                    </Button>
+                  </Flex>
                 </Flex>
               </Tabs.Content>
 
