@@ -2,13 +2,12 @@ import { useReducer } from 'preact/hooks'
 import { createContext } from 'preact'
 
 import {
+  setConfigFn,
   setCurrentRouteFn,
   setHeadersFn,
   setHistoryFn,
-  setNameFn,
   setNavStaeFn,
   setRoutesFn,
-  setThemeFn,
 } from './reducers'
 
 const AppContext = createContext(null)
@@ -98,20 +97,39 @@ function Provider({ children }) {
       group: 'Authentication',
     },
   ])
-  const [name, setName] = useReducer(setNameFn, 'My API Documentation')
-  const [headers, setHeaders] = useReducer(setHeadersFn, {})
+  const [headers, setHeaders] = useReducer(setHeadersFn, [
+    { key: '', value: '' },
+  ])
   const [history, setHistory] = useReducer(setHistoryFn, [])
   const [isNavOpen, toogleNav] = useReducer(setNavStaeFn, false)
   const [activeRoute, setCurrentRoute] = useReducer(setCurrentRouteFn, {})
-  const [theme, setTheme] = useReducer(setThemeFn, 'dark')
+  const [config, setConfig] = useReducer(setConfigFn, {
+    version: '1.0.0',
+    hideEmpty: true,
+    name: 'My Service API',
+    groupBy: 'controller', // "tag" | "path"
+    description: 'Api monitoring and documentation tool for RESTful services.',
+
+    // UI / Theme
+    theme: 'dark', // "light" | "dark"
+    accentColor: 'blue',
+
+    // Interactive API Testing
+    enableTryItOut: true,
+    timeout: 5000,
+    retries: 3,
+
+    // Advanced
+    jsonEndpoint: '/docs.json',
+    baseUrl: 'http://localhost:3000',
+  })
 
   return (
     <AppContext.Provider
       value={{
         routes,
         setRoutes,
-        name,
-        setName,
+
         headers,
         setHeaders,
         history,
@@ -120,8 +138,8 @@ function Provider({ children }) {
         toogleNav,
         activeRoute,
         setCurrentRoute,
-        theme,
-        setTheme,
+        config,
+        setConfig,
       }}
     >
       {children}

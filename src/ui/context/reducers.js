@@ -1,29 +1,20 @@
 import {
-    setCurrentRoute,
-    setHeaders,
-    setHistory,
-    setName,
-    setRoutes,
-    toogleNav,
-    toogleTheme
+    act_removeHeaders,
+    act_setConfig,
+    act_setConfigtTheme,
+    act_setCurrentRoute,
+    act_setHeaders,
+    act_setHistory,
+    act_setRoutes,
+    act_toogleNav,
 
 } from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
     switch (type) {
 
-        case setRoutes:
+        case act_setRoutes:
             return { ...state, ...payload }
-
-        default:
-            return state
-    }
-}
-
-const setNameFn = (state, { type, payload }) => {
-    switch (type) {
-        case setName:
-            return { ...payload }
 
         default:
             return state
@@ -32,8 +23,11 @@ const setNameFn = (state, { type, payload }) => {
 
 const setHeadersFn = (state, { type, payload }) => {
     switch (type) {
-        case setHeaders:
-            return { ...payload }
+        case act_setHeaders:
+            const headersMap = new Map([...payload].map(item => [item.key, item]));
+            return [...headersMap.values()]
+        case act_removeHeaders:
+            return [...state.filter((header) => header.key !== '' && header.value !== payload.key)]
 
         default:
             return state
@@ -41,7 +35,7 @@ const setHeadersFn = (state, { type, payload }) => {
 }
 const setHistoryFn = (state, { type, payload }) => {
     switch (type) {
-        case setHistory:
+        case act_setHistory:
             return { ...payload }
         default:
             return state
@@ -49,7 +43,7 @@ const setHistoryFn = (state, { type, payload }) => {
 }
 const setNavStaeFn = (state, type) => {
     switch (type) {
-        case toogleNav:
+        case act_toogleNav:
             return !state
         default:
             return state
@@ -57,7 +51,7 @@ const setNavStaeFn = (state, type) => {
 }
 const setCurrentRouteFn = (state, { type, payload }) => {
     switch (type) {
-        case setCurrentRoute:
+        case act_setCurrentRoute:
             return { path: payload.path, method: payload.method }
 
         default:
@@ -65,32 +59,35 @@ const setCurrentRouteFn = (state, { type, payload }) => {
     }
 }
 
-const setThemeFn = (state, type) => {
+
+const setConfigFn = (state, { type, payload }) => {
     switch (type) {
-        case toogleTheme:
-            if (state === 'dark') {
-                state = 'light'
+        case act_setConfig:
+            return { ...state, ...payload }
+        case act_setConfigtTheme:
+            if (state.theme === 'dark') {
+                state.theme = 'light'
                 document.documentElement.classList.remove('dark')
                 document.documentElement.classList.add('light')
                 localStorage.setItem('theme', 'light')
             } else {
-                state = 'dark'
+                state.theme = 'dark'
                 document.documentElement.classList.remove('light')
                 document.documentElement.classList.add('dark')
                 localStorage.setItem('theme', 'dark')
             }
-            return state
+            return { ...state }
         default:
             return state
     }
 }
 
+
 export {
     setRoutesFn,
-    setNameFn,
     setHeadersFn,
     setHistoryFn,
     setNavStaeFn,
     setCurrentRouteFn,
-    setThemeFn
+    setConfigFn
 }

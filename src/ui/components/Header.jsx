@@ -11,18 +11,13 @@ import { useIsMobile } from '../hooks/useMobile'
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'preact/hooks'
 import { AppContext } from '../context'
-import { toogleNav, toogleTheme } from '../context/actions'
+import { act_setConfigtTheme, act_toogleNav } from '../context/actions'
 
 export function Header() {
   const loggedIn = true
   const isMobile = useIsMobile()
   const navigate = useNavigate()
-  const {
-    toogleNav: toogleNavFn,
-    name,
-    theme,
-    setTheme,
-  } = useContext(AppContext)
+  const { toogleNav: toogleNavFn, config, setConfig } = useContext(AppContext)
 
   return (
     <header>
@@ -38,7 +33,7 @@ export function Header() {
               variant="outline"
               size={{}}
               onClick={() => {
-                toogleNavFn(toogleNav)
+                toogleNavFn(act_toogleNav)
               }}
             >
               <MenuIcon />
@@ -53,7 +48,7 @@ export function Header() {
                 md: '6',
               }}
             >
-              {name}
+              {config.name}
             </Heading>
           </Link>
           {!isMobile && loggedIn && (
@@ -102,11 +97,11 @@ export function Header() {
                 <DropdownMenu.Item
                   shortcut="⌘ D"
                   onClick={() => {
-                    setTheme(toogleTheme)
+                    setConfig({ type: act_setConfigtTheme })
                   }}
                 >
                   <span className={'capitalize'}>
-                    {theme === 'dark' ? 'light' : 'dark'} mode
+                    {config.theme === 'dark' ? 'light' : 'dark'} mode
                   </span>
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator />
