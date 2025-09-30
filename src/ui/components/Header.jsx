@@ -11,34 +11,29 @@ import { useIsMobile } from '../hooks/useMobile'
 import { Link, useNavigate } from 'react-router-dom'
 import { useContext } from 'preact/hooks'
 import { AppContext } from '../context'
-import { toogleNav, toogleTheme } from '../context/actions'
+import { act_setConfigtTheme, act_toogleNav } from '../context/actions'
 
 export function Header() {
   const loggedIn = true
   const isMobile = useIsMobile()
   const navigate = useNavigate()
-  const {
-    toogleNav: toogleNavFn,
-    name,
-    theme,
-    setTheme,
-  } = useContext(AppContext)
+  const { toogleNav: toogleNavFn, config, setConfig } = useContext(AppContext)
 
   return (
     <header>
       <Flex
         className={'border-b-[1px] dark:border-white/10 border-black/10'}
-        px={{ initial: '4', xs: '2' }}
-        py={'4'}
+        px={'4'}
+        py={'2'}
         justify={'between'}
       >
         <Flex gap={'4'} direction={'row'} align={'center'}>
           {isMobile && (
             <Button
-              variant="ghost"
+              variant="outline"
               size={{}}
               onClick={() => {
-                toogleNavFn(toogleNav)
+                toogleNavFn(act_toogleNav)
               }}
             >
               <MenuIcon />
@@ -51,10 +46,9 @@ export function Header() {
                 initial: '3',
                 sm: '5',
                 md: '6',
-                xl: '7',
               }}
             >
-              {name}
+              {config.name}
             </Heading>
           </Link>
           {!isMobile && loggedIn && (
@@ -103,11 +97,11 @@ export function Header() {
                 <DropdownMenu.Item
                   shortcut="⌘ D"
                   onClick={() => {
-                    setTheme(toogleTheme)
+                    setConfig({ type: act_setConfigtTheme })
                   }}
                 >
                   <span className={'capitalize'}>
-                    {theme === 'dark' ? 'light' : 'dark'} mode
+                    {config.theme === 'dark' ? 'light' : 'dark'} mode
                   </span>
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator />
