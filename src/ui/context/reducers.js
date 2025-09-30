@@ -14,7 +14,7 @@ const setRoutesFn = (state, { type, payload }) => {
     switch (type) {
 
         case act_setRoutes:
-            return { ...state, ...payload }
+            return [...payload]
 
         default:
             return state
