@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Code,
   Flex,
   Separator,
@@ -24,6 +25,7 @@ function SandBox() {
   const [requestBody, setRequestBody] = useState('')
 
   const [headers, setHeaders] = useState([])
+  const [excludedHeaders, setExcludedHeaders] = useState([])
   const [fullPath, setFullPath] = useState('')
 
   const [response, setResponse] = useState()
@@ -77,6 +79,15 @@ function SandBox() {
     setHeaders((prev) => prev.filter((_, i) => i !== index))
   }
 
+  const excludeHeader = (key, exclude) => {
+    if (exclude) {
+      setExcludedHeaders((prev) => [...prev, key])
+      return
+    }
+    const headers = excludedHeaders.filter((h) => h !== key)
+    setExcludedHeaders(headers)
+  }
+
   const addHeader = () => {
     if (headers.length >= 10) return
     if (headers.some((header) => header.key === '')) return
@@ -84,10 +95,12 @@ function SandBox() {
   }
 
   const makeRequest = async () => {
+    const _headers = headers.filter((h) => !excludedHeaders.includes(h.key))
+
     const _response = await apiCall({
       method: activeRoute.method,
       fullPath,
-      headers,
+      headers: _headers,
       ...activeRoute,
       body: requestBody,
     })
@@ -158,8 +171,16 @@ function SandBox() {
                   <Flex
                     gap={'2'}
                     direction={{ initial: 'column', sm: 'row' }}
-                    align={{ initial: 'start' }}
+                    align={{ initial: 'center' }}
+                    justify={'center'}
                   >
+                    <Checkbox
+                      size={'3'}
+                      defaultChecked
+                      onCheckedChange={(checked) =>
+                        excludeHeader(header.key, !checked)
+                      }
+                    ></Checkbox>
                     <TextField.Root
                       placeholder={'Add header'}
                       className={'w-full'}
