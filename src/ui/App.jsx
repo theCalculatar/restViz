@@ -8,8 +8,8 @@ import { AppContext } from './context'
 import { useContext } from 'preact/hooks'
 import { act_toogleNav } from './context/actions'
 import { Header } from './components/Header'
-import Preview from './pages/Preview'
 import Settings from './pages/settings'
+import Preview from './pages/Preview'
 
 export default function App() {
   const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
@@ -37,8 +37,8 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/test/*" element={<Preview />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/test/*" element={<Preview />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Box>
