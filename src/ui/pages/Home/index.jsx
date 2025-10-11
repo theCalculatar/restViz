@@ -25,6 +25,7 @@ import {
   Users,
   Zap,
 } from 'lucide-react'
+import { QuickActions } from '../../components/QuickActions'
 
 export function Home() {
   const { config } = useContext(AppContext)
@@ -124,142 +125,10 @@ export function Home() {
         </Flex>
 
         {/* QUICK ACTION */}
-        <Flex gap={'4'} mt={'6'} direction={{ initial: 'column', sm: 'row' }}>
-          <Card className={'w-full'}>
-            <Box>
-              <Flex gap={'4'} align={'center'}>
-                <BookOpen /> <Text>Getting Started</Text>
-              </Flex>
-              <Text mt={'2'} size={'2'} color="gray">
-                New to this API? Start here for authentication and basic
-                concepts.
-              </Text>
-            </Box>
-            <Box mt={'4'}>
-              <Flex gap={'4'} align={'center'}>
-                <Text size={'2'}>Base Url</Text>
-                <Badge>{config.baseUrl}</Badge>
-              </Flex>
-            </Box>
-            <Box mt={'4'}>
-              <Flex direction={'column'} gap={'2'}>
-                <Text size={'2'}>Authentication</Text>
-                <Text size={'2'} color="gray">
-                  Include your API key in the Authorization header
-                </Text>
-              </Flex>
-              <Button variant="outline" mt={'2'} radius="large">
-                Confiqure Authentication
-              </Button>
-            </Box>
-          </Card>
-
-          <Card className={'w-full'}>
-            <Box>
-              <Flex gap={'4'} align={'center'}>
-                <Zap /> <Text>Popular Endpoints</Text>
-              </Flex>
-              <Text mt={'2'} size={'2'} color="gray">
-                Most commonly used API endpoints
-              </Text>
-            </Box>
-            <Flex mt={'4'} gap={'2'} direction={'column'} align={'center'}>
-              <Card size={'1'} variant="surface" className={'w-full'}>
-                <Flex gap={'4'} align={'center'} justify={'between'}>
-                  <Flex gap={'4'} align={'center'}>
-                    <Badge radius="large">GET</Badge>
-                    <Box>
-                      <Flex direction={'column'}>
-                        <Text size={'2'}>Base Url</Text>
-                        <Text size={'1'} color="gray">
-                          Retrieve a list of users
-                        </Text>
-                      </Flex>
-                    </Box>
-                  </Flex>
-                  <ExternalLink />
-                </Flex>
-              </Card>
-              <Card size={'1'} variant="surface" className={'w-full'}>
-                <Flex gap={'4'} align={'center'} justify={'between'}>
-                  <Flex gap={'4'} align={'center'}>
-                    <Badge radius="large">GET</Badge>
-                    <Box>
-                      <Flex direction={'column'}>
-                        <Text size={'2'}>Base Url</Text>
-                        <Text size={'1'} color="gray">
-                          Retrieve a list of users
-                        </Text>
-                      </Flex>
-                    </Box>
-                  </Flex>
-                  <ExternalLink />
-                </Flex>
-              </Card>
-            </Flex>
-            <Flex justify={'center'}>
-              <Button variant="ghost" mt={'4'}>
-                View All Endpoints
-              </Button>
-            </Flex>
-          </Card>
-
-          <Card className={'w-full'}>
-            <Box className={'blur-sm'}>
-              <Box>
-                <Flex gap={'4'} align={'center'}>
-                  <BookOpen /> <Text>Rate Limits</Text>
-                </Flex>
-                <Text mt={'2'} color="gray" size={'2'}>
-                  Current API usage and limits
-                </Text>
-              </Box>
-              <Box mt={'4'}>
-                <Flex gap={'1'} direction={'column'}>
-                  <Flex justify={'between'} align={'center'}>
-                    <Text size={'2'}>Requests This Month</Text>
-                    <Text>1,234/10,000</Text>
-                  </Flex>
-                  <Progress
-                    value={15}
-                    color="green"
-                    radius="full"
-                    variant="soft"
-                  />
-                </Flex>
-                <Flex gap={'1'} mt={'2'} direction={'column'}>
-                  <Flex justify={'between'} align={'center'}>
-                    <Text size={'2'}>Requests This Month</Text>
-                    <Text>1,234/10,000</Text>
-                  </Flex>
-                  <Progress value={15} variant="soft" radius="full" />
-                </Flex>
-              </Box>
-              <Flex justify={'center'}>
-                <Button variant="ghost" mt={'4'}>
-                  View Analytics
-                </Button>
-              </Flex>
-            </Box>
-            <Box className={'absolute inset-0'}>
-              <Flex
-                height={'100%'}
-                width={'100%'}
-                align={'center'}
-                justify={'center'}
-                direction={'column'}
-              >
-                <Text>Analytics Feature</Text>
-                <Text size={'2'} color="gray">
-                  (Coming Soon)
-                </Text>
-              </Flex>
-            </Box>
-          </Card>
-        </Flex>
+        <QuickActions />
 
         {/* Links */}
-        <Card mt={'6'}>
+        <Card>
           <Flex direction={'column'}>
             <Text>Quick Links</Text>
             <Text size={'2'} color="gray">
