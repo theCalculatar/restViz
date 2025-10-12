@@ -1,4 +1,11 @@
-import { HashRouter as Router, Routes, Route } from 'react-router-dom'
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  useNavigation,
+  useLocation,
+} from 'react-router-dom'
 import { Home } from './pages/Home'
 import { About } from './pages/About'
 import { NotFound } from './pages/_404'
@@ -9,9 +16,12 @@ import { useContext } from 'preact/hooks'
 import { act_toogleNav } from './context/actions'
 import { Header } from './components/Header'
 import Settings from './pages/settings'
+import { useIsMobile } from './hooks/useMobile'
 
 export default function App() {
   const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
+  const isMobile = useIsMobile()
+
   return (
     <Theme
       appearance={config.theme}
@@ -24,9 +34,9 @@ export default function App() {
           <Header />
           <Flex className={'flex-1'} overflow={'hidden'}>
             <Sidebar />
-            {isNavOpen && (
+            {isNavOpen && isMobile && (
               <div
-                className="fixed inset-0 z-auto"
+                className="fixed inset-0 z-10"
                 onClick={() => {
                   toogleNavFn(act_toogleNav)
                 }}

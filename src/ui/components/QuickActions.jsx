@@ -13,9 +13,10 @@ import { useContext, useEffect, useState } from 'preact/hooks'
 import { AppContext } from '../context'
 import { Link, useNavigate } from 'react-router-dom'
 import { methodColors } from '../utils/colors'
+import { act_openNav } from '../context/actions'
 
 function QuickActions() {
-  const { config, history, routes } = useContext(AppContext)
+  const { config, history, routes, toogleNav } = useContext(AppContext)
   const navigate = useNavigate()
   const [recentRoutes, setRecentRoutes] = useState([])
 
@@ -92,7 +93,6 @@ function QuickActions() {
                         color={methodColors[route.method]}
                         size={'1'}
                       >
-                        {console.log(methodColors[route.method])}
                         {route.method}
                       </Badge>
                       <Box>
@@ -122,7 +122,13 @@ function QuickActions() {
             ))}
           </Flex>
           <Flex justify={'center'}>
-            <Button variant="ghost" mt={'4'}>
+            <Button
+              variant="ghost"
+              mt={'4'}
+              onClick={() => {
+                toogleNav(act_openNav)
+              }}
+            >
               View All Endpoints
             </Button>
           </Flex>

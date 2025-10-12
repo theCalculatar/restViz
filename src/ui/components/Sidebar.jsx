@@ -7,14 +7,20 @@ import {
   ScrollArea,
   Text,
 } from '@radix-ui/themes'
-import { useContext, useMemo } from 'preact/hooks'
+import { useContext, useEffect, useMemo } from 'preact/hooks'
 import { Collapsible } from 'radix-ui'
 import { AppContext } from '../context'
 import { groupRoutesFn } from '../utils/routesUtils'
-import { Link, useNavigate } from 'react-router-dom'
-import { act_setCurrentRoute, act_toogleNav } from '../context/actions'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {
+  act_closeNav,
+  act_openNav,
+  act_setCurrentRoute,
+  act_toogleNav,
+} from '../context/actions'
 import { ChevronDown, ChevronUp, PanelLeft } from 'lucide-react'
 import { methodColors } from '../utils/colors'
+import { useIsMobile } from '../hooks/useMobile'
 
 function Sidebar() {
   const {
@@ -28,8 +34,15 @@ function Sidebar() {
     return [...groupRoutesFn(routes).entries()]
   }, [routes])
 
-  const isMobile = true
+  const isMobile = useIsMobile()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    if (!location.pathname.includes('test')) {
+      toogleNav(act_closeNav)
+    }
+  }, [location])
 
   return (
     <aside

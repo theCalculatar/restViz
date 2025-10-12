@@ -61,7 +61,7 @@ export function Home() {
 
   return (
     <Section
-      p={'3'}
+      px={'3'}
       height={'100%'}
       width={'100%'}
       overflow={'auto'}
@@ -69,8 +69,8 @@ export function Home() {
     >
       <Container size={{ md: '3', xl: '4', sm: '3', initial: '1' }}>
         <Box className={'max-w-lg text-center mx-auto'}>
-          <Heading size="6" align={'center'} mb={'2'}>
-            {config.name}
+          <Heading size="8" align={'center'} mb={'2'}>
+            Welcome to {config.name}
           </Heading>
           <Text color="gray">
             Comprehensive API documentation with interactive testing
