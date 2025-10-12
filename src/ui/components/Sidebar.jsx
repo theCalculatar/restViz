@@ -12,8 +12,8 @@ import { Collapsible } from 'radix-ui'
 import { AppContext } from '../context'
 import { groupRoutesFn } from '../utils/routesUtils'
 import { Link, useNavigate } from 'react-router-dom'
-import { act_setCurrentRoute } from '../context/actions'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { act_setCurrentRoute, act_toogleNav } from '../context/actions'
+import { ChevronDown, ChevronUp, PanelLeft } from 'lucide-react'
 import { methodColors } from '../utils/colors'
 
 function Sidebar() {
@@ -22,6 +22,7 @@ function Sidebar() {
     isNavOpen,
     setCurrentRoute: setCurrentRouteFn,
     activeRoute,
+    toogleNav,
   } = useContext(AppContext)
   let groupedRoute = useMemo(() => {
     return [...groupRoutesFn(routes).entries()]
@@ -34,23 +35,32 @@ function Sidebar() {
     <aside
       className={
         'border-r h-full p-4 pt-[68px] lg:pt-4 w-64 sm:w-80 flex flex-col dark:border-white/10 border-black/10' +
-        ' inset-y-0 left-0 z-50 fixed -translate-x-full lg:static lg:transform-none backdrop-blur-lg ' +
+        ' inset-y-0 left-0 z-50 fixed -translate-x-full  backdrop-blur-lg ' +
         ' transition-transform duration-200 ease-in-out bg-white/[0.02] ' +
-        `${isMobile && isNavOpen && 'translate-x-0'}`
+        `${isNavOpen && 'translate-x-0 lg:static'}`
       }
     >
       <Heading size={'4'}>
         <Flex align={'center'} justify={'between'}>
           Api endpoints
-          <Button
-            color="gray"
-            variant="outline"
-            className={'rounded-mdd'}
-            radius="large"
-            size={'1'}
-          >
-            History
-          </Button>
+          {!isMobile && (
+            <Flex
+              className={`absolute -right-8 hidden  ' + ${
+                !isNavOpen && ' lg:top-[68px]'
+              }`}
+            >
+              <Button
+                size={'2'}
+                variant={'ghost'}
+                color="gray"
+                onClick={() => {
+                  toogleNav(act_toogleNav)
+                }}
+              >
+                <PanelLeft />
+              </Button>
+            </Flex>
+          )}
         </Flex>
       </Heading>
       <ScrollArea type="scroll" scrollbars="vertical" size={'1'}>
@@ -115,7 +125,6 @@ function Sidebar() {
                               color={methodColors[route.method]}
                               size={'1'}
                             >
-                              {console.log(methodColors[route.method])}
                               {route.method}
                             </Badge>
                             <Box p={'1'}>

@@ -7,7 +7,8 @@ import {
     act_setHistory,
     act_setRoutes,
     act_toogleNav,
-
+    act_openNav,
+    act_closeNav
 } from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
@@ -45,6 +46,10 @@ const setHistoryFn = (state, { type, payload }) => {
 }
 const setNavStaeFn = (state, type) => {
     switch (type) {
+        case act_closeNav:
+            return false
+        case act_openNav:
+            return true
         case act_toogleNav:
             return !state
         default:
