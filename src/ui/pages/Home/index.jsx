@@ -1,14 +1,11 @@
 import {
-  Badge,
   Box,
-  Button,
   Card,
   Container,
   Flex,
   Heading,
   Section,
   Text,
-  TextField,
 } from '@radix-ui/themes'
 import { useContext, useEffect, useMemo, useState } from 'preact/hooks'
 import { AppContext } from '../../context'
@@ -79,7 +76,12 @@ export function Home() {
           </Text>
         </Box>
 
-        <Flex gap={'2'} mt={'6'} justify={'center'} align={'center'}>
+        <Flex
+          gap={'2'}
+          mt={{ initial: '4', sm: '6' }}
+          justify={'center'}
+          align={'center'}
+        >
           <Command />
         </Flex>
 
@@ -88,7 +90,7 @@ export function Home() {
           direction={{ initial: 'column', sm: 'row' }}
           gap={'4'}
           align={'start'}
-          mt={'8'}
+          mt={{ initial: '4', sm: '6' }}
         >
           <Card className={'w-full'}>
             <Flex gap={'4'} align={'center'} justify={'between'}>

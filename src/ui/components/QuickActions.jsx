@@ -14,6 +14,7 @@ import { AppContext } from '../context'
 import { Link, useNavigate } from 'react-router-dom'
 import { methodColors } from '../utils/colors'
 import { act_openNav } from '../context/actions'
+import { Fragment } from 'preact/jsx-runtime'
 
 function QuickActions() {
   const { config, history, routes, toogleNav } = useContext(AppContext)
@@ -78,60 +79,78 @@ function QuickActions() {
               Most recent used API endpoints
             </Text>
           </Box>
-          <Flex mt={'4'} gap={'2'} direction={'column'} align={'center'}>
-            {recentRoutes.map((route) => (
-              <Link
-                to={`/test${route.path}`}
-                key={`${route.path}-${route.method}`}
-                className={'w-full'}
-              >
-                <Card variant="surface">
-                  <Flex gap={'4'} align={'center'} justify={'between'}>
-                    <Flex gap={'4'} align={'center'}>
-                      <Badge
-                        radius="large"
-                        color={methodColors[route.method]}
-                        size={'1'}
-                      >
-                        {route.method}
-                      </Badge>
-                      <Box>
-                        <Flex direction={'column'}>
-                          <Text
-                            size={'2'}
-                            className={'text-ellipsis line-clamp-1'}
-                          >
-                            {route.path}
-                          </Text>
-                          <Text
+          {recentRoutes.length !== 0 ? (
+            <Fragment>
+              <Flex mt={'4'} gap={'2'} direction={'column'} align={'center'}>
+                {recentRoutes.map((route) => (
+                  <Link
+                    to={`/test${route.path}`}
+                    key={`${route.path}-${route.method}`}
+                    className={'w-full'}
+                  >
+                    <Card variant="surface">
+                      <Flex gap={'4'} align={'center'} justify={'between'}>
+                        <Flex gap={'4'} align={'center'}>
+                          <Badge
+                            radius="large"
+                            color={methodColors[route.method]}
                             size={'1'}
-                            color="gray"
-                            className={'text-ellipsis line-clamp-1'}
                           >
-                            {route.description}
-                          </Text>
+                            {route.method}
+                          </Badge>
+                          <Box>
+                            <Flex direction={'column'}>
+                              <Text
+                                size={'2'}
+                                className={'text-ellipsis line-clamp-1'}
+                              >
+                                {route.path}
+                              </Text>
+                              <Text
+                                size={'1'}
+                                color="gray"
+                                className={'text-ellipsis line-clamp-1'}
+                              >
+                                {route.description}
+                              </Text>
+                            </Flex>
+                          </Box>
                         </Flex>
-                      </Box>
-                    </Flex>
-                    <Box>
-                      <ExternalLink />
-                    </Box>
-                  </Flex>
-                </Card>
+                        <Box>
+                          <ExternalLink />
+                        </Box>
+                      </Flex>
+                    </Card>
+                  </Link>
+                ))}
+              </Flex>
+              <Flex justify={'center'}>
+                <Button
+                  variant="ghost"
+                  mt={'4'}
+                  onClick={() => {
+                    toogleNav(act_openNav)
+                  }}
+                >
+                  View All Endpoints
+                </Button>
+              </Flex>
+            </Fragment>
+          ) : (
+            <Card variant="surface" mt={'4'}>
+              <Flex direction={'column'} mb={'4'} gap={'2'}>
+                <Text weight={'bold'}>Oops!</Text>
+                <Text size={'2'} color="gray">
+                  Your expressJs does not have routes or they are disabled!
+                </Text>
+              </Flex>
+              <Link to={''} className={'mt-2'}>
+                <Button size={'2'} variant="outline" radius="large">
+                  Learn more!
+                </Button>
               </Link>
-            ))}
-          </Flex>
-          <Flex justify={'center'}>
-            <Button
-              variant="ghost"
-              mt={'4'}
-              onClick={() => {
-                toogleNav(act_openNav)
-              }}
-            >
-              View All Endpoints
-            </Button>
-          </Flex>
+            </Card>
+          )}
         </Card>
 
         <Card className={'w-full'}>
