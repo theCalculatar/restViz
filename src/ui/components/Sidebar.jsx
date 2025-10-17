@@ -118,8 +118,7 @@ function Sidebar() {
                           direction={'column'}
                           width={'100%'}
                           className={`w-full dark:hover:bg-white/10 hover:bg-black/5 ${
-                            route.path === activeRoute.path &&
-                            route.method === activeRoute.method &&
+                            route.url === activeRoute.url &&
                             'bg-black/10 dark:bg-white/15'
                           }`}
                           style={{
@@ -130,7 +129,7 @@ function Sidebar() {
                               type: act_setCurrentRoute,
                               payload: route,
                             })
-                            navigate(`test${route.path}`)
+                            navigate(`test/${route.url}`)
                           }}
                         >
                           <Flex align={'center'} gap={'1'}>
