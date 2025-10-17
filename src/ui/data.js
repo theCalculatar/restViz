@@ -6,6 +6,7 @@ const routes = [{
     notes:
         'This endpoint supports pagination. Use ?page and ?limit parameters.',
     group: 'Users',
+    url: 'R0VUL3VzZXJz'
 },
 {
     id: '2',
@@ -15,6 +16,7 @@ const routes = [{
     notes:
         'Required fields: name, email. Password will be auto-generated if not provided.',
     group: 'Users',
+    url: 'UE9TVC91c2Vycw=='
 },
 {
     id: '3',
@@ -23,6 +25,7 @@ const routes = [{
     description: 'Get a specific user by ID',
     notes: 'Returns 404 if user not found.',
     group: 'Users',
+    url: 'R0VUL3VzZXJzL3tpZH0='
 },
 {
     id: '4',
@@ -31,6 +34,7 @@ const routes = [{
     description: 'Update a user completely',
     notes: 'All fields are required for PUT requests.',
     group: 'Users',
+    url: 'UFVUL3VzZXJzL3tpZH0='
 },
 {
     id: '5',
@@ -39,6 +43,7 @@ const routes = [{
     description: 'Partially update a user',
     notes: 'Only provided fields will be updated.',
     group: 'Users',
+    url: 'UEFUQ0gvdXNlcnMve2lkfQ=='
 },
 {
     id: '6',
@@ -47,6 +52,7 @@ const routes = [{
     description: 'Delete a user',
     notes: 'This action cannot be undone. Use with caution.',
     group: 'Users',
+    url: 'REVMRVRFL3VzZXJzL3tpZH0='
 },
 {
     id: '7',
@@ -55,6 +61,7 @@ const routes = [{
     description: 'Get all posts',
     notes: 'Supports filtering by author, category, and date range.',
     group: 'Posts',
+    url: 'R0VUL3Bvc3Rz'
 },
 {
     id: '8',
@@ -63,6 +70,7 @@ const routes = [{
     description: 'Create a new post',
     notes: 'Requires authentication. Author will be set to current user.',
     group: 'Posts',
+    url: 'UE9TVC9wb3N0cw=='
 },
 {
     id: '9',
@@ -71,6 +79,7 @@ const routes = [{
     description: 'Authenticate user',
     notes: 'Returns JWT token for subsequent requests.',
     group: 'Authentication',
+    url: 'R0VUL2F1dGgvbG9naW4='
 },
 {
     id: '10',
@@ -79,6 +88,7 @@ const routes = [{
     description: 'Logout user',
     notes: 'Invalidates the current session token.',
     group: 'Authentication',
+    url: 'UE9TVC9hdXRoL2xvZ291dA=='
 },]
 
 
