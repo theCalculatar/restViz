@@ -1,17 +1,30 @@
 import { Box, Button, Flex, TextField } from '@radix-ui/themes'
-import { act_addSuit, act_dismissDialog } from '../context/actions'
-import { useContext, useState } from 'preact/hooks'
+import {
+  act_addSuit,
+  act_dismissDialog,
+  act_updateSuit,
+} from '../context/actions'
+import { useContext, useEffect, useState } from 'preact/hooks'
 import { AppContext } from '../context'
 
-function CreateSuite() {
-  const { setDialog, setSuite } = useContext(AppContext)
+function CreateSuite(id) {
+  const { setDialog, suites, setSuite } = useContext(AppContext)
   const [suitName, setSuitName] = useState('')
   const [suitDescription, setSuitDescription] = useState('')
 
+  useEffect(() => {
+    if (JSON.stringify(id) === '{}') return
+
+    const suite = suites.find((suite) => suite.id === id)
+
+    setSuitName(suite?.title)
+    setSuitDescription(suite?.description)
+  }, [])
+
   const saveDialog = () => {
     setSuite({
-      type: act_addSuit,
-      payload: { title: suitName, description: suitDescription },
+      type: JSON.stringify(id) !== '{}' ? act_updateSuit : act_addSuit,
+      payload: { id, title: suitName, description: suitDescription },
     })
     setDialog({ type: act_dismissDialog })
   }
@@ -26,6 +39,7 @@ function CreateSuite() {
           <TextField.Root
             id={'name'}
             placeholder="e.g User API Test"
+            value={suitName}
             onChange={(e) => {
               // @ts-ignore
               setSuitName(e.target.value.trim())
@@ -39,6 +53,7 @@ function CreateSuite() {
           <TextField.Root
             id={'description'}
             placeholder="Describe the pursose of this test suits..."
+            value={suitDescription}
             onChange={(e) => {
               // @ts-ignore
               setSuitDescription(e.target.value.trim())

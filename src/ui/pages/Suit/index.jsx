@@ -42,6 +42,18 @@ function index() {
     },
   }
 
+  const editSuite = (id) => {
+    setDialog({
+      type: act_setDialog,
+      payload: {
+        Root: () => CreateSuite(id),
+        title: 'Edit Test Suite',
+        description:
+          'Edit existing test suite to organize your automated tests',
+      },
+    })
+  }
+
   return (
     <Section
       px={'3'}
@@ -74,7 +86,7 @@ function index() {
                 <Flex direction={'column'}>
                   <Text>Test Suites</Text>
                   <Text size={'6'} weight={'medium'}>
-                    0
+                    {suites.length}
                   </Text>
                 </Flex>
                 <Folder className={'lg text-blue-500'} />
@@ -144,7 +156,7 @@ function index() {
             ) : (
               suites.map((suite) => {
                 return (
-                  <Card>
+                  <Card id={suite.id}>
                     <Flex
                       justify={'between'}
                       gap={'4'}
@@ -156,7 +168,7 @@ function index() {
                           {suite.title}
                         </Text>
                         <Badge radius="large" variant="surface">
-                          {suite.tests.length} tests
+                          {suite.tests?.length} tests
                         </Badge>
                       </Flex>
                       {!isMobile ? (
@@ -168,7 +180,10 @@ function index() {
                             <PlayCircleIcon />
                             Run Suite
                           </Button>
-                          <IconButton variant="ghost">
+                          <IconButton
+                            variant="ghost"
+                            onClick={() => editSuite(suite.id)}
+                          >
                             <Edit />
                           </IconButton>
                           <IconButton variant="ghost">
@@ -194,7 +209,9 @@ function index() {
                             <DropdownMenu.Item onClick={() => {}}>
                               <PlusSquare /> Add test
                             </DropdownMenu.Item>
-                            <DropdownMenu.Item onClick={() => {}}>
+                            <DropdownMenu.Item
+                              onClick={() => editSuite(suite.id)}
+                            >
                               <Edit />
                               Edit
                             </DropdownMenu.Item>

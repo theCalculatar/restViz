@@ -11,7 +11,8 @@ import {
     act_closeNav,
     act_dismissDialog,
     act_setDialog,
-    act_addSuit
+    act_addSuit,
+    act_updateSuit
 } from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
@@ -108,6 +109,16 @@ const setSuiteFn = (state, { type, payload }) => {
         case act_addSuit:
             const id = btoa(Date.now().toString())
             return [...state, { ...payload, id, tests: [3, 23, 3] }]
+
+        case act_updateSuit:
+            const suites = state.map(suite => {
+                if (suite.id === payload.id) {
+                    suite.title = payload.title
+                    suite.description = payload.description
+                }
+                return suite
+            })
+            return [...suites]
 
         default:
             break;
