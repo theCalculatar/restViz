@@ -8,7 +8,10 @@ import {
     act_setRoutes,
     act_toogleNav,
     act_openNav,
-    act_closeNav
+    act_closeNav,
+    act_dismissDialog,
+    act_setDialog,
+    act_addSuit
 } from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
@@ -89,6 +92,27 @@ const setConfigFn = (state, { type, payload }) => {
     }
 }
 
+const setDialogFn = (state, { type, payload }) => {
+    switch (type) {
+        case act_dismissDialog:
+            return null
+        case act_setDialog:
+            return payload
+        default:
+            return state
+    }
+}
+
+const setSuiteFn = (state, { type, payload }) => {
+    switch (type) {
+        case act_addSuit:
+            const id = btoa(Date.now().toString())
+            return [...state, { ...payload, id, tests: [3, 23, 3] }]
+
+        default:
+            break;
+    }
+}
 
 export {
     setRoutesFn,
@@ -96,5 +120,7 @@ export {
     setHistoryFn,
     setNavStaeFn,
     setCurrentRouteFn,
-    setConfigFn
+    setConfigFn,
+    setDialogFn,
+    setSuiteFn
 }

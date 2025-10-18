@@ -4,10 +4,12 @@ import { createContext } from 'preact'
 import {
   setConfigFn,
   setCurrentRouteFn,
+  setDialogFn,
   setHeadersFn,
   setHistoryFn,
   setNavStaeFn,
   setRoutesFn,
+  setSuiteFn,
 } from './reducers'
 // @ts-ignore
 
@@ -40,6 +42,10 @@ function Provider({ children }) {
     return saved
   })
 
+  const [Frag, setDialog] = useReducer(setDialogFn, null)
+
+  const [suites, setSuite] = useReducer(setSuiteFn, [])
+
   return (
     <AppContext.Provider
       value={{
@@ -55,6 +61,10 @@ function Provider({ children }) {
         setCurrentRoute,
         config,
         setConfig,
+        Frag,
+        setDialog,
+        suites,
+        setSuite,
       }}
     >
       {children}

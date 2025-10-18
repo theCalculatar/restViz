@@ -98,6 +98,7 @@ const config = {
     name: 'My Restaurant API',
     groupBy: 'controller', // "tag" | "path"
     description: 'Api monitoring and documentation tool for RESTful services.',
+    environment: 'DEV',
 
     // UI / Theme
     theme: 'light', // "light" | "dark"

@@ -17,6 +17,8 @@ import { act_toogleNav } from './context/actions'
 import { Header } from './components/Header'
 import Settings from './pages/settings'
 import { useIsMobile } from './hooks/useMobile'
+import Suit from './pages/Suit'
+import Dialog from './components/Dialog'
 
 export default function App() {
   const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
@@ -47,10 +49,12 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/test" element={<Suit />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Box>
           </Flex>
+          <Dialog />
         </Router>
       </Flex>
     </Theme>
