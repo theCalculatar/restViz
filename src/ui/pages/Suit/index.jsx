@@ -117,7 +117,7 @@ function index() {
               </Flex>
             </Card>
           </Flex>
-          <Flex direction={'column'}>
+          <Flex direction={'column'} gap={'2'}>
             {isDevEnv && suites.length === 0 ? (
               <Card size={'3'}>
                 <Flex direction={'column'} align={'center'} gap={'4'}>
@@ -210,6 +210,13 @@ function index() {
                         </DropdownMenu.Root>
                       )}
                     </Flex>
+                    <Text
+                      size={'2'}
+                      color="gray"
+                      className={'text-ellipsis line-clamp-1'}
+                    >
+                      {suite.description}
+                    </Text>
                   </Card>
                 )
               })
