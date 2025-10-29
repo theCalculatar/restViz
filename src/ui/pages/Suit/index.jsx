@@ -34,6 +34,7 @@ import CreateSuite from '../../components/CreateSuite'
 import CreateTests from '../../components/CreateTests'
 import { useIsMobile } from '../../hooks/useMobile'
 import { Collapsible } from 'radix-ui'
+import { methodColors } from '../../utils/colors'
 
 function index() {
   const { config, setDialog, suites } = useContext(AppContext)
@@ -53,9 +54,20 @@ function index() {
     setDialog({
       type: act_setDialog,
       payload: {
-        Root: CreateTests,
+        Root: () => CreateTests(id, null),
         description: 'Build automated tests with assertions and validations',
         title: 'Create new test',
+      },
+    })
+  }
+
+  const updateTest = (id, test) => {
+    setDialog({
+      type: act_setDialog,
+      payload: {
+        Root: () => CreateTests(id, test),
+        description: 'Edit your automated tests assertions and validations',
+        title: 'Update your test',
       },
     })
   }
@@ -205,7 +217,7 @@ function index() {
                                   size={'2'}
                                   variant={'outline'}
                                   radius="large"
-                                  onClick={createTest}
+                                  onClick={() => createTest(suite.id)}
                                 >
                                   <Plus /> Add test
                                 </Button>
@@ -242,7 +254,9 @@ function index() {
                                     <PlayCircleIcon />
                                     Run Suite
                                   </DropdownMenu.Item>
-                                  <DropdownMenu.Item onClick={createTest}>
+                                  <DropdownMenu.Item
+                                    onClick={() => createTest(suite.id)}
+                                  >
                                     <PlusSquare /> Add test
                                   </DropdownMenu.Item>
                                   <DropdownMenu.Item
@@ -275,47 +289,70 @@ function index() {
                       <Collapsible.Content className={'CollapsibleContent'}>
                         {suite.tests.length > 0 && (
                           <Flex direction={'column'} gap={'2'} mt={'3'}>
-                            <Card>
-                              <Flex justify={'between'} gap={'4'}>
-                                <Box>
-                                  <Flex gap={'2'} align={'center'}>
-                                    <File />
-                                    <Flex gap={'1'}>
-                                      <Text size={'2'}>Auth - should fail</Text>
+                            {suite.tests.map((test) => {
+                              return (
+                                <Card>
+                                  <Flex justify={'between'} gap={'4'}>
+                                    <Box>
+                                      <Flex gap={'2'} align={'center'}>
+                                        <File />
+                                        <Flex gap={'1'}>
+                                          <Text size={'2'}>{test.title}</Text>
+                                          <Badge
+                                            radius="large"
+                                            variant="soft"
+                                            className={'select-none'}
+                                            color={methodColors[test.method]}
+                                          >
+                                            {test.method}
+                                          </Badge>
+                                          <Text color="gray" size={'2'}>
+                                            {test.path}
+                                          </Text>
+                                        </Flex>
+                                      </Flex>
                                       <Badge
+                                        variant="outline"
                                         radius="large"
-                                        color="green"
-                                        variant="soft"
+                                        color="gray"
                                         className={'select-none'}
                                       >
-                                        Get
+                                        {test.assertions?.length} Assertions
                                       </Badge>
-                                      <Text color="gray" size={'2'}>
-                                        api/user/id
-                                      </Text>
+                                    </Box>
+                                    <Flex gap={'1'}>
+                                      <Button
+                                        variant="outline"
+                                        size={{ initial: '1', md: '1' }}
+                                        radius="large"
+                                      >
+                                        <Play />
+                                        Run
+                                      </Button>
+                                      <Button
+                                        variant="outline"
+                                        size={{ initial: '1', md: '1' }}
+                                        radius="large"
+                                        onClick={() => {
+                                          updateTest(suite.id, test)
+                                        }}
+                                      >
+                                        <Edit />
+                                        Edit
+                                      </Button>
+                                      <Button
+                                        variant="outline"
+                                        size={{ initial: '1', md: '1' }}
+                                        radius="large"
+                                      >
+                                        <Trash2 />
+                                        Delete
+                                      </Button>
                                     </Flex>
                                   </Flex>
-                                  <Badge
-                                    variant="outline"
-                                    radius="large"
-                                    color="gray"
-                                    className={'select-none'}
-                                  >
-                                    3 Assertions
-                                  </Badge>
-                                </Box>
-                                <Flex>
-                                  <Button
-                                    variant="outline"
-                                    size={{ initial: '1', md: '2' }}
-                                    radius="large"
-                                  >
-                                    <Play />
-                                    Run
-                                  </Button>
-                                </Flex>
-                              </Flex>
-                            </Card>
+                                </Card>
+                              )
+                            })}
                           </Flex>
                         )}
                       </Collapsible.Content>

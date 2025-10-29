@@ -16,6 +16,7 @@ const act_addSuit = 'ADDSUIT'
 const act_updateSuit = 'UPDATESUIT'
 const act_deleteSuit = 'DELETESUIT'
 const act_addSuitTest = 'ADDSUITTEST'
+const act_editSuitTest = 'EDITSUITTEST'
 
 export {
     act_setName,
@@ -35,5 +36,6 @@ export {
     act_addSuit,
     act_addSuitTest,
     act_deleteSuit,
-    act_updateSuit
+    act_updateSuit,
+    act_editSuitTest
 }

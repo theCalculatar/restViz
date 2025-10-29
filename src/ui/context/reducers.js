@@ -12,7 +12,9 @@ import {
     act_dismissDialog,
     act_setDialog,
     act_addSuit,
-    act_updateSuit
+    act_updateSuit,
+    act_addSuitTest,
+    act_editSuitTest
 } from "./actions"
 
 const setRoutesFn = (state, { type, payload }) => {
@@ -105,16 +107,46 @@ const setDialogFn = (state, { type, payload }) => {
 }
 
 const setSuiteFn = (state, { type, payload }) => {
+    let suites
     switch (type) {
         case act_addSuit:
             const id = btoa(Date.now().toString())
-            return [...state, { ...payload, id, tests: [3, 23, 3] }]
+            return [...state, { ...payload, id, tests: [] }]
 
         case act_updateSuit:
-            const suites = state.map(suite => {
+            suites = state.map(suite => {
                 if (suite.id === payload.id) {
                     suite.title = payload.title
                     suite.description = payload.description
+                }
+                return suite
+            })
+            return [...suites]
+
+        case act_addSuitTest:
+            suites = state.map(suite => {
+                if (suite.id === payload.id) {
+                    suite.tests = [...suite.tests, payload.test]
+                }
+                return suite
+            })
+            return [...suites]
+
+        case act_editSuitTest:
+            suites = state.map(suite => {
+                if (suite.id === payload.id) {
+                    const tests = suite.tests.map((test) => {
+                        if (test.id === payload.test.id) {
+                            test.title = payload.test.title
+                            test.description = payload.test.description
+                            test.assertions = payload.test.assertions
+                            test.method = payload.test.method
+                            test.endpoint = payload.test.endpoint
+                            test.body = payload.test.body
+                        }
+                        return test
+                    })
+                    suite.tests = [...tests]
                 }
                 return suite
             })
