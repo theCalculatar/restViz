@@ -33,3 +33,20 @@ export interface Suite {
   title: string
   tests: Test[]
 }
+
+//to remove later
+export interface ApiResponse {
+  status: string
+  statusText: string
+  body: any
+  headers: Record<string, string>
+  time: number
+}
+
+export interface ApiRequest {
+  method: Method
+  endpoint: string
+  headers?: Record<string, string>
+  body?: string
+  timeout: number
+}
