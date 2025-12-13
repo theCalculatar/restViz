@@ -48,7 +48,8 @@ function Sidebar() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    if (!pathname.includes('test')) {
+    console.log(pathname)
+    if (!pathname.includes('test') && !pathname.includes('suits')) {
       toogleNav(act_closeNav)
     }
   }, [pathname])

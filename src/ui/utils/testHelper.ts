@@ -46,7 +46,7 @@ const validateAssertion = (assertion: TestAssertion, response: any) => {
     passed,
     message: passed
       ? `✓ ${type} ${operator} ${value}`
-      : `✗ Expected ${type} to ${operator} ${value}, but got ${actual}`,
+      : `✗ Expected ${type} to be ${operator} ${value}, but got ${actual}`,
   }
 }
 
@@ -62,9 +62,9 @@ const compareValues = (
       return actualStr === expected
     case 'contains':
       return actualStr.includes(expected)
-    case 'greaterThan':
+    case 'greater':
       return parseFloat(actualStr) > parseFloat(expected)
-    case 'lessThan':
+    case 'less':
       return parseFloat(actualStr) < parseFloat(expected)
     case 'exists':
       return actual !== null && actual !== undefined && actualStr !== ''
