@@ -250,17 +250,21 @@ function CreateTests(suiteId: string, test_: Test) {
                 To add after sandbox. im unto something...
               </div> */}
             </Flex>
-            <Flex direction={'column'}>
-              <Text size={'2'}>Request body</Text>
-              <TextArea
-                radius="large"
-                placeholder={'{"name":"Jone DOe", "email":"example@gmail.com"}'}
-                value={test.body}
-                onChange={(value) => {
-                  setTest({ ...test, body: value.currentTarget.value })
-                }}
-              />
-            </Flex>
+            {test.method !== 'GET' && test.method !== 'DELETE' && (
+              <Flex direction={'column'}>
+                <Text size={'2'}>Request body</Text>
+                <TextArea
+                  radius="large"
+                  placeholder={
+                    '{"name":"Jone DOe", "email":"example@gmail.com"}'
+                  }
+                  value={test.body}
+                  onChange={(value) => {
+                    setTest({ ...test, body: value.currentTarget.value })
+                  }}
+                />
+              </Flex>
+            )}
           </Flex>
         </Card>
         <Card>

@@ -136,7 +136,10 @@ const apiCall = async (request: ApiRequest): Promise<ApiResponse> => {
       {
         method: request.method,
         headers: request.headers,
-        body: request.body,
+        body:
+          request.method === 'GET' || request.method === 'DELETE'
+            ? null
+            : JSON.stringify(request.body),
       }
     )
     const endTime = response.time - performance.now()

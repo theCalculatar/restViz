@@ -1,4 +1,4 @@
-import { useReducer } from 'preact/hooks'
+import { useReducer, useEffect } from 'preact/hooks'
 import { createContext } from 'preact'
 
 import {
@@ -44,7 +44,14 @@ function Provider({ children }) {
 
   const [Frag, setDialog] = useReducer(setDialogFn, null)
 
-  const [suites, setSuite] = useReducer(setSuiteFn, [])
+  const [suites, setSuite] = useReducer(setSuiteFn, [], () => {
+    const saved = localStorage.getItem('suites')
+    return saved ? JSON.parse(saved) : []
+  })
+
+  useEffect(() => {
+    localStorage.setItem('suites', JSON.stringify(suites))
+  }, [suites])
 
   return (
     <AppContext.Provider
