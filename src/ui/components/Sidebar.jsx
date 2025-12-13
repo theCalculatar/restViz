@@ -175,7 +175,7 @@ function Sidebar() {
         className={'w-full border-t dark:border-white/10 border-black/10 py-2'}
       >
         <Link
-          to={'/test'}
+          to={'/suits'}
           className={`w-full py-1 px-2 rounded-md dark:hover:bg-white/10 hover:bg-black/5 ${
             pathname === '/test' && 'bg-black/10 dark:bg-white/15'
           }`}

@@ -8,7 +8,6 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link,
   Section,
   Text,
 } from '@radix-ui/themes'
@@ -35,6 +34,7 @@ import CreateTests from '../../components/CreateTests'
 import { useIsMobile } from '../../hooks/useMobile'
 import { Collapsible } from 'radix-ui'
 import { methodColors } from '../../utils/colors'
+import { Link } from 'react-router-dom'
 
 function index() {
   const { config, setDialog, suites } = useContext(AppContext)
@@ -214,16 +214,18 @@ function index() {
                             {!isMobile ? (
                               <Flex gap={'2'} align={'center'}>
                                 <Button
-                                  size={'2'}
+                                  size={'1'}
                                   variant={'outline'}
                                   radius="large"
                                   onClick={() => createTest(suite.id)}
                                 >
                                   <Plus /> Add test
                                 </Button>
-                                <Button>
-                                  <PlayCircleIcon />
-                                  Run Suite
+                                <Button size={'1'} asChild>
+                                  <Link to={suite.id}>
+                                    <PlayCircleIcon />
+                                    Run Suite
+                                  </Link>
                                 </Button>
                                 <IconButton
                                   variant="ghost"
@@ -250,9 +252,11 @@ function index() {
                                     marginRight: '6px',
                                   }}
                                 >
-                                  <DropdownMenu.Item>
-                                    <PlayCircleIcon />
-                                    Run Suite
+                                  <DropdownMenu.Item asChild>
+                                    <Link to={suite.id}>
+                                      <PlayCircleIcon />
+                                      Run Suite
+                                    </Link>
                                   </DropdownMenu.Item>
                                   <DropdownMenu.Item
                                     onClick={() => createTest(suite.id)}
@@ -321,14 +325,6 @@ function index() {
                                       </Badge>
                                     </Box>
                                     <Flex gap={'1'}>
-                                      <Button
-                                        variant="outline"
-                                        size={{ initial: '1', md: '1' }}
-                                        radius="large"
-                                      >
-                                        <Play />
-                                        Run
-                                      </Button>
                                       <Button
                                         variant="outline"
                                         size={{ initial: '1', md: '1' }}

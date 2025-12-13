@@ -95,6 +95,7 @@ const singleTest = async (test: Test): Promise<void> => {
 
     // Update result
     results = {
+      ...results,
       status: allPassed ? 'passed' : 'failed',
       duration,
       assertions: assertionResults,
@@ -121,14 +122,23 @@ const singleTest = async (test: Test): Promise<void> => {
 }
 
 const apiCall = async (request: ApiRequest): Promise<ApiResponse> => {
-  let response: ApiResponse
-  response.time = performance.now()
+  let response: ApiResponse = {
+    status: '',
+    statusText: '',
+    body: null,
+    headers: {},
+    time: 0,
+  }
+  response.time = Date.now()
   try {
-    const api_response = await fetch(request.endpoint, {
-      method: request.method,
-      headers: request.headers,
-      body: request.body,
-    })
+    const api_response = await fetch(
+      'http://localhost:5002' + request.endpoint,
+      {
+        method: request.method,
+        headers: request.headers,
+        body: request.body,
+      }
+    )
     const endTime = response.time - performance.now()
     const responseBody = await api_response.text()
     let parsedBody: any
@@ -156,4 +166,4 @@ const apiCall = async (request: ApiRequest): Promise<ApiResponse> => {
   return Promise.resolve(response)
 }
 
-export { getNestedValue, validateAssertion }
+export { getNestedValue, validateAssertion, singleTest }
