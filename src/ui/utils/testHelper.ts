@@ -81,6 +81,8 @@ const singleTest = async (test: Test): Promise<void> => {
     title: test.title,
   }
 
+  localStorage.setItem('lastRun', Date.now().toString())
+
   try {
     // Simulate API call (in a real app, this would make an actual HTTP request)
     const response = await apiCall(test)
@@ -92,6 +94,32 @@ const singleTest = async (test: Test): Promise<void> => {
     )
 
     const allPassed = assertionResults.every((a) => a.passed)
+
+    //calc pass rate (get old value and update)
+    const passed = allPassed ? 1 : 0
+    const oldPassRate =
+      localStorage.getItem('passRate') ||
+      JSON.stringify({
+        passRate: 0,
+        totalTests: 0,
+      })
+    const { passRate: oldPassRateValue, totalTests: oldTotalTests } =
+      JSON.parse(oldPassRate)
+
+    const oldPassedCount = oldPassRateValue * oldTotalTests
+    const newTotalTests = oldTotalTests + 1
+    const newPassedCount = oldPassedCount + passed
+    const newPassRate = newPassedCount / newTotalTests
+
+    console.log(newPassRate, newTotalTests)
+
+    localStorage.setItem(
+      'passRate',
+      JSON.stringify({
+        passRate: newPassRate,
+        totalTests: newTotalTests,
+      })
+    )
 
     // Update result
     results = {

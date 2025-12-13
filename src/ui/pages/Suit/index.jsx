@@ -40,6 +40,13 @@ function index() {
   const { config, setDialog, suites } = useContext(AppContext)
   const isDevEnv = config.environment === 'DEV'
   const isMobile = useIsMobile()
+  const lastRun = localStorage.getItem('lastRun')
+    ? new Date(JSON.parse(localStorage.getItem('lastRun'))).toLocaleDateString()
+    : '--'
+  const passRate = Math.round(
+    (JSON.parse(localStorage.getItem('passRate'))?.passRate || 0) * 100
+  )
+  const totalTests = suites.reduce((acc, suite) => acc + suite.tests.length, 0)
 
   const newSuite = {
     type: act_setDialog,
@@ -128,7 +135,7 @@ function index() {
                 <Flex direction={'column'}>
                   <Text>Total Tests</Text>
                   <Text size={'6'} weight={'medium'}>
-                    0
+                    {totalTests}
                   </Text>
                 </Flex>
                 <File className={'lg text-purple-500'} />
@@ -140,7 +147,7 @@ function index() {
                 <Flex direction={'column'}>
                   <Text>Pass Rate</Text>
                   <Text size={'6'} weight={'medium'}>
-                    --
+                    {passRate}%
                   </Text>
                 </Flex>
                 <CheckCircle2 className={'lg text-green-500'} />
@@ -152,7 +159,7 @@ function index() {
                 <Flex direction={'column'}>
                   <Text>Last Run</Text>
                   <Text size={'6'} weight={'medium'}>
-                    0
+                    {lastRun}
                   </Text>
                 </Flex>
                 <Folder className={'lg text-orange-500'} />
