@@ -15,6 +15,7 @@ const act_dismissDialog = 'DISMISSDIALOG'
 const act_addSuit = 'ADDSUIT'
 const act_updateSuit = 'UPDATESUIT'
 const act_deleteSuit = 'DELETESUIT'
+const act_deleteSuitTest = 'DELETESUITTEST'
 const act_addSuitTest = 'ADDSUITTEST'
 const act_editSuitTest = 'EDITSUITTEST'
 
@@ -36,6 +37,7 @@ export {
     act_addSuit,
     act_addSuitTest,
     act_deleteSuit,
+    act_deleteSuitTest,
     act_updateSuit,
     act_editSuitTest
 }

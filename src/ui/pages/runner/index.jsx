@@ -7,6 +7,8 @@ import {
   Play,
   Square,
   ChevronRight,
+  Folder,
+  Plus,
 } from 'lucide-react'
 import { singleTest } from '../../utils/testHelper'
 import {
@@ -27,12 +29,16 @@ import {
 import { AppContext } from '../../context'
 import { Accordion } from 'radix-ui'
 import { useNavigate, useParams } from 'react-router-dom'
+import { act_setDialog } from '../../context/actions'
+import CreateTests from '../../components/CreateTests'
 
 export function TestRunner() {
   const [currentTestIndex, setCurrentTestIndex] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
-  const { suites } = useContext(AppContext)
+  const { setDialog, suites } = useContext(AppContext)
   const { suitId } = useParams()
+  const suite = suites.find((s) => s.id === suitId) || undefined
+  const [results, setResults] = useState([])
 
   const navigate = useNavigate()
 
@@ -43,9 +49,7 @@ export function TestRunner() {
     }
   })
 
-  const suite = suites.find((s) => s.id === suitId) || undefined
-
-  const [results, setResults] = useState(() => {
+  useEffect(() => {
     const tests = suite?.tests.map((test) => ({
       testId: test.id,
       title: test.title,
@@ -53,8 +57,8 @@ export function TestRunner() {
       duration: 0,
       assertions: [],
     }))
-    return tests
-  })
+    setResults(tests)
+  }, [suites])
 
   const runTests = async () => {
     setIsRunning(true)
@@ -89,6 +93,17 @@ export function TestRunner() {
     return { passedCount, failedCount, progress }
   }, [results])
 
+  const createTest = () => {
+    setDialog({
+      type: act_setDialog,
+      payload: {
+        Root: () => CreateTests(suite.id, null),
+        description: 'Build automated tests with assertions and validations',
+        title: 'Create new test',
+      },
+    })
+  }
+
   return suite === undefined ? (
     <div className="flex-1 flex items-center justify-center">
       {/* Even though this never gets rendered, we just pleasing Babel :) */}
@@ -113,18 +128,29 @@ export function TestRunner() {
                 </Text>
               }
             </Flex>
-            {isRunning ? (
+            {suite.tests.length === 0 ? (
+              <Button radius="large" onClick={createTest}>
+                <Plus />
+                Create Test
+              </Button>
+            ) : isRunning ? (
               <Button
                 variant="surface"
                 onClick={() => setIsRunning(false)}
                 className="gap-2"
                 radius="large"
+                size={{ initial: '1', md: '2' }}
               >
                 <Square className="w-4 h-4" />
                 Stop
               </Button>
             ) : (
-              <Button onClick={runTests} radius="large" className="gap-2">
+              <Button
+                onClick={runTests}
+                radius="large"
+                size={{ initial: '1', md: '2' }}
+                className="gap-2"
+              >
                 <Play className="w-4 h-4" />
                 Start Tests
               </Button>
@@ -145,7 +171,7 @@ export function TestRunner() {
             <Box className="space-y-4 mt-2">
               <Progress
                 value={progress}
-                max={suite.tests.length}
+                max={suite.tests.length === 0 ? 1 : suite.tests.length}
                 className="h-2"
               />
 
@@ -182,6 +208,27 @@ export function TestRunner() {
             </Box>
           </Card>
 
+          {/* When no tests are found */}
+          {suite.tests.length === 0 && (
+            <Card size={'3'}>
+              <Flex direction={'column'} align={'center'} gap={'4'}>
+                <Folder className={'xxl'} />
+                <Flex direction={'column'} align={'center'} gap={'2'}>
+                  <Text size={'6'} weight={'bold'}>
+                    No tests found
+                  </Text>
+                  <Text align={'center'}>
+                    Create your first test to organize and automate your API
+                    tests
+                  </Text>
+                </Flex>
+                <Button onClick={createTest}>
+                  <Plus />
+                  Create Test
+                </Button>
+              </Flex>
+            </Card>
+          )}
           <Accordion.Root type="single" collapsible>
             {/* Test Results */}
             <div className="space-y-3">

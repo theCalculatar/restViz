@@ -28,7 +28,11 @@ import {
 } from 'lucide-react'
 import { useContext } from 'preact/hooks'
 import { AppContext } from '../../context'
-import { act_setDialog } from '../../context/actions'
+import {
+  act_deleteSuit,
+  act_deleteSuitTest,
+  act_setDialog,
+} from '../../context/actions'
 import CreateSuite from '../../components/CreateSuite'
 import CreateTests from '../../components/CreateTests'
 import { useIsMobile } from '../../hooks/useMobile'
@@ -37,7 +41,7 @@ import { methodColors } from '../../utils/colors'
 import { Link } from 'react-router-dom'
 
 function index() {
-  const { config, setDialog, suites } = useContext(AppContext)
+  const { config, setDialog, suites, setSuite } = useContext(AppContext)
   const isDevEnv = config.environment === 'DEV'
   const isMobile = useIsMobile()
   const lastRun = localStorage.getItem('lastRun')
@@ -87,6 +91,25 @@ function index() {
         title: 'Edit Test Suite',
         description:
           'Edit existing test suite to organize your automated tests',
+      },
+    })
+  }
+
+  const deleteSuite = (id) => {
+    setSuite({
+      type: act_deleteSuit,
+      payload: {
+        id,
+      },
+    })
+  }
+
+  const deleteTest = (id, testId) => {
+    setSuite({
+      type: act_deleteSuitTest,
+      payload: {
+        id,
+        testId,
       },
     })
   }
@@ -240,7 +263,10 @@ function index() {
                                 >
                                   <Edit />
                                 </IconButton>
-                                <IconButton variant="ghost">
+                                <IconButton
+                                  variant="ghost"
+                                  onClick={() => deleteSuite(suite.id)}
+                                >
                                   <Trash2 />
                                 </IconButton>
                               </Flex>
@@ -279,7 +305,7 @@ function index() {
                                   <DropdownMenu.Separator />
                                   <DropdownMenu.Item
                                     color="red"
-                                    onClick={() => console.log('Signed out!')}
+                                    onClick={() => deleteSuite(suite.id)}
                                   >
                                     <Trash2 />
                                     Delete
@@ -347,6 +373,9 @@ function index() {
                                         variant="outline"
                                         size={{ initial: '1', md: '1' }}
                                         radius="large"
+                                        onClick={() =>
+                                          deleteTest(suite.id, test.id)
+                                        }
                                       >
                                         <Trash2 />
                                         Delete
