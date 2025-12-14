@@ -149,7 +149,10 @@ const singleTest = async (test: Test): Promise<void> => {
   }
 }
 
-const apiCall = async (request: ApiRequest): Promise<ApiResponse> => {
+const apiCall = async (
+  request: ApiRequest,
+  options?: any
+): Promise<ApiResponse> => {
   let response: ApiResponse = {
     status: '',
     statusText: '',
@@ -159,17 +162,38 @@ const apiCall = async (request: ApiRequest): Promise<ApiResponse> => {
   }
   response.time = Date.now()
   try {
-    const api_response = await fetch(
-      'http://localhost:5002' + request.endpoint,
-      {
-        method: request.method,
-        headers: request.headers,
-        body:
-          request.method === 'GET' || request.method === 'DELETE'
-            ? null
-            : JSON.stringify(request.body),
+    const MAX_RETRIES = options?.maxRetries || 3
+    const TIMEOUT_MS = options?.timeout || 5000
+    let retries = 0
+    let api_response: Response | null = null
+
+    while (retries < MAX_RETRIES) {
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS)
+
+        api_response = await fetch(request.endpoint, {
+          method: request.method,
+          headers: request.headers,
+          body:
+            request.method === 'GET' || request.method === 'DELETE'
+              ? null
+              : JSON.stringify(request.body),
+          signal: controller.signal,
+        })
+        clearTimeout(timeoutId)
+        break
+      } catch (error) {
+        retries++
+        if (retries >= MAX_RETRIES) {
+          throw Error('Failed to get response after retries')
+        }
       }
-    )
+    }
+
+    if (!api_response) {
+      throw new Error('Failed to get response after retries')
+    }
     const endTime = response.time - performance.now()
     const responseBody = await api_response.text()
     let parsedBody: any
