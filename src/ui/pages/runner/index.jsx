@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Folder,
   Plus,
+  Edit,
 } from 'lucide-react'
 import { singleTest } from '../../utils/testHelper'
 import {
@@ -125,6 +126,17 @@ export function TestRunner() {
         Root: () => CreateTests(suite.id, null),
         description: 'Build automated tests with assertions and validations',
         title: 'Create new test',
+      },
+    })
+  }
+
+  const updateTest = (id, test) => {
+    setDialog({
+      type: act_setDialog,
+      payload: {
+        Root: () => CreateTests(id, test),
+        description: 'Edit your automated tests assertions and validations',
+        title: 'Update your test',
       },
     })
   }
@@ -305,14 +317,28 @@ export function TestRunner() {
                               </Flex>
                             </Flex>
                           </Accordion.Trigger>
-                          <Button
-                            size={'1'}
-                            radius="large"
-                            disabled={isRunning}
-                            onClick={() => runSingleTest(index)}
-                          >
-                            Run Test
-                          </Button>
+                          <Flex gap={'2'}>
+                            <Button
+                              variant="outline"
+                              size={{ initial: '1', md: '1' }}
+                              radius="large"
+                              onClick={() => {
+                                const test = suite.tests[index]
+                                updateTest(suite.id, test)
+                              }}
+                            >
+                              <Edit className="mr-1" />
+                              Edit
+                            </Button>
+                            <Button
+                              size={'1'}
+                              radius="large"
+                              disabled={isRunning}
+                              onClick={() => runSingleTest(index)}
+                            >
+                              Run Test
+                            </Button>
+                          </Flex>
                         </Flex>
                       </Accordion.Header>
                       <Accordion.Content className={'CollapsibleContent'}>
