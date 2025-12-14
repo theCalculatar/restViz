@@ -28,7 +28,7 @@ export default function App() {
   return (
     <Theme
       appearance={config.theme}
-      accentColor="blue"
+      accentColor={config.accentColor || 'blue'}
       radius="small"
       scaling="95%"
     >

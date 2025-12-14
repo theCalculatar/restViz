@@ -111,8 +111,6 @@ const singleTest = async (test: Test): Promise<void> => {
     const newPassedCount = oldPassedCount + passed
     const newPassRate = newPassedCount / newTotalTests
 
-    console.log(newPassRate, newTotalTests)
-
     localStorage.setItem(
       'passRate',
       JSON.stringify({

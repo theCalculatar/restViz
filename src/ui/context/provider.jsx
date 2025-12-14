@@ -38,7 +38,7 @@ function Provider({ children }) {
   const [config, setConfig] = useReducer(setConfigFn, {}, () => {
     // @ts-ignore
     const saved = window.__config__ || {}
-    saved.theme = localStorage.getItem('theme') || config.theme
+    saved.theme = localStorage.getItem('theme') || saved.theme || 'light'
     return saved
   })
 

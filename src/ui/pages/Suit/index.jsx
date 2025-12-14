@@ -122,7 +122,7 @@ function index() {
       overflow={'auto'}
       className={'w-full'}
     >
-      <Container>
+      <Container size={{ md: '3', xl: '4', sm: '3', initial: '1' }}>
         <Flex direction={'column'} gap={'4'}>
           <Flex justify={'between'} gap={'4'}>
             <Flex direction={'column'}>

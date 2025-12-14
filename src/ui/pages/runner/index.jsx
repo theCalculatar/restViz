@@ -86,6 +86,31 @@ export function TestRunner() {
     setCurrentTestIndex(0)
   }
 
+  const runSingleTest = async (index) => {
+    if (isRunning) return
+    setIsRunning(true)
+    setCurrentTestIndex(index)
+
+    setResults((prevResults) => {
+      const newResults = [...prevResults]
+      newResults[index] = {
+        ...newResults[index],
+        status: 'running',
+      }
+      return newResults
+    })
+
+    const response = await singleTest(suite.tests[index])
+
+    setResults((prevResults) => {
+      const newResults = [...prevResults]
+      newResults[index] = response
+      return newResults
+    })
+
+    setIsRunning(false)
+  }
+
   const { passedCount, failedCount, progress } = useMemo(() => {
     const passedCount = results?.filter((r) => r.status === 'passed').length
     const failedCount = results?.filter((r) => r.status === 'failed').length
@@ -237,16 +262,12 @@ export function TestRunner() {
                   <Accordion.Item value={'item-' + index}>
                     <Card key={result.testId}>
                       <Accordion.Header>
-                        <Accordion.Trigger
-                          asChild
-                          className={'accord transition-all duration-300'}
-                        >
-                          <Flex
-                            align={'center'}
-                            justify={'between'}
-                            width={'100%'}
+                        <Flex gap={'2'} justify={'between'}>
+                          <Accordion.Trigger
+                            asChild
+                            className={'accord transition-all duration-300'}
                           >
-                            <Flex className="flex-1" gap={'2'} align={'center'}>
+                            <Flex width={'100%'} className="flex-1" gap={'2'}>
                               <ChevronRight className="w-4 h-4 ico" />
 
                               {result.status === 'passed' && (
@@ -283,8 +304,16 @@ export function TestRunner() {
                                 )}
                               </Flex>
                             </Flex>
-                          </Flex>
-                        </Accordion.Trigger>
+                          </Accordion.Trigger>
+                          <Button
+                            size={'1'}
+                            radius="large"
+                            disabled={isRunning}
+                            onClick={() => runSingleTest(index)}
+                          >
+                            Run Test
+                          </Button>
+                        </Flex>
                       </Accordion.Header>
                       <Accordion.Content className={'CollapsibleContent'}>
                         {result.status !== 'pending' && (
@@ -413,16 +442,6 @@ export function TestRunner() {
                             )}
                           </Tabs.Root>
                         )}
-                        <Flex gap={'2'} mt={'2'}>
-                          <Button
-                            variant="surface"
-                            size={'1'}
-                            radius="large"
-                            // onClick={}
-                          >
-                            Run Test
-                          </Button>
-                        </Flex>
                       </Accordion.Content>
                     </Card>
                   </Accordion.Item>
