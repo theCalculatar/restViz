@@ -31,7 +31,7 @@ import {
   act_editSuitTest,
 } from '../context/actions'
 
-function CreateTests(suiteId: string, test_: Test) {
+function CreateTests(suiteId: string, test_: Test | null) {
   const { routes, setSuite, setDialog } = useContext(AppContext)
   const [routesLink, setRoutesLink] = useState(routes)
 
@@ -51,7 +51,7 @@ function CreateTests(suiteId: string, test_: Test) {
   })
 
   const addAssertion = () => {
-    test.assertions.push(assertion)
+    test.assertions!.push(assertion)
     setAssertion({
       id: Date.now().toString(),
       type: 'code',
@@ -61,7 +61,7 @@ function CreateTests(suiteId: string, test_: Test) {
   }
 
   const removeAssertion = (assertionId: string) => {
-    const newAssertion = test.assertions.filter((as_) => as_.id !== assertionId)
+    const newAssertion = test.assertions!.filter((as_) => as_.id !== assertionId)
     setTest({ ...test, assertions: newAssertion })
   }
 

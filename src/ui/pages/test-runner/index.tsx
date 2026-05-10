@@ -32,26 +32,29 @@ import { Accordion } from 'radix-ui'
 import { useNavigate, useParams } from 'react-router-dom'
 import { act_setDialog } from '../../context/actions'
 import CreateTests from '../../components/CreateTests'
+import { Suite, Test, TestAssertion } from '@/types/suites'
 
 export function TestRunner() {
-  const [currentTestIndex, setCurrentTestIndex] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
-  const { setDialog, suites } = useContext(AppContext)
-  const { suitId } = useParams()
-  const suite = suites.find((s) => s.id === suitId) || undefined
-  const [results, setResults] = useState([])
-
   const navigate = useNavigate()
 
+  const [currentTestIndex, setCurrentTestIndex] = useState<number>(0)
+  const [isRunning, setIsRunning] = useState<boolean>(false)
+  const { setDialog, suites, headers } = useContext(AppContext)
+  const { suitId } = useParams()
+
+  const suite = suites.find((s: Suite) => s.id === suitId) || undefined
+
   useEffect(() => {
-    if (!suites.some((suite) => suite.id === suitId)) {
+    if (!suites.some((suite: Suite) => suite.id === suitId)) {
       navigate('/404')
       return
     }
   })
 
+  const [results, setResults] = useState<Test[]>([])
+
   useEffect(() => {
-    const tests = suite?.tests.map((test) => ({
+    const tests = suite?.tests.map((test: Test) => ({
       testId: test.id,
       title: test.title,
       status: 'pending',
@@ -66,45 +69,64 @@ export function TestRunner() {
     let resultsArray = []
     for (let i = 0; i < suite.tests.length; i++) {
       setCurrentTestIndex(i)
+
       setResults((prevResults) => {
-        const newResults = [...prevResults]
+        const newResults: Test[] = [...prevResults]
+
         newResults[i] = {
           ...newResults[i],
           status: 'running',
         }
         return newResults
       })
-      const response = await singleTest(suite.tests[i])
+
+      const response = await singleTest({ ...suite.tests[i], headers: {} })
+
       resultsArray.push(response)
+
       setResults((prevResults) => {
         const newResults = [...prevResults]
+        //@ts-ignore
         newResults[i] = response
         return newResults
       })
       setCurrentTestIndex(i)
     }
+
     setIsRunning(false)
     setCurrentTestIndex(0)
   }
 
-  const runSingleTest = async (index) => {
+  const runSingleTest = async (index: number) => {
     if (isRunning) return
     setIsRunning(true)
     setCurrentTestIndex(index)
 
     setResults((prevResults) => {
       const newResults = [...prevResults]
+
+      //@ts-ignore
       newResults[index] = {
+        //@ts-ignore
         ...newResults[index],
         status: 'running',
       }
       return newResults
     })
 
-    const response = await singleTest(suite.tests[index])
+    const headerObj = headers.reduce((acc: any, curr: any) => {
+      if (curr.key) acc[curr.key] = curr.value
+      return acc
+    }, {})
+
+    const response = await singleTest({
+      ...suite.tests[index],
+      headers: headerObj,
+    })
 
     setResults((prevResults) => {
       const newResults = [...prevResults]
+      //@ts-ignore
       newResults[index] = response
       return newResults
     })
@@ -130,7 +152,7 @@ export function TestRunner() {
     })
   }
 
-  const updateTest = (id, test) => {
+  const updateTest = (id: any, test: Test) => {
     setDialog({
       type: act_setDialog,
       payload: {
@@ -159,11 +181,9 @@ export function TestRunner() {
           <Flex justify={'between'}>
             <Flex direction={'column'}>
               <Heading>Suite Runner</Heading>
-              {
-                <Text as="p">
-                  Running suite: <Text>{suite.title}</Text>
-                </Text>
-              }
+              <Text as="p">
+                Running suite: <Text>{suite.title}</Text>
+              </Text>
             </Flex>
             {suite.tests.length === 0 ? (
               <Button radius="large" onClick={createTest}>
@@ -201,8 +221,8 @@ export function TestRunner() {
                 {isRunning
                   ? `Running test ${currentTestIndex + 1} of ${results.length}`
                   : results.every((r) => r.status === 'pending')
-                  ? 'Ready to run tests'
-                  : `Completed ${passedCount + failedCount} of tests`}
+                    ? 'Ready to run tests'
+                    : `Completed ${passedCount + failedCount} of tests`}
               </Text>
             </Box>
             <Box className="space-y-4 mt-2">
@@ -214,9 +234,7 @@ export function TestRunner() {
 
               <Grid gap={'2'} columns={{ initial: '2', md: '4' }}>
                 <Card>
-                  <div className="text-2xl font-bold">
-                    {suite.tests.length}{' '}
-                  </div>
+                  <div className="text-2xl font-bold">{suite.tests.length}</div>
                   <div className="text-sm text-muted-foreground">
                     Total Tests
                   </div>
@@ -235,7 +253,7 @@ export function TestRunner() {
                 </Card>
                 <Card>
                   <div className="text-2xl font-bold">
-                    {results.reduce((sum, r) => sum + r.duration, 0)}ms
+                    {results.reduce((sum, r) => sum + r.duration! || 0, 0)}ms
                   </div>
                   <div className="text-sm text-muted-foreground">
                     Total Time
@@ -272,7 +290,7 @@ export function TestRunner() {
               {results.map((result, index) => {
                 return (
                   <Accordion.Item value={'item-' + index}>
-                    <Card key={result.testId}>
+                    <Card key={result.id}>
                       <Accordion.Header>
                         <Flex gap={'2'} justify={'between'}>
                           <Accordion.Trigger
@@ -303,15 +321,15 @@ export function TestRunner() {
                                       result.status === 'passed'
                                         ? 'green'
                                         : result.status === 'running'
-                                        ? 'blue'
-                                        : 'red'
+                                          ? 'blue'
+                                          : 'red'
                                     }
                                     radius="large"
                                   >
                                     {result.status}
                                   </Badge>
                                 )}
-                                {result.duration > 0 && (
+                                {result.duration! > 0 && (
                                   <Text size={'2'}>{result.duration}ms</Text>
                                 )}
                               </Flex>
@@ -363,101 +381,10 @@ export function TestRunner() {
                               )}
                             </Tabs.List>
 
-                            <Tabs.Content
-                              value="assertions"
-                              className="space-y-2"
-                            >
-                              {result.assertions?.length === 0 ? (
-                                <Text size={'2'} color="gray">
-                                  No assertions defined
-                                </Text>
-                              ) : (
-                                result.assertions?.map((assertion) => (
-                                  <Box
-                                    key={assertion.id}
-                                    className={`p-3 border rounded-lg ${
-                                      assertion.passed
-                                        ? 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800'
-                                        : 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800'
-                                    }`}
-                                  >
-                                    <div className="flex items-start gap-2">
-                                      {assertion.passed ? (
-                                        <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5" />
-                                      ) : (
-                                        <XCircle className="w-4 h-4 text-red-600 mt-0.5" />
-                                      )}
-                                      <div className="flex-1">
-                                        <Text weight={'medium'}>
-                                          {assertion.message}
-                                        </Text>
-                                        {!assertion.passed && (
-                                          <Box className="mt-2 text-xs font-mono space-y-1">
-                                            <Text as="div">
-                                              Expected:{' '}
-                                              <Text color="green">
-                                                {assertion.expected}
-                                              </Text>
-                                            </Text>
-                                            <Text as="div">
-                                              Actual:{' '}
-                                              <Text color="red">
-                                                {assertion.actual}
-                                              </Text>
-                                            </Text>
-                                          </Box>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </Box>
-                                ))
-                              )}
-                            </Tabs.Content>
-
-                            {result.response && (
-                              <>
-                                <Tabs.Content value="response">
-                                  <div className="space-y-3">
-                                    <Flex gap={'2'} align={'center'}>
-                                      <Badge>{result.response.status}</Badge>
-                                      <Text size={'2'}>
-                                        {result.response.statusText}
-                                      </Text>
-                                      <Text size={'2'} className="ml-auto">
-                                        {result.response.time}/ms
-                                      </Text>
-                                    </Flex>
-                                    <Separator size={'4'} />
-                                    <Card>
-                                      <pre className="text-xs overflow-auto">
-                                        {JSON.stringify(
-                                          result.response.body,
-                                          null,
-                                          2
-                                        )}
-                                      </pre>
-                                    </Card>
-                                  </div>
-                                </Tabs.Content>
-
-                                <Tabs.Content value="headers">
-                                  <Box className="space-y-2">
-                                    {Object.entries(
-                                      result.response.headers
-                                    ).map(([key, value]) => (
-                                      <Card key={key}>
-                                        <Text size={'2'} weight={'medium'}>
-                                          {key}:
-                                        </Text>
-                                        <Text size={'2'} ml={'1'}>
-                                          {value}
-                                        </Text>
-                                      </Card>
-                                    ))}
-                                  </Box>
-                                </Tabs.Content>
-                              </>
-                            )}
+                            <TestResultsAssertions
+                              assertions={result.assertions}
+                            />
+                            <TestResultsResponse {...result.response} />
 
                             {result.error && (
                               <Box>
@@ -478,5 +405,90 @@ export function TestRunner() {
         </Flex>
       </Container>
     </Section>
+  )
+}
+
+const TestResultsAssertions = (data: { assertions: TestAssertion[] }) => {
+  const assertions = data.assertions
+
+  return (
+    <Tabs.Content value="assertions" className="space-y-2">
+      {assertions?.length === 0 ? (
+        <Text size={'2'} color="gray">
+          No assertions defined
+        </Text>
+      ) : (
+        assertions?.map((assertion) => (
+          <Box
+            key={assertion.id}
+            className={`p-3 border rounded-lg ${
+              assertion.passed
+                ? 'bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-800'
+                : 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800'
+            }`}
+          >
+            <div className="flex items-start gap-2">
+              {assertion.passed ? (
+                <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5" />
+              ) : (
+                <XCircle className="w-4 h-4 text-red-600 mt-0.5" />
+              )}
+              <div className="flex-1">
+                <Text weight={'medium'}>{assertion.message}</Text>
+                {!assertion.passed && (
+                  <Box className="mt-2 text-xs font-mono space-y-1">
+                    <Text as="div">
+                      Expected: <Text color="green">{assertion.expected}</Text>
+                    </Text>
+                    <Text as="div">
+                      Actual: <Text color="red">{assertion.actual}</Text>
+                    </Text>
+                  </Box>
+                )}
+              </div>
+            </div>
+          </Box>
+        ))
+      )}
+    </Tabs.Content>
+  )
+}
+
+const TestResultsResponse = (response: any) => {
+  return (
+    <>
+      <Tabs.Content value="response">
+        <div className="space-y-3">
+          <Flex gap={'2'} align={'center'}>
+            <Badge>{response.status}</Badge>
+            <Text size={'2'}>{response.statusText}</Text>
+            <Text size={'2'} className="ml-auto">
+              {response.time}/ms
+            </Text>
+          </Flex>
+          <Separator size={'4'} />
+          <Card>
+            <pre className="text-xs overflow-auto">
+              {JSON.stringify(response.body, null, 2)}
+            </pre>
+          </Card>
+        </div>
+      </Tabs.Content>
+
+      <Tabs.Content value="headers">
+        <Box className="space-y-2">
+          {Object.entries(response.headers).map(([key, value]) => (
+            <Card key={key}>
+              <Text size={'2'} weight={'medium'}>
+                {key}:
+              </Text>
+              <Text size={'2'} ml={'1'}>
+                {value as string}
+              </Text>
+            </Card>
+          ))}
+        </Box>
+      </Tabs.Content>
+    </>
   )
 }

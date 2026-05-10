@@ -162,6 +162,8 @@ const apiCall = async (
   try {
     const MAX_RETRIES = options?.maxRetries || 3
     const TIMEOUT_MS = options?.timeout || 5000
+    const BASE_URL = options?.baseUrl || 'http://localhost:3000'
+
     let retries = 0
     let api_response: Response | null = null
 
@@ -170,13 +172,13 @@ const apiCall = async (
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
-        api_response = await fetch(request.endpoint, {
+        api_response = await fetch(BASE_URL + request.endpoint, {
           method: request.method,
           headers: request.headers,
           body:
             request.method === 'GET' || request.method === 'DELETE'
               ? null
-              : JSON.stringify(request.body),
+              : request.body,
           signal: controller.signal,
         })
         clearTimeout(timeoutId)
@@ -184,7 +186,7 @@ const apiCall = async (
       } catch (error) {
         retries++
         if (retries >= MAX_RETRIES) {
-          throw Error('Failed to get response after retries')
+          throw Error('Failed to get response after ' + MAX_RETRIES + 'retries')
         }
       }
     }

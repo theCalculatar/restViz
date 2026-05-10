@@ -11,10 +11,16 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "skipLibCheck": true,
+
+    "baseUrl": ".",
+
     "paths": {
+      "@/*": ["./src/ui/*"],
+
       "react": ["./node_modules/preact/compat/"],
       "react-dom": ["./node_modules/preact/compat/"]
     }
   },
+
   "include": ["node_modules/vite/client.d.ts", "**/*"]
 }

@@ -4,6 +4,11 @@ export interface TestAssertion {
   field?: string
   operator: Operator
   value: string
+  // Test stats
+  passed?: boolean
+  message?: string
+  expected?: string
+  actual?: string
 }
 
 export type Operator = 'equals' | 'contains' | 'greater' | 'less'
@@ -24,6 +29,11 @@ export interface Test {
   body?: string
   assertions: TestAssertion[]
   timeout: number
+  //Test stats TODO - be moved
+  status?: string
+  duration?: number
+  response?: any
+  error?: string
   //   preRequestScript?: string ------------> to be continued :)
   //   postResponseScript?: string
 }

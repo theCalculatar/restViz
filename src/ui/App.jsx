@@ -19,7 +19,7 @@ import Settings from './pages/settings'
 import { useIsMobile } from './hooks/useMobile'
 import Suit from './pages/Suit'
 import Dialog from './components/Dialog'
-import { TestRunner } from './pages/runner'
+import { TestRunner } from './pages/test-runner'
 
 export default function App() {
   const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
