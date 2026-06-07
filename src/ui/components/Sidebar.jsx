@@ -12,17 +12,11 @@ import { Collapsible } from 'radix-ui'
 import { AppContext } from '../context'
 import { groupRoutesFn } from '../utils/routesUtils'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import {
-  act_closeNav,
-  act_openNav,
-  act_setCurrentRoute,
-  act_toogleNav,
-} from '../context/actions'
+import { act_closeNav, act_toogleNav } from '../context/actions'
 import {
   BookOpen,
   ChevronDown,
   ChevronRight,
-  ChevronUp,
   Folder,
   PanelLeft,
   Settings,
@@ -32,13 +26,7 @@ import { methodColors } from '../utils/colors'
 import { useIsMobile } from '../hooks/useMobile'
 
 function Sidebar() {
-  const {
-    routes,
-    isNavOpen,
-    setCurrentRoute: setCurrentRouteFn,
-    activeRoute,
-    toogleNav,
-  } = useContext(AppContext)
+  const { routes, isNavOpen, toogleNav } = useContext(AppContext)
   let groupedRoute = useMemo(() => {
     return [...groupRoutesFn(routes).entries()]
   }, [routes])
@@ -48,7 +36,6 @@ function Sidebar() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    console.log(pathname)
     if (!pathname.includes('test') && !pathname.includes('suits')) {
       toogleNav(act_closeNav)
     }
@@ -138,10 +125,6 @@ function Sidebar() {
                             borderRadius: 'var(--radius-3)',
                           }}
                           onClick={() => {
-                            setCurrentRouteFn({
-                              type: act_setCurrentRoute,
-                              payload: route,
-                            })
                             navigate(`test/${route.url}`)
                           }}
                         >
@@ -202,7 +185,7 @@ function Sidebar() {
           </Flex>
         </Link>
         <Link
-          to={'/docs'}
+          to={'https://restviz.mintlify.app/'}
           target={'_blank'}
           className={`py-1 px-2 rounded-md dark:hover:bg-white/10 hover:bg-black/5`}
         >

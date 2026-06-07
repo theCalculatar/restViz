@@ -45,76 +45,60 @@ export function Header() {
               size={{
                 initial: '3',
                 sm: '5',
-                md: '6',
+                // md: '6',
               }}
             >
               {config.name}
             </Heading>
           </Link>
-          {!isMobile && loggedIn && (
-            <Button size={'2'} onClick={() => {}}>
-              <ChartColumnIncreasingIcon /> Dashboard
-            </Button>
-          )}
         </Flex>
         <Box>
-          {!loggedIn ? (
-            <Button>
-              <LogIn width={16} />
-              Sign In
-            </Button>
-          ) : (
-            <DropdownMenu.Root>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
               <DropdownMenu.Trigger>
-                <DropdownMenu.Trigger>
-                  <Avatar
-                    src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
-                    fallback="A"
-                    radius="full"
-                  />
-                </DropdownMenu.Trigger>
+                <Avatar
+                  src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?&w=256&h=256&q=70&crop=focalpoint&fp-x=0.5&fp-y=0.3&fp-z=1&fit=crop"
+                  fallback="A"
+                  radius="full"
+                />
               </DropdownMenu.Trigger>
-              <DropdownMenu.Content
-                style={{ marginTop: '6px', marginRight: '6px' }}
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content
+              style={{ marginTop: '6px', marginRight: '6px' }}
+            >
+              <DropdownMenu.Item shortcut="⌘ S">Share</DropdownMenu.Item>
+              <DropdownMenu.Item
+                shortcut="⌘ M"
+                onClick={() => {
+                  navigate('/settings')
+                }}
               >
-                <DropdownMenu.Item
-                  shortcut="⌘ P"
-                  onClick={() => {
-                    window.location.replace('https://restviz.vercel.app')
-                  }}
-                >
-                  Profile
-                </DropdownMenu.Item>
-                <DropdownMenu.Item shortcut="⌘ S">Share</DropdownMenu.Item>
-                <DropdownMenu.Item
-                  shortcut="⌘ M"
-                  onClick={() => {
-                    navigate('/settings')
-                  }}
-                >
-                  Settings
-                </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  shortcut="⌘ D"
-                  onClick={() => {
-                    setConfig({ type: act_setConfigtTheme })
-                  }}
-                >
-                  <span className={'capitalize'}>
-                    {config.theme === 'dark' ? 'light' : 'dark'} mode
-                  </span>
-                </DropdownMenu.Item>
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item
-                  shortcut="⌘ E"
-                  color="red"
-                  onClick={() => console.log('Signed out!')}
-                >
-                  Sign Out
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
-          )}
+                Settings
+              </DropdownMenu.Item>
+              <DropdownMenu.Item
+                shortcut="⌘ D"
+                onClick={() => {
+                  setConfig({ type: act_setConfigtTheme })
+                }}
+              >
+                <span className={'capitalize'}>
+                  {config.theme === 'dark' ? 'light' : 'dark'} mode
+                </span>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item
+                shortcut="⌘ E"
+                color="red"
+                onClick={() => {
+                  localStorage.clear()
+                  sessionStorage.clear()
+                  window.location.reload()
+                }}
+              >
+                Clear cache
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </Box>
       </Flex>
     </header>
