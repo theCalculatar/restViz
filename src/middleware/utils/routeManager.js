@@ -67,7 +67,9 @@ const updateRoutes = (appRoutes) => {
     addRoutes(newRoutes)
   }
 
-  return newRoutes
+  return newRoutes.map((route) => {
+    return { ...route, url: btoa(route.method + route.path) }
+  })
 }
 
 module.exports = { updateRoutes }
