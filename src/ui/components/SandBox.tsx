@@ -40,6 +40,14 @@ function SandBox({ activeRoute }: { activeRoute: any }) {
     setFullPath(window.location.origin + activeRoute.path)
   }, [activeRoute, _headers])
 
+  const onHeaderChange = (index: number, field: 'key' | 'value', value: string) => {
+    setHeaders((prev) => {
+      const next = [...prev]
+      next[index] = { ...next[index], [field]: value }
+      return next
+    })
+  }
+
   const validateJson = (value) => {
     if (!value.trim()) {
       setIsValid(true)
@@ -95,12 +103,17 @@ function SandBox({ activeRoute }: { activeRoute: any }) {
   }
 
   const makeRequest = async () => {
-    const _headers = headers.filter((h) => !excludedHeaders.includes(h.key))
+    const headersObject = headers
+      .filter((h) => h.key.trim() !== '' && !excludedHeaders.includes(h.key))
+      .reduce((acc: any, h: any) => {
+        acc[h.key] = h.value
+        return acc
+      }, {})
 
     const _response = await apiCall({
       method: activeRoute.method,
       fullPath,
-      headers: _headers,
+      headers: headersObject,
       ...activeRoute,
       body: requestBody,
     })
@@ -165,9 +178,10 @@ function SandBox({ activeRoute }: { activeRoute: any }) {
               </Button>
             </Flex>
             <Flex gap={'2'} mt={'2'} direction={'column'}>
-              {headers.map((header, key) => {
+              {headers.map((header, index) => {
                 return (
                   <Flex
+                    key={index}
                     gap={'2'}
                     direction={{ initial: 'column', sm: 'row' }}
                     align={{ initial: 'center' }}
@@ -185,18 +199,20 @@ function SandBox({ activeRoute }: { activeRoute: any }) {
                       className={'w-full'}
                       radius="large"
                       value={header.key}
+                      onChange={(e: any) => onHeaderChange(index, 'key', e.target.value)}
                     ></TextField.Root>
                     <TextField.Root
                       placeholder={'Add value'}
                       className={'w-full'}
                       radius="large"
                       value={header.value}
+                      onChange={(e: any) => onHeaderChange(index, 'value', e.target.value)}
                     ></TextField.Root>
                     <Button
                       variant="surface"
                       radius="large"
                       color="red"
-                      onClick={() => removeHeader(key)}
+                      onClick={() => removeHeader(index)}
                     >
                       <X />
                     </Button>
@@ -309,7 +325,7 @@ function SandBox({ activeRoute }: { activeRoute: any }) {
             <Separator mt={'2'} mb={'2'} size={'4'} />
             <Flex align={'center'} justify={'between'}>
               <Text>Response body</Text>
-              <Text color="gray">{response.timeout.toFixed(2)} ms</Text>
+              <Text color="gray">{(response.timeout || 0).toFixed(2)} ms</Text>
             </Flex>
             <Code
               mt={'2'}
