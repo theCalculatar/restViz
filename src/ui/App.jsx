@@ -17,6 +17,9 @@ import { act_toogleNav } from './context/actions'
 import { Header } from './components/Header'
 import Settings from './pages/settings'
 import { useIsMobile } from './hooks/useMobile'
+import Suit from './pages/Suit'
+import Dialog from './components/Dialog'
+import { TestRunner } from './pages/test-runner'
 
 export default function App() {
   const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
@@ -25,7 +28,7 @@ export default function App() {
   return (
     <Theme
       appearance={config.theme}
-      accentColor="blue"
+      accentColor={config.accentColor || 'blue'}
       radius="small"
       scaling="95%"
     >
@@ -47,10 +50,13 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/suits" element={<Suit />} />
+                <Route path="/suits/:suitId/" element={<TestRunner />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Box>
           </Flex>
+          <Dialog />
         </Router>
       </Flex>
     </Theme>

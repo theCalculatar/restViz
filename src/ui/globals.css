@@ -22,6 +22,18 @@ body {
   width: 16px;
 }
 
+.lucide.lg {
+  width: 20px;
+}
+
+.lucide.xl {
+  width: 34px;
+}
+
+.lucide.xxl {
+  width: 44px;
+}
+
 .CollapsibleContent {
   overflow: hidden;
 }
@@ -55,4 +67,11 @@ body {
 }
 .collapse-trigger[data-state='open'] .ico-closed {
   display: none;
+}
+
+.accord[data-state='closed'] .ico {
+  transform: rotate(0deg); 
+}
+.accord[data-state='open'] .ico {
+  transform: rotate(90deg);
 }
