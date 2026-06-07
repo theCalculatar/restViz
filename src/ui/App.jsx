@@ -1,4 +1,11 @@
-import { HashRouter as Router, Routes, Route } from 'react-router-dom'
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  useNavigation,
+  useLocation,
+} from 'react-router-dom'
 import { Home } from './pages/Home'
 import { About } from './pages/About'
 import { NotFound } from './pages/_404'
@@ -10,13 +17,19 @@ import { act_toogleNav } from './context/actions'
 import { Header } from './components/Header'
 import Settings from './pages/settings'
 import Preview from './pages/Preview'
+import { useIsMobile } from './hooks/useMobile'
+import Suit from './pages/Suit'
+import Dialog from './components/Dialog'
+import { TestRunner } from './pages/test-runner'
 
 export default function App() {
   const { toogleNav: toogleNavFn, isNavOpen, config } = useContext(AppContext)
+  const isMobile = useIsMobile()
+
   return (
     <Theme
       appearance={config.theme}
-      accentColor="blue"
+      accentColor={config.accentColor || 'blue'}
       radius="small"
       scaling="95%"
     >
@@ -25,9 +38,9 @@ export default function App() {
           <Header />
           <Flex className={'flex-1'} overflow={'hidden'}>
             <Sidebar />
-            {isNavOpen && (
+            {isNavOpen && isMobile && (
               <div
-                className="fixed inset-0 z-auto"
+                className="fixed inset-0 z-10"
                 onClick={() => {
                   toogleNavFn(act_toogleNav)
                 }}
@@ -39,10 +52,13 @@ export default function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/test/*" element={<Preview />} />
+                <Route path="/suits" element={<Suit />} />
+                <Route path="/suits/:suitId/" element={<TestRunner />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Box>
           </Flex>
+          <Dialog />
         </Router>
       </Flex>
     </Theme>

@@ -1,13 +1,15 @@
-import { useReducer } from 'preact/hooks'
+import { useReducer, useEffect } from 'preact/hooks'
 import { createContext } from 'preact'
 
 import {
   setConfigFn,
   setCurrentRouteFn,
+  setDialogFn,
   setHeadersFn,
   setHistoryFn,
   setNavStaeFn,
   setRoutesFn,
+  setSuiteFn,
 } from './reducers'
 // @ts-ignore
 
@@ -36,9 +38,20 @@ function Provider({ children }) {
   const [config, setConfig] = useReducer(setConfigFn, {}, () => {
     // @ts-ignore
     const saved = window.__config__ || {}
-    saved.theme = localStorage.getItem('theme') || config.theme
+    saved.theme = localStorage.getItem('theme') || saved.theme || 'light'
     return saved
   })
+
+  const [Frag, setDialog] = useReducer(setDialogFn, null)
+
+  const [suites, setSuite] = useReducer(setSuiteFn, [], () => {
+    const saved = localStorage.getItem('suites')
+    return saved ? JSON.parse(saved) : []
+  })
+
+  useEffect(() => {
+    localStorage.setItem('suites', JSON.stringify(suites))
+  }, [suites])
 
   return (
     <AppContext.Provider
@@ -55,6 +68,10 @@ function Provider({ children }) {
         setCurrentRoute,
         config,
         setConfig,
+        Frag,
+        setDialog,
+        suites,
+        setSuite,
       }}
     >
       {children}
