@@ -16,6 +16,8 @@ examples/
 
 # Ignore source files that shouldn't be published
 src/*
+!src/types/
+!src/types/index.d.ts
 # lib/
 # dist/
 
