@@ -1,6 +1,10 @@
 {
   "name": "restviz",
   "version": "4.0.0-alpha.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theCalculatar/restViz.git"
+  },
   "main": "dist/middleware/index.cjs",
   "type": "commonjs",
   "types": "src/types/index.d.ts",
