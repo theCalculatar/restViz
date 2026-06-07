@@ -8,6 +8,11 @@ const routes = [
       'This endpoint supports pagination. Use ?page and ?limit parameters.',
     group: 'Users',
     url: 'R0VUL3VzZXJz',
+    responses: {
+      200: 'Success',
+      400: 'Bad request',
+      401: 'Unauthorized',
+    },
   },
   {
     id: '2',
@@ -18,6 +23,16 @@ const routes = [
       'Required fields: name, email. Password will be auto-generated if not provided.',
     group: 'Users',
     url: 'UE9TVC91c2Vycw==',
+    body: {
+      name: 'John Doe',
+      email: 'email',
+      password: 'password',
+    },
+    responses: {
+      200: 'Success',
+      400: 'Bad request',
+      401: 'Unauthorized',
+    },
   },
   {
     id: '3',

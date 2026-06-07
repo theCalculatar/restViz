@@ -1,5 +1,3 @@
-// import React from 'react'
-
 import { Container, Flex, Section } from '@radix-ui/themes'
 import SandBox from '../../components/SandBox'
 import RouteDescrption from '../../components/RouteDescrption'
@@ -9,19 +7,18 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { act_setCurrentRoute } from '../../context/actions'
 
 function Preview() {
-  const { routes, activeRoute, setCurrentRoute } = useContext(AppContext)
+  const { routes, setCurrentRoute } = useContext(AppContext)
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
+  let route = routes?.find((r) => r.url == pathname.replace('/test/', ''))
+
+  if (!route) {
+    navigate('/404')
+  }
+
   useEffect(() => {
-    if (routes.length > 0) {
-      const route = routes.find((r) => r.path == pathname.replace('/test', ''))
-      if (route) {
-        setCurrentRoute({ type: act_setCurrentRoute, payload: route })
-      } else {
-        navigate('/404')
-      }
-    }
+    setCurrentRoute({ type: act_setCurrentRoute, payload: route })
   }, [pathname])
 
   return (
@@ -32,8 +29,8 @@ function Preview() {
           width={'100%'}
           gap={'4'}
         >
-          <RouteDescrption />
-          <SandBox />
+          <RouteDescrption route={route} />
+          <SandBox activeRoute={route} />
         </Flex>
       </Container>
     </Section>

@@ -20,8 +20,8 @@ import { prettyJson } from '../utils/json'
 import { apiCall } from '../lib/request'
 import { Fragment } from 'preact/jsx-runtime'
 
-function SandBox() {
-  const { activeRoute, headers: _headers, setHistory } = useContext(AppContext)
+function SandBox({ activeRoute }: { activeRoute: any }) {
+  const { headers: _headers, setHistory } = useContext(AppContext)
   const [requestBody, setRequestBody] = useState('')
 
   const [headers, setHeaders] = useState([])
@@ -61,10 +61,10 @@ function SandBox() {
 
   const formatJson = () => {
     try {
-      setRequestBody(prettyJson(requestBody))
+      const _value = JSON.parse(requestBody)
+      setRequestBody(prettyJson(_value))
       setIsValid(true)
     } catch {
-      setRequestBody(requestBody)
       setIsValid(false)
     }
   }
@@ -104,7 +104,6 @@ function SandBox() {
       ...activeRoute,
       body: requestBody,
     })
-    console.log(_response)
     setResponse(_response)
     // addHistory(response)
   }
@@ -116,7 +115,7 @@ function SandBox() {
     setBCopied(true)
     setTimeout(() => {
       setBCopied(false)
-    }, 2000)
+    }, 3000)
   }
 
   return (
@@ -293,9 +292,8 @@ function SandBox() {
                 size={'2'}
                 variant="outline"
                 radius="large"
-                color="gray"
-                onClick={copy}
-                disabled={bCopied}
+                color={bCopied ? 'green' : 'gray'}
+                onClick={() => !bCopied && copy()}
               >
                 {bCopied ? (
                   <Fragment>
