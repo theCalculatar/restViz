@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= config.name %></title>
+    <link rel="stylesheet" href="/restviz/ui/index.css" />
+    <link rel="shortcut icon" href="/restviz/ui/favicon.png" type="image/png" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      window.__routes__ = JSON.parse(`<%- routes %>`)
+      window.__config__ = JSON.parse(`<%- config %>`)
+    </script>
+    <script src="/restviz/ui/script.js"></script>
+  </body>
+</html>

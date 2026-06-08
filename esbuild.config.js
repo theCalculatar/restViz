@@ -1,12 +1,34 @@
-const { build } = require('esbuild')
+// @ts-nocheck
+const esbuild = require('esbuild')
 
-build({
-    entryPoints: ['src/middleware/index.js'],
-    outfile: 'dist/middleware/index.cjs',
-    minify: true,
-    bundle: true,
-    platform: 'node',   // target Node.js
-    format: 'cjs',      // CommonJS output
-    target: 'node18',   // adjust to your lowest Node version
-    external: ['express'], // don't bundle express, let users install it
-}).catch(() => process.exit(1))
+const isWatch = process.argv.includes('--watch')
+
+const config = {
+  entryPoints: ['src/middleware/index.js'],
+  outfile: 'dist/middleware/index.cjs',
+  minify: true,
+  bundle: true,
+  platform: 'node',
+  format: 'cjs',
+  target: 'node18',
+  external: ['express', 'ejs'],
+}
+
+async function run() {
+  if (isWatch) {
+    const ctx = await esbuild.context(config)
+
+    await ctx.watch()
+
+    console.log('RestViz middleware watching...')
+  } else {
+    await esbuild.build(config)
+
+    console.log('RestViz middleware built.')
+  }
+}
+
+run().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

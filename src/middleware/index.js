@@ -8,35 +8,71 @@ const path = require('path')
 const { updateRoutes } = require('./utils')
 const { routeExtractor } = require('./lib')
 
-const init = (express, options) => {
+const init = (express, options = {}) => {
   let routeExtracted = false
   let routes = []
 
-  return (request, response, next) => {
-    if (!routeExtracted) {
-      const app = request.app
-      // Serve static files from the "public" folder
-      app.use(express.static(path.join(__dirname, '../ui')))
+  const uiPath = path.join(__dirname, '../ui')
+  const viewsPath = path.join(__dirname, '../../views')
 
-      // Set EJS as the view engine
+  const staticMiddleware = express.static(uiPath)
+
+  return (req, res, next) => {
+    const app = req.app
+
+    if (!routeExtracted) {
+      const existingViews = app.get('views')
+
       app.set('view engine', 'ejs')
-      app.set('views', path.join(__dirname, '../../views'))
+      app.set('views', [
+        ...(Array.isArray(existingViews)
+          ? existingViews
+          : existingViews
+            ? [existingViews]
+            : []),
+        viewsPath,
+      ])
 
       const router = app._router || app.router || []
       routes = updateRoutes(routeExtractor(router)) // Extract all registered routes
 
-      // Root route for listing endpoints
-      app.get('/', (req, res) => {
-        res.render('index', {
-          title: options.title ? options.title : 'My API Documentation',
-          theme: options ? options.theme : 'light',
-          routes: JSON.stringify(routes),
-          page: 'home',
-        })
-      })
       routeExtracted = true
     }
-    next()
+
+    if (req.path === '/restviz/ui' || req.path.startsWith('/restviz/ui/')) {
+      req.url = req.url.replace(/^\/restviz\/ui/, '') || '/'
+      return staticMiddleware(req, res, next)
+    }
+
+    // Root route for listing endpoints
+    if (req.path === '/restviz') {
+      return res.render('restviz', {
+        config: JSON.stringify({
+          version: '4.0.0',
+          hideEmpty: true,
+          name: options?.title || 'My API Documentation',
+          groupBy: 'controller', // "tag" | "path"
+          description:
+            'Api monitoring and documentation tool for RESTful services.',
+          environment: 'DEV',
+
+          // UI / Theme
+          theme: options?.theme || 'light', // "light" | "dark"
+          accentColor: 'blue',
+
+          // Interactive API Testing
+          enableTryItOut: true,
+          timeout: 5000,
+          retries: 3,
+
+          baseUrl: 'http://localhost:3000',
+        }),
+
+        routes: JSON.stringify(routes),
+      })
+    }
+
+    return next()
   }
 }
 
