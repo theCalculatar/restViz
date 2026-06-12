@@ -7,23 +7,28 @@ import {
 import { useContext, useEffect, useState } from 'preact/hooks'
 import { AppContext } from '../context'
 
-function CreateSuite(id) {
+function CreateSuite(props: any) {
   const { setDialog, suites, setSuite } = useContext(AppContext)
   const [suitName, setSuitName] = useState('')
   const [suitDescription, setSuitDescription] = useState('')
 
+  const id = typeof props === 'string' ? props : props?.id
+  const isEdit = typeof id === 'string' && id !== ''
+
   useEffect(() => {
-    if (JSON.stringify(id) === '{}') return
+    if (!isEdit) return
 
-    const suite = suites.find((suite) => suite.id === id)
+    const suite = suites.find((suite: any) => suite.id === id)
 
-    setSuitName(suite?.title)
-    setSuitDescription(suite?.description)
-  }, [])
+    if (suite) {
+      setSuitName(suite.title || '')
+      setSuitDescription(suite.description || '')
+    }
+  }, [id, isEdit, suites])
 
   const saveDialog = () => {
     setSuite({
-      type: JSON.stringify(id) !== '{}' ? act_updateSuit : act_addSuit,
+      type: isEdit ? act_updateSuit : act_addSuit,
       payload: { id, title: suitName, description: suitDescription },
     })
     setDialog({ type: act_dismissDialog })
@@ -33,30 +38,28 @@ function CreateSuite(id) {
     <Box mt={'4'}>
       <Flex direction={'column'} gap={'2'}>
         <Flex direction={'column'}>
-          <label className={'text-sm mb-1'} for={'name'}>
+          <label className={'text-sm mb-1'} htmlFor={'name'}>
             Suit name*
           </label>
           <TextField.Root
             id={'name'}
             placeholder="e.g User API Test"
             value={suitName}
-            onChange={(e) => {
-              // @ts-ignore
-              setSuitName(e.target.value.trim())
+            onChange={(e: any) => {
+              setSuitName(e.target.value)
             }}
           />
         </Flex>
         <Flex direction={'column'}>
-          <label className={'text-sm mb-1'} for={'description'}>
+          <label className={'text-sm mb-1'} htmlFor={'description'}>
             Description
           </label>
           <TextField.Root
             id={'description'}
             placeholder="Describe the pursose of this test suits..."
             value={suitDescription}
-            onChange={(e) => {
-              // @ts-ignore
-              setSuitDescription(e.target.value.trim())
+            onChange={(e: any) => {
+              setSuitDescription(e.target.value)
             }}
           />
         </Flex>

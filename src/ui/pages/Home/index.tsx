@@ -27,10 +27,10 @@ import { Command } from '../../utils/command'
 export function Home() {
   const { config, routes, history } = useContext(AppContext)
   const [isOperational, setisOperational] = useState('Down')
-  const totalEndpoins = useMemo(() => routes.length, [])
-  const endpointGroups = useMemo(() => groupRoutesFn(routes).size, [])
+  const totalEndpoins = useMemo(() => routes.length, [routes])
+  const endpointGroups = useMemo(() => groupRoutesFn(routes).size, [routes])
   const requestsToday = useMemo(() => {
-    return history.filter((req) => {
+    return history.filter((req: any) => {
       const today = new Date()
       const reqDate = new Date(req.timestamp)
       return (
@@ -45,7 +45,7 @@ export function Home() {
     // Simulate fetching API status from base endpoint
     const fetchApiStatus = async () => {
       try {
-        const response = await fetch(config.base)
+        const response = await fetch(config.base || config.baseUrl)
         const data = response.status
         if (data === 200) setisOperational('Operational')
       } catch (error) {
@@ -54,7 +54,7 @@ export function Home() {
     }
 
     fetchApiStatus()
-  })
+  }, [config.base, config.baseUrl])
 
   return (
     <Section

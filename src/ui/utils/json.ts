@@ -1,8 +1,4 @@
-/**
- * @param {any} obj - Any type of object
- * @param {string} message - Custom message to return if JSON string is undefined
- */
-const prettyJson = (obj, message = '') => {
+export const prettyJson = (obj: any, message: string = ''): string => {
   try {
     const jsonString = JSON.stringify(obj, null, 2)
 
@@ -14,5 +10,3 @@ const prettyJson = (obj, message = '') => {
     return message
   }
 }
-
-export { prettyJson }

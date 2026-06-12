@@ -4,8 +4,17 @@
  * Licensed under the MIT License (MIT)
  */
 
-const fs = require('fs')
-const { isValid } = require('./stucture.js')
+import * as fs from 'fs'
+import { isValid } from './stucture'
+
+export interface ExtractedRoute {
+  method: string
+  path: string
+  decription?: string
+  notes?: string
+  url?: string
+  [key: string]: any
+}
 
 /**
  * Retrieves existing routes from the routes.json file.
@@ -13,12 +22,13 @@ const { isValid } = require('./stucture.js')
  *
  * @returns {Array} An array of route objects stored in the routes.json file.
  */
-const existingRoutes = () => {
+const existingRoutes = (): ExtractedRoute[] => {
   try {
-    let routes = fs.readFileSync('routes.json', 'utf-8')
+    const routes = fs.readFileSync('routes.json', 'utf-8')
     if (isValid(routes)) {
       return JSON.parse(routes) // Return parsed routes if valid
     }
+    return []
   } catch (error) {
     createFile() // Create the file if it doesn't exist or there's an error
     return []
@@ -29,7 +39,7 @@ const existingRoutes = () => {
  * Creates an empty routes.json file.
  * Initializes the file with an empty array to store route data.
  */
-const createFile = () => {
+const createFile = (): void => {
   fs.writeFileSync('routes.json', '[]', 'utf8')
 }
 
@@ -38,7 +48,7 @@ const createFile = () => {
  *
  * @param {Array} routes - An array of route objects to be stored.
  */
-const addRoutes = (routes) => {
+const addRoutes = (routes: ExtractedRoute[]): void => {
   fs.writeFileSync('routes.json', JSON.stringify(routes, null, 2))
 }
 
@@ -49,16 +59,16 @@ const addRoutes = (routes) => {
  * @param {Array} appRoutes - An array of new route objects to be merged with existing routes.
  * @returns {Array} The updated list of routes after merging.
  */
-const updateRoutes = (appRoutes) => {
+export const updateRoutes = (appRoutes: ExtractedRoute[]): ExtractedRoute[] => {
   const newRoutes = existingRoutes()
-  let routesChanged = false;
+  let routesChanged = false
 
   appRoutes.forEach((route) => {
     const routeExist = newRoutes.find(
       (route_) => route_.path === route.path && route_.method === route.method
     )
     if (!routeExist) {
-      routesChanged = true; // Mark as changed if a new route is added
+      routesChanged = true // Mark as changed if a new route is added
       newRoutes.push(route) // Add only if the route doesn't already exist
     }
   })
@@ -71,5 +81,3 @@ const updateRoutes = (appRoutes) => {
     return { ...route, url: btoa(route.method + route.path) }
   })
 }
-
-module.exports = { updateRoutes }

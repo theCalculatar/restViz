@@ -4,31 +4,30 @@
  * Licensed under the MIT License (MIT)
  */
 
+import { ExtractedRoute } from '../utils/routeManager'
+
 /**
  * Extracts all registered routes from an Express router, including nested routes.
  *
- * This function iterates through the router's stack to identify both direct routes
- * and nested routers (like instances of Express.Router). It recursively processes
- * nested routers to extract their routes as well. The extracted routes include the
- * HTTP method (GET, POST, etc.) and the route path.
- *
- * @param {object} router - The Express router or app instance to extract routes from.
+ * @param {any} router - The Express router or app instance to extract routes from.
  * @param {string} [basePath=''] - The base path for nested routes (used during recursion).
- * @returns {Array<{ method: string, path: string }>} An array of route objects, each containing:
- *   - method: The HTTP method (e.g., "GET", "POST").
- *   - path: The full path of the route.
+ * @returns {ExtractedRoute[]} An array of route objects, each containing method and path.
  */
-const routeExtractor = (router, basePath = '') => {
-  const routes = []
+export const routeExtractor = (router: any, basePath = ''): ExtractedRoute[] => {
+  const routes: ExtractedRoute[] = []
+
+  if (!router || !router.stack) {
+    return routes
+  }
 
   // Iterate through each layer in the router's stack
-  router.stack.forEach((layer) => {
+  router.stack.forEach((layer: any) => {
     if (layer.route) {
       // Direct route found
       const path = basePath + layer.route.path
       const method = Object.keys(layer.route.methods)[0].toUpperCase() // Get the HTTP method
       routes.push({ method, path }) // Add the route to the list
-    } else if (layer.name === 'router' && layer.handle.stack) {
+    } else if (layer.name === 'router' && layer.handle && layer.handle.stack) {
       // Nested router (like Express.Router)
 
       let nestedBasePath = layer.path || ''
@@ -54,5 +53,3 @@ const routeExtractor = (router, basePath = '') => {
   // Return the final list of extracted routes
   return routes
 }
-
-module.exports = { routeExtractor }

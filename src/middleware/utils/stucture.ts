@@ -4,7 +4,7 @@
  * Licensed under the MIT License (MIT)
  */
 
-const { Validator } = require('jsonschema')
+import { Validator } from 'jsonschema'
 
 const schema = {
   type: 'array',
@@ -20,9 +20,9 @@ const schema = {
   },
 }
 
-var validator = new Validator()
+const validator = new Validator()
 
-const isValid = (routes) => {
+export const isValid = (routes: string): boolean => {
   try {
     const $routes = JSON.parse(routes)
     return validator.validate($routes, schema).valid
@@ -30,5 +30,3 @@ const isValid = (routes) => {
     return false
   }
 }
-
-module.exports = { isValid }

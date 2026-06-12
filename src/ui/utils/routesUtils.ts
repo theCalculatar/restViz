@@ -1,5 +1,5 @@
-const groupRoutesFn = (routes) => {
-    const _routes = new Map()
+export const groupRoutesFn = (routes: any[]): Map<string, any[]> => {
+    const _routes = new Map<string, any[]>()
     for (const route of routes) {
         const path = '/' + route.path.split('/')[1]
         const group = _routes.get(path)
@@ -13,5 +13,3 @@ const groupRoutesFn = (routes) => {
     }
     return _routes
 }
-
-export { groupRoutesFn }

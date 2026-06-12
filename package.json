@@ -13,7 +13,8 @@
     "dev": "vite",
     "dev:middleware": "node esbuild.config.js --watch",
     "build": "vite build",
-    "build:middleware": "node esbuild.config.js"
+    "build:middleware": "node esbuild.config.js",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [
     "REST",
@@ -48,11 +49,14 @@
   "devDependencies": {
     "@eslint/js": "^9.33.0",
     "@preact/preset-vite": "^2.10.2",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.3",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.9",
     "globals": "^16.3.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
+    "typescript": "^6.0.3",
     "vite": "^7.0.4"
   }
 }

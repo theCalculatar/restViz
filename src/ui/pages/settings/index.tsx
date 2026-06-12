@@ -12,17 +12,21 @@ import {
   Text,
   TextArea,
   TextField,
+  Flex,
 } from '@radix-ui/themes'
-import { Flex } from '@radix-ui/themes/src/index.js'
 import { Download, InfoIcon, Repeat, Save, Upload, X } from 'lucide-react'
 import { useContext, useState } from 'preact/hooks'
 import { AppContext } from '../../context'
 import { act_setConfigtTheme, act_setHeaders } from '../../context/actions'
 
+interface HeaderItem {
+  key: string
+  value: string
+}
+
 function Settings() {
-  // @ts-ignore
   const { headers, setHeaders, config, setConfig } = useContext(AppContext)
-  const [localHeaders, setLocalHeaders] = useState(headers)
+  const [localHeaders, setLocalHeaders] = useState<HeaderItem[]>(headers)
 
   const addHeader = () => {
     if (localHeaders.length >= 10) return
@@ -30,7 +34,7 @@ function Settings() {
     setLocalHeaders((prev) => [...prev, { key: '', value: '' }])
   }
 
-  const removeHeader = (index) => {
+  const removeHeader = (index: number) => {
     if (localHeaders[index].key === '') return
 
     if (localHeaders.length <= 1) {
@@ -40,9 +44,12 @@ function Settings() {
     setLocalHeaders((prev) => prev.filter((_, i) => i !== index))
   }
 
-  const onHeaderChange = (index, field, value) => {
+  const onHeaderChange = (index: number, field: 'key' | 'value', value: string) => {
     const updatedHeaders = [...localHeaders]
-    updatedHeaders[index][field] = value
+    updatedHeaders[index] = {
+      ...updatedHeaders[index],
+      [field]: value
+    }
     setLocalHeaders(updatedHeaders)
   }
 
@@ -76,11 +83,11 @@ function Settings() {
             </Tabs.List>
 
             <Box pt="3">
-              <Tabs.Content value="account" className={''}>
+              <Tabs.Content value="account">
                 <Flex direction={'column'} gap="2">
                   <Card>
                     <Flex direction={'column'} mb="2">
-                      <Text>Documantation info</Text>
+                      <Text>Documentation info</Text>
                       <Text size="2" color="gray">
                         Basic information about your API documentation.
                       </Text>
@@ -218,6 +225,7 @@ function Settings() {
                           {localHeaders?.map((header, key) => {
                             return (
                               <Flex
+                                key={key}
                                 gap={'2'}
                                 direction={{ initial: 'column', sm: 'row' }}
                                 align={{ initial: 'start' }}
@@ -227,8 +235,7 @@ function Settings() {
                                   className={'w-full'}
                                   radius="large"
                                   value={header.key}
-                                  onChange={(e) => {
-                                    // @ts-ignore
+                                  onChange={(e: any) => {
                                     onHeaderChange(key, 'key', e.target.value)
                                   }}
                                 ></TextField.Root>
@@ -237,8 +244,7 @@ function Settings() {
                                   className={'w-full'}
                                   radius="large"
                                   value={header.value}
-                                  onChange={(e) => {
-                                    // @ts-ignore
+                                  onChange={(e: any) => {
                                     onHeaderChange(key, 'value', e.target.value)
                                   }}
                                 ></TextField.Root>
@@ -260,16 +266,14 @@ function Settings() {
                       <Callout.Icon>
                         <InfoIcon />
                       </Callout.Icon>
-                      <Callout.Text>
-                        <Text size={'3'}>Security Notice</Text>
-                      </Callout.Text>
-                      <Callout.Text>
-                        <Text size={'2'} color="gray">
+                      <Box>
+                        <Text size={'3'} weight={'bold'} as="div">Security Notice</Text>
+                        <Text size={'2'} color="gray" as="div">
                           Authentication tokens are stored locally in your
                           browser. Never share your settings export with
                           sensitive credentials.
                         </Text>
-                      </Callout.Text>
+                      </Box>
                     </Callout.Root>
                   </Card>
                   <Flex align={'end'} gap={'4'} mt={'2'} direction={'column'}>
@@ -308,7 +312,7 @@ function Settings() {
                   </Card>
                   <Card>
                     <Flex direction={'column'} mb="4">
-                      <Text>Perfomance</Text>
+                      <Text>Performance</Text>
                       <Text size="2" color="gray">
                         Optimize performance and memory usage.
                       </Text>

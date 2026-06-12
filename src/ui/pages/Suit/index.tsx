@@ -20,7 +20,6 @@ import {
   File,
   Folder,
   FolderIcon,
-  Play,
   PlayCircleIcon,
   Plus,
   PlusSquare,
@@ -39,18 +38,27 @@ import { useIsMobile } from '../../hooks/useMobile'
 import { Collapsible } from 'radix-ui'
 import { methodColors } from '../../utils/colors'
 import { Link } from 'react-router-dom'
+import { Suite } from '../../types/suites'
 
-function index() {
+function SuitPage() {
   const { config, setDialog, suites, setSuite } = useContext(AppContext)
   const isDevEnv = config.environment === 'DEV'
   const isMobile = useIsMobile()
   const lastRun = localStorage.getItem('lastRun')
-    ? new Date(JSON.parse(localStorage.getItem('lastRun'))).toLocaleDateString()
+    ? new Date(JSON.parse(localStorage.getItem('lastRun') || '""')).toLocaleDateString()
     : '--'
-  const passRate = Math.round(
-    (JSON.parse(localStorage.getItem('passRate'))?.passRate || 0) * 100
-  )
-  const totalTests = suites.reduce((acc, suite) => acc + suite.tests.length, 0)
+
+  const passRateVal = (() => {
+    try {
+      const stored = localStorage.getItem('passRate')
+      return stored ? JSON.parse(stored)?.passRate || 0 : 0
+    } catch (_) {
+      return 0
+    }
+  })()
+  const passRate = Math.round(passRateVal * 100)
+
+  const totalTests = (suites || []).reduce((acc: number, suite: Suite) => acc + (suite.tests || []).length, 0)
 
   const newSuite = {
     type: act_setDialog,
@@ -61,7 +69,7 @@ function index() {
     },
   }
 
-  const createTest = (id) => {
+  const createTest = (id: string) => {
     setDialog({
       type: act_setDialog,
       payload: {
@@ -72,7 +80,7 @@ function index() {
     })
   }
 
-  const updateTest = (id, test) => {
+  const updateTest = (id: string, test: any) => {
     setDialog({
       type: act_setDialog,
       payload: {
@@ -83,7 +91,7 @@ function index() {
     })
   }
 
-  const editSuite = (id) => {
+  const editSuite = (id: string) => {
     setDialog({
       type: act_setDialog,
       payload: {
@@ -95,7 +103,7 @@ function index() {
     })
   }
 
-  const deleteSuite = (id) => {
+  const deleteSuite = (id: string) => {
     setSuite({
       type: act_deleteSuit,
       payload: {
@@ -104,7 +112,7 @@ function index() {
     })
   }
 
-  const deleteTest = (id, testId) => {
+  const deleteTest = (id: string, testId: string) => {
     setSuite({
       type: act_deleteSuitTest,
       payload: {
@@ -196,7 +204,7 @@ function index() {
                   <Folder className={'xxl'} />
                   <Flex direction={'column'} align={'center'} gap={'2'}>
                     <Text size={'6'} weight={'bold'}>
-                      No test suits yet
+                      No test suites yet
                     </Text>
                     <Text align={'center'}>
                       Create your first test suite to organize and automate your
@@ -214,9 +222,9 @@ function index() {
                 </Flex>
               </Card>
             ) : (
-              suites.map((suite) => {
+              suites.map((suite: Suite) => {
                 return (
-                  <Card id={suite.id}>
+                  <Card id={suite.id} key={suite.id}>
                     <Collapsible.Root>
                       <Collapsible.Trigger
                         asChild
@@ -247,11 +255,14 @@ function index() {
                                   size={'1'}
                                   variant={'outline'}
                                   radius="large"
-                                  onClick={() => createTest(suite.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    createTest(suite.id)
+                                  }}
                                 >
                                   <Plus /> Add test
                                 </Button>
-                                <Button size={'1'} asChild>
+                                <Button size={'1'} asChild onClick={(e) => e.stopPropagation()}>
                                   <Link to={suite.id}>
                                     <PlayCircleIcon />
                                     Run Suite
@@ -259,13 +270,19 @@ function index() {
                                 </Button>
                                 <IconButton
                                   variant="ghost"
-                                  onClick={() => editSuite(suite.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    editSuite(suite.id)
+                                  }}
                                 >
                                   <Edit />
                                 </IconButton>
                                 <IconButton
                                   variant="ghost"
-                                  onClick={() => deleteSuite(suite.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    deleteSuite(suite.id)
+                                  }}
                                 >
                                   <Trash2 />
                                 </IconButton>
@@ -273,11 +290,9 @@ function index() {
                             ) : (
                               <DropdownMenu.Root>
                                 <DropdownMenu.Trigger>
-                                  <DropdownMenu.Trigger>
-                                    <IconButton variant="ghost">
-                                      <EllipsisVertical />
-                                    </IconButton>
-                                  </DropdownMenu.Trigger>
+                                  <IconButton variant="ghost" onClick={(e) => e.stopPropagation()}>
+                                    <EllipsisVertical />
+                                  </IconButton>
                                 </DropdownMenu.Trigger>
                                 <DropdownMenu.Content
                                   style={{
@@ -324,11 +339,11 @@ function index() {
                         </Flex>
                       </Collapsible.Trigger>
                       <Collapsible.Content className={'CollapsibleContent'}>
-                        {suite.tests.length > 0 && (
+                        {suite.tests && suite.tests.length > 0 && (
                           <Flex direction={'column'} gap={'2'} mt={'3'}>
                             {suite.tests.map((test) => {
                               return (
-                                <Card>
+                                <Card key={test.id}>
                                   <Flex justify={'between'} gap={'4'}>
                                     <Box>
                                       <Flex gap={'2'} align={'center'}>
@@ -339,12 +354,12 @@ function index() {
                                             radius="large"
                                             variant="soft"
                                             className={'select-none'}
-                                            color={methodColors[test.method]}
+                                            color={methodColors[test.method] as any}
                                           >
                                             {test.method}
                                           </Badge>
                                           <Text color="gray" size={'2'}>
-                                            {test.path}
+                                            {test.endpoint}
                                           </Text>
                                         </Flex>
                                       </Flex>
@@ -360,7 +375,6 @@ function index() {
                                     <Flex gap={'1'}>
                                       <Button
                                         variant="outline"
-                                        size={{ initial: '1', md: '1' }}
                                         radius="large"
                                         onClick={() => {
                                           updateTest(suite.id, test)
@@ -371,7 +385,6 @@ function index() {
                                       </Button>
                                       <Button
                                         variant="outline"
-                                        size={{ initial: '1', md: '1' }}
                                         radius="large"
                                         onClick={() =>
                                           deleteTest(suite.id, test.id)
@@ -400,4 +413,4 @@ function index() {
   )
 }
 
-export default index
+export default SuitPage

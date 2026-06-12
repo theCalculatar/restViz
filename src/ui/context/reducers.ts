@@ -1,3 +1,4 @@
+import { Suite } from '../types/suites'
 import {
   act_removeHeaders,
   act_setConfig,
@@ -19,7 +20,12 @@ import {
   act_deleteSuitTest,
 } from './actions'
 
-const setRoutesFn = (state, { type, payload }) => {
+interface Action {
+  type: string
+  payload?: any
+}
+
+export const setRoutesFn = (state: any[], { type, payload }: Action): any[] => {
   switch (type) {
     case act_setRoutes:
       return [...payload]
@@ -29,7 +35,7 @@ const setRoutesFn = (state, { type, payload }) => {
   }
 }
 
-const setHeadersFn = (state, { type, payload }) => {
+export const setHeadersFn = (state: any[], { type, payload }: Action): any[] => {
   switch (type) {
     case act_setHeaders:
       const headersMap = new Map([...payload].map((item) => [item.key, item]))
@@ -47,7 +53,8 @@ const setHeadersFn = (state, { type, payload }) => {
       return state
   }
 }
-const setHistoryFn = (state, { type, payload }) => {
+
+export const setHistoryFn = (state: any, { type, payload }: Action): any => {
   switch (type) {
     case act_setHistory:
       return { ...payload }
@@ -55,7 +62,8 @@ const setHistoryFn = (state, { type, payload }) => {
       return state
   }
 }
-const setNavStaeFn = (state, type) => {
+
+export const setNavStaeFn = (state: boolean, type: string): boolean => {
   switch (type) {
     case act_closeNav:
       return false
@@ -67,7 +75,8 @@ const setNavStaeFn = (state, type) => {
       return state
   }
 }
-const setCurrentRouteFn = (state, { type, payload }) => {
+
+export const setCurrentRouteFn = (state: any, { type, payload }: Action): any => {
   switch (type) {
     case act_setCurrentRoute:
       return { path: payload.path, method: payload.method }
@@ -77,7 +86,7 @@ const setCurrentRouteFn = (state, { type, payload }) => {
   }
 }
 
-const setConfigFn = (state, { type, payload }) => {
+export const setConfigFn = (state: any, { type, payload }: Action): any => {
   switch (type) {
     case act_setConfig:
       return { ...state, ...payload }
@@ -99,7 +108,7 @@ const setConfigFn = (state, { type, payload }) => {
   }
 }
 
-const setDialogFn = (state, { type, payload }) => {
+export const setDialogFn = (state: any, { type, payload }: Action): any => {
   switch (type) {
     case act_dismissDialog:
       return null
@@ -110,8 +119,8 @@ const setDialogFn = (state, { type, payload }) => {
   }
 }
 
-const setSuiteFn = (state, { type, payload }) => {
-  let suites
+export const setSuiteFn = (state: Suite[], { type, payload }: Action): Suite[] => {
+  let suites: Suite[]
   switch (type) {
     case act_addSuit:
       const id = btoa(Date.now().toString())
@@ -168,17 +177,6 @@ const setSuiteFn = (state, { type, payload }) => {
       })
 
     default:
-      break
+      return state
   }
-}
-
-export {
-  setRoutesFn,
-  setHeadersFn,
-  setHistoryFn,
-  setNavStaeFn,
-  setCurrentRouteFn,
-  setConfigFn,
-  setDialogFn,
-  setSuiteFn,
 }
