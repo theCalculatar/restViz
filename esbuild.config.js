@@ -4,7 +4,7 @@ const esbuild = require('esbuild')
 const isWatch = process.argv.includes('--watch')
 
 const config = {
-  entryPoints: ['src/middleware/index.js'],
+  entryPoints: ['src/middleware/index.ts'],
   outfile: 'dist/middleware/index.cjs',
   minify: true,
   bundle: true,

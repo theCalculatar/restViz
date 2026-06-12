@@ -41,6 +41,7 @@ export interface Test {
 export interface Suite {
   id: string
   title: string
+  description?: string
   tests: Test[]
 }
 

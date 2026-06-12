@@ -1,14 +1,38 @@
+/*!
+ * restViz - A custom API documentation middleware
+ * Copyright (c) 2025 Mahlane Alpheus Mabetlela
+ * Licensed under the MIT License (MIT)
+ */
+
+export interface FetchRequest {
+  fullPath: string
+  method: string
+  headers?: Record<string, string>
+  body?: any
+  [key: string]: any
+}
+
+export interface FetchResponse {
+  status: number | string
+  statusText: string
+  timeout: number
+  timestamp?: number
+  data?: any
+  error?: string
+  request: FetchRequest
+}
+
 // A function to make API calls and handle responses - rough but ill come back to it
-async function apiCall(request) {
+async function apiCall(request: FetchRequest): Promise<FetchResponse> {
   const __response = {
-    status: 200,
+    status: 200 as number | string,
     statusText: '',
     timeout: 0,
     timestamp: Date.now(),
   }
 
-  let response
-  let endTime
+  let response: Response | undefined
+  let endTime: number
   const startTime = performance.now()
 
   try {
@@ -31,7 +55,7 @@ async function apiCall(request) {
     }
 
     const contentType = response.headers.get('content-type') || ''
-    let data
+    let data: any
     if (contentType.includes('application/json')) {
       data = await response.json()
     } else {
@@ -55,16 +79,16 @@ async function apiCall(request) {
     }
 
     return resultsFn({ data, ...__response }, request)
-  } catch (error) {
+  } catch (error: any) {
     endTime = performance.now()
     __response.timeout = endTime - startTime
     __response.status = response?.status || '000'
     __response.statusText = response?.statusText || 'Network Error'
-    __response.request = request
 
     const isFetchFailed =
-      error.message.toLowerCase().includes('fetch failed') ||
-      error.message.toLowerCase().includes('failed to fetch')
+      error.message &&
+      (error.message.toLowerCase().includes('fetch failed') ||
+        error.message.toLowerCase().includes('failed to fetch'))
 
     if (isFetchFailed) {
       return resultsFn(
@@ -78,8 +102,9 @@ async function apiCall(request) {
     }
 
     if (
-      error.message.includes("Failed to execute 'fetch'") ||
-      error.message.includes("Failed to execute 'json'")
+      error.message &&
+      (error.message.includes("Failed to execute 'fetch'") ||
+        error.message.includes("Failed to execute 'json'"))
     ) {
       return resultsFn(
         {
@@ -92,6 +117,7 @@ async function apiCall(request) {
     }
 
     if (
+      error.message &&
       error.message.includes('Unexpected token') &&
       response?.status === 500
     ) {
@@ -100,10 +126,10 @@ async function apiCall(request) {
     }
 
     // Handle other errors
-    return resultsFn({ ...__response, error: error.message }, request)
+    return resultsFn({ ...__response, error: error.message || String(error) }, request)
   }
 }
 
-const resultsFn = (data, request) => Promise.resolve({ ...data, request })
+const resultsFn = (data: any, request: FetchRequest): FetchResponse => ({ ...data, request })
 
 export { apiCall }

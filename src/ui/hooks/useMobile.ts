@@ -2,8 +2,8 @@ import { useEffect, useState } from "preact/hooks";
 
 const MOBILE_BREAKPOINT = 1024;
 
-export function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(
+export function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(
     undefined,
   );
 

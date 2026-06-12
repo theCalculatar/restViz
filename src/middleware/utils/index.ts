@@ -4,6 +4,4 @@
  * Licensed under the MIT License (MIT)
  */
 
-const { routeExtractor } = require('./routeExtractor.js')
-
-module.exports = { routeExtractor }
+export { updateRoutes, ExtractedRoute } from './routeManager'

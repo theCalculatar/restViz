@@ -5,13 +5,18 @@ import { CommandIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { act_setConfigtTheme } from '../context/actions'
 
+interface CommandItem {
+  name: string
+  action: () => void
+}
+
 export const Command = () => {
   const { routes, setConfig } = useContext(AppContext)
   const navigate = useNavigate()
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState<CommandItem[]>([])
   const [commandOpen, setCommandOpen] = useState(false)
 
-  const commands = [
+  const commands: CommandItem[] = [
     {
       name: 'Toggle Dark Mode',
       action: () => setConfig({ type: act_setConfigtTheme }),
@@ -28,7 +33,6 @@ export const Command = () => {
       name: 'Open GitHub Issues',
       action: () => navigate('https:github.com/theCalculatar/restviz/issues'),
     },
-
     {
       name: 'Go to Settings',
       action: () => navigate('/settings'),
@@ -36,7 +40,7 @@ export const Command = () => {
   ]
 
   commands.push(
-    ...routes.map((route) => ({
+    ...routes.map((route: any) => ({
       name: `Go to ${route.path}-${route.method} endpoint`,
       action: () => navigate('/test' + route.path),
     }))
@@ -44,9 +48,9 @@ export const Command = () => {
 
   useEffect(() => {
     setResults(commands)
-  }, [])
+  }, [routes])
 
-  const inputChange = (e) => {
+  const inputChange = (e: any) => {
     setCommandOpen(true)
     const value = e.target.value.toLowerCase()
     const matchedCommand = commands.filter((cmd) =>
@@ -63,7 +67,7 @@ export const Command = () => {
         placeholder={'Type a command or search...'}
         autoComplete="off"
         onChange={(e) => inputChange(e)}
-        onFocus={(e) => {
+        onFocus={() => {
           setCommandOpen(true)
         }}
         onFocusOut={() => {

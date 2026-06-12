@@ -1,5 +1,5 @@
 import { useReducer, useEffect } from 'preact/hooks'
-import { createContext } from 'preact'
+import { createContext, ComponentChildren } from 'preact'
 
 import {
   setConfigFn,
@@ -11,11 +11,14 @@ import {
   setRoutesFn,
   setSuiteFn,
 } from './reducers'
-// @ts-ignore
 
-const AppContext = createContext(null)
+export const AppContext = createContext<any>(null)
 
-function Provider({ children }) {
+interface ProviderProps {
+  children: ComponentChildren
+}
+
+export function Provider({ children }: ProviderProps) {
   const [routes, setRoutes] = useReducer(setRoutesFn, [], () => {
     // @ts-ignore
     return window.__routes__ || []
@@ -78,5 +81,3 @@ function Provider({ children }) {
     </AppContext.Provider>
   )
 }
-
-export { Provider, AppContext }

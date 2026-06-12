@@ -14,12 +14,12 @@ import { AppContext } from '../context'
 import { Link, useNavigate } from 'react-router-dom'
 import { methodColors } from '../utils/colors'
 import { act_openNav } from '../context/actions'
-import { Fragment } from 'preact/jsx-runtime'
+import { Fragment } from 'preact'
 
 function QuickActions() {
   const { config, history, routes, toogleNav } = useContext(AppContext)
   const navigate = useNavigate()
-  const [recentRoutes, setRecentRoutes] = useState([])
+  const [recentRoutes, setRecentRoutes] = useState<any[]>([])
 
   useEffect(() => {
     if (history.length === 0) {
@@ -30,7 +30,7 @@ function QuickActions() {
 
     const popular = history.slice(-2).reverse()
     setRecentRoutes(popular)
-  }, [history])
+  }, [history, routes])
 
   return (
     <Section py={'6'}>
@@ -65,7 +65,7 @@ function QuickActions() {
                 navigate('/settings')
               }}
             >
-              Confiqure Authentication
+              Configure Authentication
             </Button>
           </Box>
         </Card>
@@ -93,7 +93,7 @@ function QuickActions() {
                         <Flex gap={'4'} align={'center'}>
                           <Badge
                             radius="large"
-                            color={methodColors[route.method]}
+                            color={methodColors[route.method] as any}
                             size={'1'}
                           >
                             {route.method}

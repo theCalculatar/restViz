@@ -16,7 +16,7 @@ export default defineConfig({
 		outDir: 'dist/ui', // everything goes under dist/ui
 		emptyOutDir: true,
 		rollupOptions: {
-			input: path.resolve(__dirname, 'src/ui/index.jsx'),
+			input: path.resolve(__dirname, 'src/ui/index.tsx'),
 			output: {
 				entryFileNames: 'script.js', // main JS
 				chunkFileNames: null,

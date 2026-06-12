@@ -2,7 +2,7 @@ import { Box, Card, Flex, IconButton, ScrollArea, Text } from '@radix-ui/themes'
 import { X } from 'lucide-react'
 import { useContext } from 'preact/hooks'
 import { AppContext } from '../context'
-import { Fragment } from 'preact/jsx-runtime'
+import { Fragment } from 'preact'
 import { act_dismissDialog } from '../context/actions'
 
 function Dialog() {

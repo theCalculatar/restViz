@@ -287,7 +287,7 @@ export function TestRunner() {
           <Accordion.Root type="single" collapsible>
             {/* Test Results */}
             <div className="space-y-3">
-              {results.map((result, index) => {
+              {results?.map((result, index) => {
                 return (
                   <Accordion.Item value={'item-' + index}>
                     <Card key={result.id}>
@@ -477,7 +477,7 @@ const TestResultsResponse = (response: any) => {
 
       <Tabs.Content value="headers">
         <Box className="space-y-2">
-          {Object.entries(response.headers).map(([key, value]) => (
+          {Object?.entries(response.headers ?? {})?.map(([key, value]) => (
             <Card key={key}>
               <Text size={'2'} weight={'medium'}>
                 {key}:

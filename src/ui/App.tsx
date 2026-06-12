@@ -2,9 +2,6 @@ import {
   HashRouter as Router,
   Routes,
   Route,
-  useNavigate,
-  useNavigation,
-  useLocation,
 } from 'react-router-dom'
 import { Home } from './pages/Home'
 import { About } from './pages/About'

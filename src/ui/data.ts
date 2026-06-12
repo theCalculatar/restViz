@@ -1,4 +1,32 @@
-const routes = [
+export interface MockRoute {
+  id: string
+  method: string
+  path: string
+  description?: string
+  notes?: string
+  group?: string
+  url: string
+  body?: any
+  responses?: Record<number, string>
+}
+
+export interface AppConfig {
+  version: string
+  hideEmpty: boolean
+  name: string
+  groupBy: string
+  description: string
+  environment: string
+  theme: 'light' | 'dark'
+  accentColor: string
+  enableTryItOut: boolean
+  timeout: number
+  retries: number
+  jsonEndpoint?: string
+  baseUrl: string
+}
+
+const routes: MockRoute[] = [
   {
     id: '1',
     method: 'GET',
@@ -108,7 +136,7 @@ const routes = [
   },
 ]
 
-const config = {
+const config: AppConfig = {
   version: '1.0.0',
   hideEmpty: true,
   name: 'My Restaurant API',

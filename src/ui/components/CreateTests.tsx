@@ -22,14 +22,14 @@ import {
   Unlink,
 } from 'lucide-react'
 import { useContext, useState } from 'preact/hooks'
-import { Test, TestAssertion } from '../types/suites'
-import { methodColors } from '../utils/colors'
-import { AppContext } from '../context'
+import { Test, TestAssertion } from '@/types/suites'
+import { methodColors } from '@/utils/colors'
+import { AppContext } from '@/context'
 import {
   act_addSuitTest,
   act_dismissDialog,
   act_editSuitTest,
-} from '../context/actions'
+} from '@/context/actions'
 
 function CreateTests(suiteId: string, test_: Test | null) {
   const { routes, setSuite, setDialog } = useContext(AppContext)
@@ -61,12 +61,14 @@ function CreateTests(suiteId: string, test_: Test | null) {
   }
 
   const removeAssertion = (assertionId: string) => {
-    const newAssertion = test.assertions!.filter((as_) => as_.id !== assertionId)
+    const newAssertion = test.assertions!.filter(
+      (as_) => as_.id !== assertionId
+    )
     setTest({ ...test, assertions: newAssertion })
   }
 
   const filterRoutes = (q: string) => {
-    setRoutesLink(routes.filter((route) => route.path.includes(q)))
+    setRoutesLink(routes.filter((route: any) => route.path.includes(q)))
   }
 
   const saveTest = () => {
@@ -120,7 +122,7 @@ function CreateTests(suiteId: string, test_: Test | null) {
                     </Box>
                     <ScrollArea className={'max-h-72'}>
                       <Flex direction={'column'} gap={'2'}>
-                        {routesLink.map((route, index) => {
+                        {routesLink.map((route: any, index: number) => {
                           return (
                             <Popover.Close
                               onClick={() => {
@@ -139,7 +141,9 @@ function CreateTests(suiteId: string, test_: Test | null) {
                               <Card
                                 style={{
                                   background:
-                                    route.url === test.link && '#81818161',
+                                    route.url === test.link
+                                      ? '#81818161'
+                                      : undefined,
                                 }}
                               >
                                 <Flex
@@ -149,7 +153,11 @@ function CreateTests(suiteId: string, test_: Test | null) {
                                 >
                                   <Flex align={'center'} gap={'1'}>
                                     <Badge
-                                      color={methodColors[route.method]}
+                                      color={
+                                        methodColors[
+                                          route.method as keyof typeof methodColors
+                                        ] as any
+                                      }
                                       size={'1'}
                                     >
                                       {route.method}
@@ -276,7 +284,7 @@ function CreateTests(suiteId: string, test_: Test | null) {
               </Text>
             </Flex>
             <Flex gap={'4'} direction={'column'}>
-              {test?.assertions.map((assertion, key) => {
+              {test?.assertions?.map((assertion, key) => {
                 return (
                   <Card key={key}>
                     <Flex justify={'between'} align={'center'}>

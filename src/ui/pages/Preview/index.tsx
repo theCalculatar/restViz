@@ -11,7 +11,7 @@ function Preview() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  let route = routes?.find((r) => r.url == pathname.replace('/test/', ''))
+  let route = routes?.find((r: any) => r.url == pathname.replace('/test/', ''))
 
   if (!route) {
     navigate('/404')

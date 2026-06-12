@@ -1,4 +1,5 @@
 import {
+  Box,
   Callout,
   Card,
   Code,
@@ -44,14 +45,12 @@ export function NotFound() {
                   <Callout.Icon>
                     <Search className={'text-blue-500'} />
                   </Callout.Icon>
-                  <Callout.Text>
-                    <Flex direction={'column'}>
-                      <Text weight={'bold'}>Check the URL</Text>
-                      <Text color="gray" size={'2'}>
-                        Verify the endpoint path and parameters
-                      </Text>
-                    </Flex>
-                  </Callout.Text>
+                  <Box>
+                    <Text weight={'bold'} as="div">Check the URL</Text>
+                    <Text color="gray" size={'2'} as="div">
+                      Verify the endpoint path and parameters
+                    </Text>
+                  </Box>
                 </Callout.Root>
                 <Callout.Root
                   className={'flex-1'}
@@ -61,14 +60,12 @@ export function NotFound() {
                   <Callout.Icon>
                     <BookOpenIcon className={'text-green-500'} />
                   </Callout.Icon>
-                  <Callout.Text>
-                    <Flex direction={'column'}>
-                      <Text weight={'bold'} color="gray">
-                        Browse Documentation
-                      </Text>
-                      <Text size={'2'}>Explore available API endpoints</Text>
-                    </Flex>
-                  </Callout.Text>
+                  <Box>
+                    <Text weight={'bold'} color="gray" as="div">
+                      Browse Documentation
+                    </Text>
+                    <Text size={'2'} as="div">Explore available API endpoints</Text>
+                  </Box>
                 </Callout.Root>
               </Flex>
             </Flex>

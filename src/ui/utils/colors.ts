@@ -1,4 +1,4 @@
-const methodColors = {
+export const methodColors: Record<string, string> = {
     GET: 'green',
     POST: 'blue',
     PUT: 'orange',
@@ -6,18 +6,16 @@ const methodColors = {
     PATCH: 'purple'
 }
 
-const statusColor = {
+export const statusColor: Record<number, string> = {
     200: 'green',
     300: 'yellow',
     400: 'orange',
     500: 'red'
 }
 
-const getStatusColor = (status) => {
+export const getStatusColor = (status: number): string => {
     if (status >= 200 && status < 300) return statusColor[200]
     if (status >= 300 && status < 400) return statusColor[300]
     if (status >= 400 && status < 500) return statusColor[400]
     return 'red'
 }
-
-export { methodColors, statusColor, getStatusColor }

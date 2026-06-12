@@ -4,20 +4,26 @@
  * Licensed under the MIT License (MIT)
  */
 
-const path = require('path')
-const { updateRoutes } = require('./utils')
-const { routeExtractor } = require('./lib')
+import * as path from 'path'
+import { Request, Response, NextFunction } from 'express'
+import { updateRoutes, ExtractedRoute } from './utils'
+import { routeExtractor } from './lib'
 
-const init = (express, options = {}) => {
+export interface ThemeOptions {
+  title?: string
+  theme?: 'light' | 'dark'
+}
+
+export const init = (express: any, options: ThemeOptions = {}) => {
   let routeExtracted = false
-  let routes = []
+  let routes: ExtractedRoute[] = []
 
   const uiPath = path.join(__dirname, '../ui')
   const viewsPath = path.join(__dirname, '../../views')
 
   const staticMiddleware = express.static(uiPath)
 
-  return (req, res, next) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     const app = req.app
 
     if (!routeExtracted) {
@@ -33,7 +39,7 @@ const init = (express, options = {}) => {
         viewsPath,
       ])
 
-      const router = app._router || app.router || []
+      const router = (app as any)._router || (app as any).router || []
       routes = updateRoutes(routeExtractor(router)) // Extract all registered routes
 
       routeExtracted = true
@@ -75,7 +81,3 @@ const init = (express, options = {}) => {
     return next()
   }
 }
-
-module.exports = { init }
-
-// Helping to document and make APIs easier to understand

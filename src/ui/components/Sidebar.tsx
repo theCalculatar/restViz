@@ -27,7 +27,7 @@ import { useIsMobile } from '../hooks/useMobile'
 
 function Sidebar() {
   const { routes, isNavOpen, toogleNav } = useContext(AppContext)
-  let groupedRoute = useMemo(() => {
+  const groupedRoute = useMemo(() => {
     return [...groupRoutesFn(routes).entries()]
   }, [routes])
 
@@ -82,6 +82,7 @@ function Sidebar() {
           className={'select-none'}
         >
           {groupedRoute.map((group, key) => {
+            const [path, items] = group as [string, any[]]
             return (
               <Collapsible.Root key={key}>
                 <Collapsible.Trigger asChild className={'collapse-trigger'}>
@@ -101,7 +102,7 @@ function Sidebar() {
                         </Box>
                         <Folder className={'text-blue-500'} />
                         <Text size={'2'} className="IconButton">
-                          {group[0]}
+                          {path}
                         </Text>
                       </Flex>
                     </Flex>
@@ -109,7 +110,7 @@ function Sidebar() {
                 </Collapsible.Trigger>
                 <Collapsible.Content className={'CollapsibleContent'}>
                   <Flex direction={'column'} gap={'1'} px={'2'}>
-                    {group[1].map((route, index) => {
+                    {items.map((route: any, index: number) => {
                       return (
                         <Flex
                           key={index}
@@ -130,7 +131,7 @@ function Sidebar() {
                         >
                           <Flex align={'center'} gap={'1'}>
                             <Badge
-                              color={methodColors[route.method]}
+                              color={methodColors[route.method] as any}
                               size={'1'}
                             >
                               {route.method}
